@@ -11,3 +11,5 @@ dependencies = [
 [tool.pytest.ini_options]
 testpaths = ["datagen/tests"]
 filterwarnings = ["ignore::DeprecationWarning", "ignore::FutureWarning"]
+[tool.setuptools.packages.find]
+include = ["datagen*", "navigator*", "tools*", "validator*"]

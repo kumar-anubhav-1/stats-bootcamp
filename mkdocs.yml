@@ -3,7 +3,7 @@ site_description: Learn statistics, machine learning and AI by solving real reta
 site_author: Softsensor AI
 repo_name: stats-bootcamp
 copyright: '© 2026 Kumar Anubhav · <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a> — free to share and adapt with credit, not for commercial use'
-# repo_url: https://github.com/<org>/stats-bootcamp   # set when you push
+repo_url: https://github.com/kumar-anubhav-1/stats-bootcamp
 docs_dir: docs
 theme:
   name: material
