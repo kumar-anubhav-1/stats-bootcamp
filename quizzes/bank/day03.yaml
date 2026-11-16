@@ -1,0 +1,1588 @@
+quizzes:
+- id: L3.1-F
+  title: L3.1 Estimation and CIs (Basic → Advanced)
+  lesson: L3.1
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C120
+    prompt: "A 95% CI for mean basket value is {{ a.d3_basket_ci[0] }} – {{ a.d3_basket_ci[1] }}. Which reading is correct?"
+    options:
+    - id: a
+      text: Values of the true mean in this range are compatible with the data; the method captures the truth 95% of the time
+      correct: true
+      why: A property of the procedure.
+    - id: b
+      text: 95% of baskets are between these values
+      why: That describes individuals; the CI describes the mean.
+    - id: c
+      text: The sample mean is wrong 5% of the time
+      why: No.
+    - id: d
+      text: There is a 95% chance a new basket falls here
+      why: That would be a prediction interval — much wider.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C121
+    prompt: "Mean {{ a.d3_basket_mean }}, SE {{ a.d3_basket_se }}. Approximate 95% CI half-width?"
+    answer: "{{ a.d3_basket_ci_halfwidth }}"
+    tolerance_abs: 0.1
+    explanation: 1.96 × SE.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C121
+    prompt: To halve the width of a CI you need roughly…
+    options:
+    - id: a
+      text: 4× the sample
+      correct: true
+      why: Width ∝ 1/√n.
+    - id: b
+      text: 2× the sample
+      why: That narrows it by √2 only.
+    - id: c
+      text: Half the sample
+      why: Wider.
+    - id: d
+      text: A 90% level instead
+      why: Narrower, but less confidence — not the same thing.
+  - id: q4
+    type: numeric
+    difficulty: 3
+    concepts:
+    - C120
+    prompt: Simulated coverage (%) of the 95% t-interval for mean basket value at n = 30?
+    answer: "{{ a.d3_t_coverage[30] }}"
+    tolerance_abs: 1.5
+    unit: '%'
+    explanation: Heavy tails → under-coverage.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C121
+    prompt: Which interval should you use for a fraud rate of 0.7% from 300 accounts?
+    options:
+    - id: a
+      text: Wilson (or Clopper-Pearson)
+      correct: true
+      why: "Coverage {{ a.d3_wilson_cov }}% vs Wald {{ a.d3_wald_cov }}%."
+    - id: b
+      text: Wald
+      why: Collapses to 0–0 with no frauds sampled.
+    - id: c
+      text: t-interval
+      why: For means.
+    - id: d
+      text: No interval
+      why: Always give one.
+  - id: q6
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C118
+    prompt: 'True or false: the sample mean is a robust estimator of the average basket.'
+    options:
+    - id: a
+      text: False — it is unbiased and consistent, but one bulk buyer moves it; the median is robust
+      correct: true
+      why: Robustness ≠ unbiasedness.
+    - id: b
+      text: 'True'
+      why: Not robust to outliers.
+    - id: c
+      text: True when n > 30
+      why: Still sensitive to extremes.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C120
+    prompt: "Branch {{ a.d3_small_branch }} has {{ a.d3_small_branch_rate }}% default (CI {{ a.d3_small_branch_ci[0] }} – {{ a.d3_small_branch_ci[1] }}%). Best reading?"
+    options:
+    - id: a
+      text: Low but imprecise — small n; compare with intervals and peers
+      correct: true
+      why: Eight defaults.
+    - id: b
+      text: Best-run branch
+      why: Not supported.
+    - id: c
+      text: Data error
+      why: No.
+    - id: d
+      text: Exactly 1.42% risk
+      why: Point estimate only.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C119
+    prompt: Maximum likelihood chooses the parameter that…
+    options:
+    - id: a
+      text: Makes the observed data most probable
+      correct: true
+      why: Definition.
+    - id: b
+      text: Minimises the median
+      why: No.
+    - id: c
+      text: Is most likely a priori
+      why: That's a prior.
+    - id: d
+      text: Has the smallest CI
+      why: No.
+- id: L3.1-L
+  title: L3.1 Uncertainty in reporting (Leader)
+  lesson: L3.1
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C120
+    prompt: "A branch league table ranks {{ a.d3_small_branch }} best on {{ a.d3_small_branch_def }} defaults. Your action?"
+    options:
+    - id: a
+      text: Require intervals and n, and compare branches with peers in the same region
+      correct: true
+      why: Small units hit extremes by chance; mix matters.
+    - id: b
+      text: Reward the branch
+      why: Rewards luck and geography.
+    - id: c
+      text: Remove small branches
+      why: Hides information.
+    - id: d
+      text: Average all branches
+      why: Loses the comparison.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C121
+    prompt: A team reports 'average basket up 3%' month on month. First question?
+    options:
+    - id: a
+      text: What is the CI of the change, and at what unit?
+      correct: true
+      why: Is it distinguishable from noise?
+    - id: b
+      text: Which month?
+      why: Secondary.
+    - id: c
+      text: Why not 5%?
+      why: No.
+    - id: d
+      text: None
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C120
+    prompt: Write a one-sentence annual-report line for average basket value that a non-specialist will read correctly.
+    model: "The average basket was {{ a.d3_basket_mean }}; allowing for sampling uncertainty the true figure is very likely between {{ a.d3_basket_ci[0] }} and {{ a.d3_basket_ci[1] }} (a typical — median — basket was {{ a.d3_basket_median }})."
+    rubric: 'Full: estimate + interval in plain words + median or caveat. Partial: estimate + interval only.'
+  - id: q4
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C120
+    prompt: A junior's 95% t-interval for mean spend uses 30 customers from a heavy-tailed population. Concern?
+    options:
+    - id: a
+      text: "Actual coverage may be ~{{ a.d3_t_coverage[30] }}%; ask for bootstrap/median or more data"
+      correct: true
+      why: Heavy tails.
+    - id: b
+      text: None — n = 30
+      why: Rule of thumb fails here.
+    - id: c
+      text: Use 99% instead
+      why: Doesn't fix shape.
+    - id: d
+      text: Drop the biggest customer
+      why: Hides real spend.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C121
+    prompt: Which reporting rule would you mandate?
+    options:
+    - id: a
+      text: Every estimate shows its interval, n and unit
+      correct: true
+      why: Uncertainty is part of the number.
+    - id: b
+      text: Only show significant results
+      why: Selective reporting.
+    - id: c
+      text: Round to whole numbers
+      why: Not the issue.
+    - id: d
+      text: Always use 99%
+      why: Arbitrary.
+- id: L3.2-F
+  title: L3.2 Bootstrap and permutation (Basic → Advanced)
+  lesson: L3.2
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C122
+    prompt: A bootstrap resample is drawn…
+    options:
+    - id: a
+      text: With replacement, same size as the data
+      correct: true
+      why: Some rows repeat, some are left out.
+    - id: b
+      text: Without replacement, same size
+      why: That just reshuffles the data.
+    - id: c
+      text: From a normal distribution
+      why: That's parametric simulation.
+    - id: d
+      text: From new data
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C122
+    prompt: Upper bound of the 95% bootstrap CI for median spend per customer?
+    answer: "{{ a.d3_cust_median_ci[1] }}"
+    tolerance_abs: 1.5
+    explanation: "Median {{ a.d3_cust_median }}."
+  - id: q3
+    type: numeric
+    difficulty: 3
+    concepts:
+    - C122
+    prompt: How many times larger is the store-resampled SE of mean line revenue than the line-resampled SE?
+    answer: "{{ a.d3_se_ratio_store_line }}"
+    tolerance_abs: 1
+    explanation: Lines within stores are not independent.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C123
+    prompt: A permutation test p-value is…
+    options:
+    - id: a
+      text: The share of label shuffles giving a difference at least as extreme as observed
+      correct: true
+      why: Distribution under H0 built by shuffling.
+    - id: b
+      text: The bootstrap SE
+      why: No.
+    - id: c
+      text: The chance H0 is true
+      why: Never.
+    - id: d
+      text: Always smaller than the t-test p
+      why: No.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C123
+    prompt: "Permutation p for default rate {{ a.d3_perm_br_b }} vs {{ a.d3_perm_br_a }}?"
+    answer: "{{ a.d3_perm_p }}"
+    tolerance_abs: 0.03
+    explanation: "Chi-square p = {{ a.d3_chi2_p_branches }}."
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C122
+    prompt: When does the bootstrap NOT help much?
+    options:
+    - id: a
+      text: Very small samples or extreme quantiles
+      correct: true
+      why: It can't invent information.
+    - id: b
+      text: Medians
+      why: Ideal use.
+    - id: c
+      text: Ratios
+      why: Ideal use.
+    - id: d
+      text: Skewed data with modest n
+      why: Good use.
+  - id: q7
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C122
+    prompt: 'True or false: fixing the random seed is optional for a bootstrap in a report.'
+    options:
+    - id: a
+      text: False — without it results change on every run
+      correct: true
+      why: Reproducibility.
+    - id: b
+      text: 'True'
+      why: Audit can't reproduce.
+    - id: c
+      text: True if B is large
+      why: Still varies slightly.
+  - id: q8
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C122
+    prompt: Data are 40 stores × 16 weeks. Correct bootstrap?
+    options:
+    - id: a
+      text: Resample stores (cluster bootstrap)
+      correct: true
+      why: The store is the independent unit.
+    - id: b
+      text: Resample store-weeks
+      why: Pseudo-replication.
+    - id: c
+      text: Resample weeks
+      why: Ignores stores.
+    - id: d
+      text: No resampling possible
+      why: Cluster bootstrap works.
+- id: L3.2-L
+  title: L3.2 Resampling for reviewers (Leader)
+  lesson: L3.2
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C122
+    prompt: A deck says 'bootstrapped on 25,000 lines, CI ± 0.07'. Your question?
+    options:
+    - id: a
+      text: What was resampled? Stores or customers would give a much wider interval
+      correct: true
+      why: "{{ a.d3_se_ratio_store_line }}× here."
+    - id: b
+      text: Why not 50,000?
+      why: No.
+    - id: c
+      text: Which software?
+      why: Irrelevant.
+    - id: d
+      text: None
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C123
+    prompt: Why are permutation tests well suited to 20-v-20 store tests?
+    options:
+    - id: a
+      text: Exact under randomisation, few assumptions
+      correct: true
+      why: "L3.4 p = {{ a.l34_perm_p }}."
+    - id: b
+      text: Always more powerful
+      why: Not always.
+    - id: c
+      text: No need for randomisation
+      why: Validity rests on it.
+    - id: d
+      text: Faster
+      why: Not the reason.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C122
+    prompt: What must a bootstrap section of a model-validation report contain?
+    model: Statistic, resampling unit and why it is independent, number of resamples, seed, interval type (percentile/BCa), the bootstrap distribution plot, and a comparison with the classical interval where one exists.
+    rubric: 'Full: unit + B + seed + interval type + plot/comparison. Partial: 2–3.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C123
+    prompt: Permutation and chi-square disagree badly on a large sample. Most likely?
+    options:
+    - id: a
+      text: A coding error or wrong unit — investigate
+      correct: true
+      why: With large n they should agree.
+    - id: b
+      text: Pick the smaller p
+      why: p-hacking.
+    - id: c
+      text: Normal
+      why: Not with large n.
+    - id: d
+      text: Use neither
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C122
+    prompt: A metric 'median days to cure' is proposed for a KPI. How should its uncertainty be shown?
+    options:
+    - id: a
+      text: Bootstrap CI resampling accounts
+      correct: true
+      why: No simple SE for medians.
+    - id: b
+      text: Mean ± SD
+      why: Wrong statistic.
+    - id: c
+      text: None
+      why: No.
+    - id: d
+      text: Wald
+      why: For proportions.
+- id: L3.3-F
+  title: L3.3 Testing logic (Basic → Advanced)
+  lesson: L3.3
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C125
+    prompt: A p-value is…
+    options:
+    - id: a
+      text: The probability of data at least this extreme if H0 were true
+      correct: true
+      why: Definition.
+    - id: b
+      text: The probability H0 is true
+      why: Classic misreading.
+    - id: c
+      text: The effect size
+      why: No.
+    - id: d
+      text: The probability of replication
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C126
+    prompt: "Default 2025Q1 vs 2024Q4: p = {{ a.d3_v_q1q4_p }}, CI {{ a.d3_v_q1q4_ci[0] }} to {{ a.d3_v_q1q4_ci[1] }} pp. Correct conclusion?"
+    options:
+    - id: a
+      text: No evidence of a change; changes of about ± 1 pp cannot be ruled out
+      correct: true
+      why: Not significant ≠ no change.
+    - id: b
+      text: Default did not change
+      why: Too strong.
+    - id: c
+      text: Default fell
+      why: CI includes 0.
+    - id: d
+      text: The test failed
+      why: No.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C127
+    prompt: "False-positive rate (%) in {{ a.d3_aa_reps | n }} A/A store splits at α = 0.05?"
+    answer: "{{ a.d3_aa_fpr }}"
+    tolerance_abs: 1.5
+    unit: '%'
+    explanation: ≈ α by design.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C125
+    prompt: Under H0, p-values are distributed…
+    options:
+    - id: a
+      text: Uniformly between 0 and 1
+      correct: true
+      why: A/A histogram is flat.
+    - id: b
+      text: Mostly near 0
+      why: Only under H1.
+    - id: c
+      text: Mostly near 1
+      why: No.
+    - id: d
+      text: Normally around 0.5
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C126
+    prompt: "Transaction counts: p = {{ a.d3_tc_p }} on panel rows, d = {{ a.d3_tc_d }}; p = {{ a.d3_tc_acc_p }} at account level. Main lessons?"
+    options:
+    - id: a
+      text: Big n makes trivial effects significant, and repeated rows fake extra precision
+      correct: true
+      why: Effect size + independent unit.
+    - id: b
+      text: Online customers transact much more
+      why: A third of a transaction.
+    - id: c
+      text: Account-level analysis is wrong
+      why: It's right.
+    - id: d
+      text: Use the smaller p
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C127
+    prompt: A Type II error is…
+    options:
+    - id: a
+      text: Missing a real effect
+      correct: true
+      why: False negative, rate β.
+    - id: b
+      text: A false alarm
+      why: Type I.
+    - id: c
+      text: A coding error
+      why: No.
+    - id: d
+      text: Using the wrong test
+      why: No.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C124
+    prompt: When is a one-sided test legitimate?
+    options:
+    - id: a
+      text: When the direction is fixed before seeing data for a business reason and the other direction would lead to the same action
+      correct: true
+      why: Chosen in advance.
+    - id: b
+      text: When the two-sided p is 0.08
+      why: p-hacking.
+    - id: c
+      text: Always — more power
+      why: No.
+    - id: d
+      text: Never
+      why: Sometimes appropriate.
+  - id: q8
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C125
+    prompt: "2025Q2 default rate (%) vs 2025Q1 ({{ a.d3_v_q1 }}%)?"
+    answer: "{{ a.d3_v_q2 }}"
+    tolerance_abs: 0.1
+    unit: '%'
+    explanation: "p = {{ a.d3_v_q2q1_p }}."
+- id: L3.3-L
+  title: L3.3 Reading tests as a leader (Leader)
+  lesson: L3.3
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C126
+    prompt: A team says 'p = 0.06, so the campaign had no effect — cancel it'. Response?
+    options:
+    - id: a
+      text: Ask for the CI and MDE; the result is inconclusive, not negative
+      correct: true
+      why: Absence of evidence.
+    - id: b
+      text: Cancel
+      why: Unsupported.
+    - id: c
+      text: Round to 0.05
+      why: No.
+    - id: d
+      text: Re-run until significant
+      why: p-hacking.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C127
+    prompt: What should set α for a fraud-blocking rule?
+    options:
+    - id: a
+      text: The relative cost of blocking genuine customers vs missing fraud
+      correct: true
+      why: Costs of the two errors.
+    - id: b
+      text: Convention (0.05)
+      why: Not automatically.
+    - id: c
+      text: The analyst's preference
+      why: No.
+    - id: d
+      text: The sample size
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C124
+    prompt: List what must be written down before a test is run.
+    model: H0/H1 and sidedness, primary outcome, unit of analysis, population and window, exclusions, test, α, sample size/MDE, stopping rule, and how secondary outcomes will be corrected.
+    rubric: 'Full: ≥ 6 items incl. unit and stopping rule. Partial: 3–5.'
+  - id: q4
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C126
+    prompt: 'MI pack: ''online customers transact significantly more (p < 0.001)''. Your reply?'
+    options:
+    - id: a
+      text: How much more, at what unit? (+0.36 a month on panel rows; not significant per account)
+      correct: true
+      why: Effect + unit.
+    - id: b
+      text: Great, push online
+      why: Trivial effect.
+    - id: c
+      text: Ask for p < 0.0001
+      why: Irrelevant.
+    - id: d
+      text: No reply
+      why: Bad reporting stands.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C125
+    prompt: Which is the best single summary for a decision-maker?
+    options:
+    - id: a
+      text: Effect size in business units with its CI
+      correct: true
+      why: Size and uncertainty.
+    - id: b
+      text: The p-value
+      why: No size.
+    - id: c
+      text: The test statistic
+      why: Opaque.
+    - id: d
+      text: '''Significant'''
+      why: Uninformative.
+- id: L3.5-F
+  title: L3.5 k groups and categorical tests (Basic → Advanced)
+  lesson: L3.5
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C135
+    prompt: Why not six t-tests for four regions?
+    options:
+    - id: a
+      text: Multiple tests inflate the false-alarm rate (~26%)
+      correct: true
+      why: Omnibus test, then corrected pairs.
+    - id: b
+      text: t-tests can't compare regions
+      why: They can, pairwise.
+    - id: c
+      text: Too slow
+      why: No.
+    - id: d
+      text: ANOVA is always more powerful
+      why: Not the reason.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C137
+    prompt: "Basket value is heavily skewed and Levene p = {{ a.d3_levene_p }}. Primary test?"
+    options:
+    - id: a
+      text: Kruskal-Wallis (Welch ANOVA as companion)
+      correct: true
+      why: Skew + unequal variances.
+    - id: b
+      text: Classic ANOVA
+      why: Assumptions violated.
+    - id: c
+      text: Chi-square
+      why: Categorical outcomes.
+    - id: d
+      text: Paired t
+      why: No.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C143
+    prompt: η² for basket value by region (4 decimals)?
+    answer: "{{ a.d3_eta2 }}"
+    tolerance_abs: 0.001
+    explanation: Region explains ~0.5% of variation.
+  - id: q4
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C136
+    prompt: Why do North's baskets look smaller?
+    options:
+    - id: a
+      text: "{{ a.d3_north_share_express }}% of its baskets come from Express stores; within formats it isn't consistently lower"
+      correct: true
+      why: Mix.
+    - id: b
+      text: North shoppers spend less
+      why: Not within format.
+    - id: c
+      text: Data error
+      why: No.
+    - id: d
+      text: Weather
+      why: No.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C143
+    prompt: Cramér's V for default × employment type (3 decimals)?
+    answer: "{{ a.d3_emp_v }}"
+    tolerance_abs: 0.005
+    explanation: Very weak.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C138
+    prompt: "A standardised residual of +{{ a.d3_emp_resid_student }} for student defaulters means…"
+    options:
+    - id: a
+      text: Far more student defaults than independence predicts — this cell drives the association
+      correct: true
+      why: '|r| > 2.'
+    - id: b
+      text: Students default less
+      why: Positive = more.
+    - id: c
+      text: Test invalid
+      why: No.
+    - id: d
+      text: Nothing
+      why: It's the key cell.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C139
+    prompt: "Expected defaults in a 2×2 cell ≈ {{ a.d3_fisher_exp }}. Test?"
+    options:
+    - id: a
+      text: Fisher's exact
+      correct: true
+      why: Small expected counts.
+    - id: b
+      text: Chi-square
+      why: Approximation unreliable.
+    - id: c
+      text: t-test
+      why: No.
+    - id: d
+      text: ANOVA
+      why: No.
+  - id: q8
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C140
+    prompt: 30+ DPD measured on the same accounts at months 6 and 12. Test?
+    options:
+    - id: a
+      text: McNemar (uses discordant pairs)
+      correct: true
+      why: Paired binary.
+    - id: b
+      text: Chi-square on the two percentages
+      why: Ignores pairing.
+    - id: c
+      text: Fisher
+      why: Not paired.
+    - id: d
+      text: Kruskal
+      why: No.
+- id: L3.5-L
+  title: L3.5 Group comparisons in decisions (Leader)
+  lesson: L3.5
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C136
+    prompt: The regional director proposes a 'North uplift programme' because North baskets are smallest. Response?
+    options:
+    - id: a
+      text: North's gap is store mix; review the North store portfolio instead
+      correct: true
+      why: Within format, no consistent gap.
+    - id: b
+      text: Approve
+      why: Misattributed.
+    - id: c
+      text: Close North stores
+      why: No.
+    - id: d
+      text: Run more tests
+      why: The data already explain it.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C143
+    prompt: A significant chi-square with V = 0.03 on 25,000 rows means…
+    options:
+    - id: a
+      text: A real but very weak association
+      correct: true
+      why: Large n detects small effects.
+    - id: b
+      text: A strong predictor
+      why: No.
+    - id: c
+      text: No association
+      why: It exists.
+    - id: d
+      text: Test invalid
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C135
+    prompt: What three things should accompany any 'groups differ' finding?
+    model: Which groups differ after correction (post-hoc), how much in business units with an effect size (η²/V), and a check of what explains it (mix/confounding) before attributing it to the grouping.
+    rubric: 'Full: three. Partial: two.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C139
+    prompt: How should branch performance be compared fairly?
+    options:
+    - id: a
+      text: Against peers with similar customer mix, with intervals (funnel plot or Fisher vs region)
+      correct: true
+      why: Mix + uncertainty.
+    - id: b
+      text: Raw league table
+      why: Rewards luck and region.
+    - id: c
+      text: By branch size only
+      why: No.
+    - id: d
+      text: Not at all
+      why: Possible fairly.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C138
+    prompt: Before adding employment type to a credit model, check…
+    options:
+    - id: a
+      text: Incremental predictive value and fairness/proxy effects
+      correct: true
+      why: Weak association; regulatory risk.
+    - id: b
+      text: Only the chi-square p
+      why: Insufficient.
+    - id: c
+      text: Nothing
+      why: No.
+    - id: d
+      text: That it's significant in every branch
+      why: Multiple testing.
+- id: L3.6-F
+  title: L3.6 Effect sizes and power (Basic → Advanced)
+  lesson: L3.6
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C144
+    prompt: Power is…
+    options:
+    - id: a
+      text: The probability of detecting an effect of a given size if it exists
+      correct: true
+      why: 1 − β.
+    - id: b
+      text: 1 − α
+      why: That's specificity-like.
+    - id: c
+      text: The p-value
+      why: No.
+    - id: d
+      text: The effect size
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C145
+    prompt: Stores per arm to detect a 10% lift (80% power)?
+    answer: "{{ a.d3_stores_per_arm[10] }}"
+    tolerance_abs: 1
+    explanation: "SD {{ a.d3_gi_sd }}."
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C145
+    prompt: MDE (%) with 20 stores per arm?
+    answer: "{{ a.d3_mde_20 }}"
+    tolerance_abs: 0.3
+    unit: '%'
+    explanation: (1.96 + 0.84) × SD × √(2/20).
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C145
+    prompt: Halving the effect you want to detect requires about…
+    options:
+    - id: a
+      text: 4× the sample
+      correct: true
+      why: n ∝ 1/effect².
+    - id: b
+      text: 2×
+      why: No.
+    - id: c
+      text: Same
+      why: No.
+    - id: d
+      text: Half
+      why: No.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C142
+    prompt: NNT for the collections challenger (accounts per extra cure)?
+    answer: "{{ a.d3_f16_nnt }}"
+    tolerance_abs: 1
+    explanation: 1 / risk difference.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C142
+    prompt: "OR {{ a.d3_f16_or }} vs RR {{ a.d3_f16_rr }} for cure. Why is OR larger?"
+    options:
+    - id: a
+      text: Cure is common (~35%); OR exaggerates RR for common outcomes
+      correct: true
+      why: They converge only for rare outcomes.
+    - id: b
+      text: Calculation error
+      why: No.
+    - id: c
+      text: OR is always larger
+      why: Only when the effect is positive.
+    - id: d
+      text: Small n
+      why: No.
+  - id: q7
+    type: numeric
+    difficulty: 3
+    concepts:
+    - C144
+    prompt: "Design effect for 16 weeks per store with ICC {{ a.d3_icc_weeks }}?"
+    answer: "{{ a.d3_deff_16 }}"
+    tolerance_abs: 0.2
+    explanation: 1 + 15 × ICC.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C144
+    prompt: "HNI test: n = 241, power {{ a.d3_hni_power }}% for 6% vs 4%. Result not significant. Conclusion?"
+    options:
+    - id: a
+      text: Inconclusive — the test could not detect a plausible difference
+      correct: true
+      why: Under-powered.
+    - id: b
+      text: HNI customers are no riskier
+      why: Not supported.
+    - id: c
+      text: HNI customers are safer
+      why: No.
+    - id: d
+      text: Increase α
+      why: No.
+- id: L3.6-L
+  title: L3.6 Planning tests (Leader)
+  lesson: L3.6
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C145
+    prompt: "The fixture test needs {{ a.d3_stores_per_arm[5] }} stores per arm to detect 5%; the chain has 40. Decision?"
+    options:
+    - id: a
+      text: "Redesign (longer window, CUPED) or test only if a ≥ {{ a.d3_mde_20 }}% effect matters"
+      correct: true
+      why: Don't run an uninformative test.
+    - id: b
+      text: Run it anyway
+      why: Likely inconclusive.
+    - id: c
+      text: Analyse transactions to get power
+      why: Pseudo-replication.
+    - id: d
+      text: Roll out without testing
+      why: Possible, but decide consciously.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C144
+    prompt: A vendor reports 'observed power 35%' after a null result. Response?
+    options:
+    - id: a
+      text: Ignore — post-hoc power restates the p-value; ask for the MDE
+      correct: true
+      why: Power is a design property.
+    - id: b
+      text: Re-run with 35% more data
+      why: Not how power works.
+    - id: c
+      text: Accept as proof of no effect
+      why: No.
+    - id: d
+      text: Ask for 80%
+      why: After the fact, meaningless.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C145
+    prompt: Recommend a plan for the next collections challenger (target +3 pp).
+    model: "At 80/20 we need about {{ a.d3_n_total_3pp | n }} accounts (~{{ a.d3_months_3pp }} months of intake); at 50/50 about {{ a.d3_n_total_3pp_5050 | n }}. Choose 50/50 if the new script carries little risk, or target +5 pp ({{ a.d3_prop_curve[5] | n }} accounts at 80/20). Fix horizon, primary metric and guardrails in advance."
+    rubric: 'Full: numbers + trade-off + pre-registration. Partial: numbers only.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C142
+    prompt: Which effect size best supports an operational staffing decision?
+    options:
+    - id: a
+      text: "NNT ({{ a.d3_f16_nnt }} accounts per extra cure)"
+      correct: true
+      why: Directly actionable.
+    - id: b
+      text: Odds ratio
+      why: Hard to act on.
+    - id: c
+      text: p-value
+      why: Not an effect size.
+    - id: d
+      text: Cohen's h
+      why: Abstract.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C144
+    prompt: "The last challenger had {{ a.d3_power_actual_3pp }}% power for its target yet found an effect. Lesson?"
+    options:
+    - id: a
+      text: It was lucky — the true effect was larger than planned; future tests must be sized properly
+      correct: true
+      why: Design failure, good outcome.
+    - id: b
+      text: Power doesn't matter
+      why: It does.
+    - id: c
+      text: Effect is spurious
+      why: CI excludes 0.
+    - id: d
+      text: Repeat identically
+      why: Still under-powered.
+- id: L3.7-F
+  title: L3.7 Multiple testing (Basic → Advanced)
+  lesson: L3.7
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C146
+    prompt: Chance (%) of at least one false alarm in 20 independent true-null tests at α = 0.05?
+    answer: '64.2'
+    tolerance_abs: 1
+    unit: '%'
+    explanation: 1 − 0.95²⁰.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C147
+    prompt: Holm compared with Bonferroni…
+    options:
+    - id: a
+      text: Controls the same family-wise error with more power
+      correct: true
+      why: Step-down.
+    - id: b
+      text: Controls FDR
+      why: That's BH.
+    - id: c
+      text: Is less strict about FWER
+      why: Same guarantee.
+    - id: d
+      text: Needs independence
+      why: No.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C148
+    prompt: Benjamini-Hochberg controls…
+    options:
+    - id: a
+      text: The expected share of false discoveries among results declared significant
+      correct: true
+      why: FDR.
+    - id: b
+      text: The chance of any false positive
+      why: FWER.
+    - id: c
+      text: Power
+      why: No.
+    - id: d
+      text: Effect sizes
+      why: No.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C146
+    prompt: "Stores flagged for a weekend effect after Holm (of {{ a.d3_mt_r_tests }})?"
+    answer: "{{ a.d3_mt_r_holm }}"
+    tolerance_abs: 0
+    explanation: "Raw: {{ a.d3_mt_r_raw }}."
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C148
+    prompt: Noise features kept by raw p < 0.05 in the 30-feature screen?
+    answer: "{{ a.d3_mt_f_raw_noise }}"
+    tolerance_abs: 0
+    explanation: "BH kept {{ a.d3_mt_f_bh_noise }}."
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C148
+    prompt: For a feature screen, prefer…
+    options:
+    - id: a
+      text: BH — keeps real signals, limits false leads
+      correct: true
+      why: "{{ a.d3_mt_f_bh_real }} real vs Bonferroni {{ a.d3_mt_f_bonf_real }}."
+    - id: b
+      text: Bonferroni
+      why: Drops real features.
+    - id: c
+      text: No correction
+      why: Admits noise.
+    - id: d
+      text: Only one test
+      why: Not a screen.
+  - id: q7
+    type: numeric
+    difficulty: 3
+    concepts:
+    - C149
+    prompt: False-positive rate (%) when peeking 8 times at an A/A test?
+    answer: "{{ a.d3_peek_fpr }}"
+    tolerance_abs: 2
+    unit: '%'
+    explanation: Not 5%.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C149
+    prompt: HARKing means…
+    options:
+    - id: a
+      text: Hypothesising after the results are known
+      correct: true
+      why: Presenting exploration as confirmation.
+    - id: b
+      text: A type of correction
+      why: No.
+    - id: c
+      text: A sampling method
+      why: No.
+    - id: d
+      text: A bootstrap variant
+      why: No.
+- id: L3.7-L
+  title: L3.7 Guarding against false discoveries (Leader)
+  lesson: L3.7
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C149
+    prompt: '''The promo works in Express stores in the North on weekends.'' First question?'
+    options:
+    - id: a
+      text: How many cuts were examined, and was this pre-specified?
+      correct: true
+      why: Forking paths.
+    - id: b
+      text: What was the p-value?
+      why: Meaningless without the number of tests.
+    - id: c
+      text: Roll out to Express North
+      why: Exploratory.
+    - id: d
+      text: None
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C147
+    prompt: A board claim about a single product launch. Correction for secondary metrics?
+    options:
+    - id: a
+      text: Holm (family-wise)
+      correct: true
+      why: False claims costly.
+    - id: b
+      text: BH
+      why: For screens.
+    - id: c
+      text: None
+      why: Inflated risk.
+    - id: d
+      text: Only report the best metric
+      why: Selective reporting.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C149
+    prompt: Draft a one-paragraph team policy that prevents p-hacking without killing exploration.
+    model: Every test has a one-page pre-registration (hypothesis, primary outcome, unit, window, exclusions, test, α, sample size, stopping rule) committed to the repo before data are touched. Results that match it are confirmatory. Everything else is labelled exploratory, corrected with BH, and needs a confirmatory test before action. Interim looks only under a pre-set alpha-spending plan.
+    rubric: 'Full: pre-registration + exploratory label + correction + stopping rule. Partial: two.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C146
+    prompt: A KPI wall flags 7 of 200 metrics as significantly changed this week. Reading?
+    options:
+    - id: a
+      text: About 10 would be flagged by chance; apply FDR before reacting
+      correct: true
+      why: 200 × 0.05.
+    - id: b
+      text: Seven real problems
+      why: Probably noise.
+    - id: c
+      text: The wall is broken
+      why: Working as (badly) designed.
+    - id: d
+      text: Ignore all metrics
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C149
+    prompt: The team wants to stop a test as soon as p < 0.05. You require…
+    options:
+    - id: a
+      text: A fixed horizon or a sequential plan with alpha spending
+      correct: true
+      why: "Peeking FPR ≈ {{ a.d3_peek_fpr }}%."
+    - id: b
+      text: Daily checks are fine
+      why: Inflate errors.
+    - id: c
+      text: α = 0.10
+      why: Worse.
+    - id: d
+      text: Nothing
+      why: No.
+- id: D3-GATE
+  title: Day 3 gate (pass 75%)
+  lesson: D3
+  track: Mixed
+  pass_mark: 75
+  questions:
+  - id: g01
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C120
+    prompt: A 95% CI describes…
+    options:
+    - id: a
+      text: Uncertainty about an estimate (e.g. the mean)
+      correct: true
+      why: Not individuals.
+    - id: b
+      text: Where 95% of customers lie
+      why: No.
+    - id: c
+      text: P(H0)
+      why: No.
+    - id: d
+      text: The effect size
+      why: No.
+  - id: g02
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C121
+    prompt: 'Rare-rate interval of choice:'
+    options:
+    - id: a
+      text: Wilson
+      correct: true
+      why: Coverage.
+    - id: b
+      text: Wald
+      why: Under-covers.
+    - id: c
+      text: t
+      why: Means.
+    - id: d
+      text: None
+      why: No.
+  - id: g03
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C122
+    prompt: Clustered data (stores × weeks) — resample…
+    options:
+    - id: a
+      text: Stores
+      correct: true
+      why: Independent unit.
+    - id: b
+      text: Store-weeks
+      why: Pseudo-replication.
+    - id: c
+      text: Weeks
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: g04
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C126
+    prompt: p = 0.20 with a wide CI means…
+    options:
+    - id: a
+      text: Inconclusive
+      correct: true
+      why: Not evidence of no effect.
+    - id: b
+      text: No effect
+      why: No.
+    - id: c
+      text: Effect is 20%
+      why: No.
+    - id: d
+      text: Test invalid
+      why: No.
+  - id: g05
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C127
+    prompt: Share (%) of true-null tests significant at α = 0.05, in the long run?
+    answer: '5'
+    tolerance_abs: 0
+    unit: '%'
+    explanation: Definition of α.
+  - id: g06
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C137
+    prompt: 'Skewed outcome, 4 groups:'
+    options:
+    - id: a
+      text: Kruskal-Wallis + corrected pairwise
+      correct: true
+      why: Robust.
+    - id: b
+      text: Six t-tests
+      why: Inflated errors.
+    - id: c
+      text: Chi-square
+      why: Categorical.
+    - id: d
+      text: McNemar
+      why: Paired binary.
+  - id: g07
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C139
+    prompt: 'Expected cell count 3 in a 2×2:'
+    options:
+    - id: a
+      text: Fisher's exact
+      correct: true
+      why: Small counts.
+    - id: b
+      text: Chi-square
+      why: Unreliable.
+    - id: c
+      text: ANOVA
+      why: No.
+    - id: d
+      text: z-test
+      why: Approximation fails.
+  - id: g08
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C143
+    prompt: η² = 0.005 means the grouping explains…
+    options:
+    - id: a
+      text: About 0.5% of the variation
+      correct: true
+      why: Tiny.
+    - id: b
+      text: 5%
+      why: No.
+    - id: c
+      text: Half
+      why: No.
+    - id: d
+      text: Nothing
+      why: A little.
+  - id: g09
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C145
+    prompt: MDE (%) of the 20-v-20 store design?
+    answer: "{{ a.d3_mde_20 }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: L3.6.
+  - id: g10
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C144
+    prompt: 'Non-significant under-powered test:'
+    options:
+    - id: a
+      text: Report MDE; inconclusive
+      correct: true
+      why: Can't detect plausible effects.
+    - id: b
+      text: No effect
+      why: No.
+    - id: c
+      text: Compute observed power
+      why: Uninformative.
+    - id: d
+      text: Raise α
+      why: No.
+  - id: g11
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C148
+    prompt: 'Screening 30 features — correction:'
+    options:
+    - id: a
+      text: Benjamini-Hochberg
+      correct: true
+      why: FDR for screens.
+    - id: b
+      text: None
+      why: Noise enters.
+    - id: c
+      text: Bonferroni always
+      why: Loses real signals.
+    - id: d
+      text: Pick top 5 by p
+      why: Arbitrary.
+  - id: g12
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C149
+    prompt: Stopping a test at the first p < 0.05 after daily checks…
+    options:
+    - id: a
+      text: Inflates false positives well above 5%
+      correct: true
+      why: Optional stopping.
+    - id: b
+      text: Is efficient
+      why: Invalid.
+    - id: c
+      text: Reduces errors
+      why: No.
+    - id: d
+      text: Is required
+      why: No.

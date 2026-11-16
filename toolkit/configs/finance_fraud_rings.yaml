@@ -1,0 +1,7 @@
+# L8.6 (F07): accounts linked by shared devices/addresses — connected components.
+recipe: rcp_anomaly_scan
+dataset: {name: meridian_links, path: data/finance/devices_addresses.parquet}
+columns: {entity: account_id, link: link_id}
+filters: []
+params: {mode: graph, min_size: 6, label: {path: data/finance/accounts.parquet, key: account_id, column: fraud_flag}}
+output: {folder: "outputs/{recipe}/{date}_finance_fraud_rings"}

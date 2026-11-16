@@ -1,0 +1,78 @@
+{
+  "baskets": 3163,
+  "items": 40,
+  "rules_after_support": 1192,
+  "rules_after_lift": 518,
+  "top": [
+    {
+      "antecedent": "Pasta",
+      "consequent": "Pasta Sauce",
+      "support": 0.133418,
+      "confidence": 0.805344,
+      "lift": 3.27838
+    },
+    {
+      "antecedent": "Pasta Sauce",
+      "consequent": "Pasta",
+      "support": 0.133418,
+      "confidence": 0.543115,
+      "lift": 3.27838
+    },
+    {
+      "antecedent": "Beer",
+      "consequent": "Chips",
+      "support": 0.053746,
+      "confidence": 0.447368,
+      "lift": 2.715981
+    },
+    {
+      "antecedent": "Chips",
+      "consequent": "Beer",
+      "support": 0.053746,
+      "confidence": 0.326296,
+      "lift": 2.715981
+    },
+    {
+      "antecedent": "Cleaning",
+      "consequent": "Paper",
+      "support": 0.033196,
+      "confidence": 0.34202,
+      "lift": 1.952722
+    },
+    {
+      "antecedent": "Paper",
+      "consequent": "Cleaning",
+      "support": 0.033196,
+      "confidence": 0.189531,
+      "lift": 1.952722
+    },
+    {
+      "antecedent": "Rice",
+      "consequent": "Paper",
+      "support": 0.045526,
+      "confidence": 0.327273,
+      "lift": 1.868526
+    },
+    {
+      "antecedent": "Paper",
+      "consequent": "Rice",
+      "support": 0.045526,
+      "confidence": 0.259928,
+      "lift": 1.868526
+    },
+    {
+      "antecedent": "Cleaning",
+      "consequent": "Oil",
+      "support": 0.022447,
+      "confidence": 0.23127,
+      "lift": 1.788528
+    },
+    {
+      "antecedent": "Oil",
+      "consequent": "Cleaning",
+      "support": 0.022447,
+      "confidence": 0.173594,
+      "lift": 1.788528
+    }
+  ]
+}

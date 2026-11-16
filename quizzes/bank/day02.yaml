@@ -1,0 +1,1807 @@
+quizzes:
+- id: L2.1-F
+  title: L2.1 Probability and Bayes (Basic → Advanced)
+  lesson: L2.1
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C076
+    prompt: Return rate (%) for Electronics lines (returns ÷ sales lines)?
+    answer: "{{ a.d2_p_return_elec }}"
+    tolerance_abs: 0.2
+    unit: '%'
+    explanation: "Versus {{ a.d2_p_return }}% overall — conditioning changes the answer."
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C075
+    prompt: "P(promo) = {{ a.d2_p_promo }}%, P(display) = {{ a.d2_p_display }}%, P(both) = {{ a.d2_p_both }}%. Are they independent?"
+    options:
+    - id: a
+      text: "No — independence would give about {{ a.d2_p_both_if_indep }}%"
+      correct: true
+      why: P(A and B) ≠ P(A) × P(B).
+    - id: b
+      text: 'Yes'
+      why: The joint is far above the product.
+    - id: c
+      text: Cannot tell without a test
+      why: The gap is huge; a test would only confirm it.
+    - id: d
+      text: Only if P(both) = 0
+      why: That would be mutually exclusive, not independent.
+  - id: q3
+    type: numeric
+    difficulty: 3
+    concepts:
+    - C078
+    prompt: "Using Bayes: sensitivity {{ a.d2_alert_sens_pct }}%, false-positive rate {{ a.d2_alert_fpr_pct }}%, base rate {{ a.d2_fraud_base_pct }}%. P(fraud | alert) in %?"
+    answer: "{{ a.d2_alert_ppv_bayes_pct }}"
+    tolerance_abs: 0.3
+    unit: '%'
+    explanation: 0.377×0.007 ÷ (0.377×0.007 + 0.031×0.993).
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C079
+    prompt: Why is precision low even for a good fraud alert?
+    options:
+    - id: a
+      text: Fraud is rare, so false alarms among the many genuine customers outnumber the frauds caught
+      correct: true
+      why: Base-rate effect.
+    - id: b
+      text: The alert is broken
+      why: "It raises the fraud rate {{ a.d2_alert_lift }}-fold."
+    - id: c
+      text: Sensitivity is too high
+      why: Not the cause.
+    - id: d
+      text: Sample size
+      why: No.
+  - id: q5
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C076
+    prompt: "True or false: since {{ a.d2_p_partner_given_default }}% of defaulters came through partners, a partner customer has a {{ a.d2_p_partner_given_default }}% chance of default."
+    options:
+    - id: a
+      text: "False — that confuses P(partner | default) with P(default | partner) = {{ a.d2_pd_partner_pct }}%"
+      correct: true
+      why: Confusion of the inverse.
+    - id: b
+      text: 'True'
+      why: Different conditionals.
+    - id: c
+      text: True for large samples
+      why: Sample size doesn't fix it.
+  - id: q6
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C081
+    prompt: "Odds of default for partner customers (p = {{ a.d2_pd_partner_pct }}%), 4 decimals?"
+    answer: "{{ a.d2_odds_partner }}"
+    tolerance_abs: 0.002
+    explanation: p ÷ (1 − p).
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C077
+    prompt: The law of total probability lets you…
+    options:
+    - id: a
+      text: Combine group-level rates, weighted by group shares, into an overall rate
+      correct: true
+      why: P(A) = Σ P(A|Bᵢ)P(Bᵢ).
+    - id: b
+      text: Prove independence
+      why: No.
+    - id: c
+      text: Reverse a conditional
+      why: That's Bayes.
+    - id: d
+      text: Remove bias
+      why: No.
+  - id: q8
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C080
+    prompt: Per 10,000 accounts, how many false alarms does the alert produce?
+    answer: "{{ a.d2_nf_false }}"
+    tolerance_abs: 3
+    explanation: "Versus {{ a.d2_nf_caught }} frauds caught."
+- id: L2.1-L
+  title: L2.1 Alerts and conditional claims (Leader)
+  lesson: L2.1
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C078
+    prompt: "The alert flags {{ a.d2_alert_rate_pct }}% of accounts with precision {{ a.d2_alert_ppv_bayes_pct }}%. Deploy?"
+    options:
+    - id: a
+      text: As a triage queue if investigation cost per alert is below the expected recovery per alert; not as an automatic block
+      correct: true
+      why: Low precision is normal for rare events; economics decide.
+    - id: b
+      text: Block all alerted accounts
+      why: Most are genuine customers.
+    - id: c
+      text: Reject — precision under 50%
+      why: Wrong benchmark for rare events.
+    - id: d
+      text: Deploy without measuring
+      why: No.
+  - id: q2
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C079
+    prompt: A vendor claims 95% accuracy for fraud detection. First question?
+    options:
+    - id: a
+      text: What precision and recall at our base rate, per 10,000 accounts?
+      correct: true
+      why: Accuracy is meaningless at 0.7% prevalence.
+    - id: b
+      text: What algorithm?
+      why: Secondary.
+    - id: c
+      text: Price?
+      why: Later.
+    - id: d
+      text: None
+      why: See a.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C078
+    prompt: Explain the alert's performance to the head of fraud in natural frequencies (two sentences).
+    model: "Out of 10,000 accounts about {{ a.d2_nf_fraud }} are fraudulent; the alert catches about {{ a.d2_nf_caught }} of them but also flags about {{ a.d2_nf_false }} genuine customers. So roughly one alert in {{ (100 / a.d2_alert_ppv_bayes_pct) | round(0) | int }} is real fraud — useful for prioritising investigations, not for blocking."
+    rubric: 'Full: three counts + conclusion on use. Partial: percentages only.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C076
+    prompt: '''Most defaulters are partner customers'' is used to argue ''partner customers mostly default''. Your correction?'
+    options:
+    - id: a
+      text: "Partner default rate is {{ a.d2_pd_partner_pct }}% — high but far from 'mostly'"
+      correct: true
+      why: Swapped conditional.
+    - id: b
+      text: Agree
+      why: Wrong.
+    - id: c
+      text: Partner customers never default
+      why: Wrong.
+    - id: d
+      text: Can't be computed
+      why: It can.
+  - id: q5
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C075
+    prompt: Merchandising wants separate ROI for displays and promotions from historical data. Response?
+    options:
+    - id: a
+      text: "They co-occur {{ a.d2_p_disp_given_promo }}% of the time — effects are not separable without a test varying them independently"
+      correct: true
+      why: Dependence/confounding.
+    - id: b
+      text: Run a regression with both
+      why: Near-collinear; unstable.
+    - id: c
+      text: Assume equal split
+      why: Arbitrary.
+    - id: d
+      text: Use the bigger effect
+      why: No.
+- id: L2.2-F
+  title: L2.2 Discrete distributions (Basic → Advanced)
+  lesson: L2.2
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C083
+    prompt: Number of defaults among 2,400 accounts with the same PD follows…
+    options:
+    - id: a
+      text: Binomial
+      correct: true
+      why: Successes in n independent trials.
+    - id: b
+      text: Poisson only
+      why: Approximation at best.
+    - id: c
+      text: Normal exactly
+      why: Approximation.
+    - id: d
+      text: Geometric
+      why: Trials until first success.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C083
+    prompt: "Expected defaults and SD for n = 2,400 at p = {{ a.d2_true_default_pct }}%: give the SD."
+    answer: "{{ a.d2_binom_sd }}"
+    tolerance_abs: 0.2
+    explanation: "√(np(1−p)); mean {{ a.d2_binom_mean }}."
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C085
+    prompt: Variance ÷ mean of weekly Dairy units in store S001?
+    answer: "{{ a.d2_s1_dairy_disp }}"
+    tolerance_abs: 0.1
+    explanation: Over-dispersed → negative binomial.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C086
+    prompt: When is Poisson appropriate for counts?
+    options:
+    - id: a
+      text: When variance ≈ mean and events are independent at a constant rate
+      correct: true
+      why: Poisson's defining property.
+    - id: b
+      text: Always for counts
+      why: Retail demand is usually over-dispersed.
+    - id: c
+      text: When counts are large
+      why: Not the criterion.
+    - id: d
+      text: When there are zeros
+      why: No.
+  - id: q5
+    type: numeric
+    difficulty: 3
+    concepts:
+    - C087
+    prompt: Audit samples 50 of 200 files with 10 faulty. P(at least one faulty found), % (hypergeometric)?
+    answer: "{{ a.d2_hyp_p_detect }}"
+    tolerance_abs: 0.2
+    unit: '%'
+    explanation: "Binomial approximation gives {{ a.d2_binom_p_detect }}%."
+  - id: q6
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C084
+    prompt: "With {{ a.d2_p_promo_basket }}% of baskets containing a promo item, expected baskets until the first promo basket?"
+    answer: "{{ a.d2_geom_mean_wait }}"
+    tolerance_abs: 0.05
+    explanation: Geometric mean 1/p.
+  - id: q7
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C086
+    prompt: "Poisson fits the zero-claim share well but predicts {{ a.d2_claim_p2_pois }}% of policies with 2+ claims vs {{ a.d2_claim_p2_obs }}% observed. Implication?"
+    options:
+    - id: a
+      text: Risk varies between policyholders; use negative binomial
+      correct: true
+      why: Heterogeneity fattens the tail.
+    - id: b
+      text: Poisson is fine
+      why: It misses the expensive tail.
+    - id: c
+      text: Data error
+      why: No.
+    - id: d
+      text: Use a normal
+      why: Counts.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C089
+    prompt: Store return rates vary more than binomial noise predicts. Which model idea fits?
+    options:
+    - id: a
+      text: Beta-binomial / hierarchical (rates differ by store)
+      correct: true
+      why: Extra between-group variation.
+    - id: b
+      text: Single binomial
+      why: Too little variance.
+    - id: c
+      text: Geometric
+      why: No.
+    - id: d
+      text: Uniform
+      why: No.
+- id: L2.2-L
+  title: L2.2 Distributions in decisions (Leader)
+  lesson: L2.2
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C085
+    prompt: "Safety stock was set assuming Poisson demand; actual dispersion is ~{{ a.d2_sku_disp_median }} for typical SKUs. Consequence?"
+    options:
+    - id: a
+      text: Systematic under-stocking and more stockouts than planned
+      correct: true
+      why: Poisson understates variability.
+    - id: b
+      text: Over-stocking
+      why: Opposite.
+    - id: c
+      text: No effect
+      why: Variance drives safety stock.
+    - id: d
+      text: Only affects slow movers
+      why: All over-dispersed SKUs.
+  - id: q2
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C083
+    prompt: "Vintage defaults are consistent with one PD before 2025Q2 (p = {{ a.d2_vint_early_chi2_p }}) but not overall (p ≈ {{ a.d2_vint_chi2_p }}). Decision for provisioning?"
+    options:
+    - id: a
+      text: Segment PD — recent vintages need their own estimate and an investigation
+      correct: true
+      why: The process changed.
+    - id: b
+      text: Keep one PD
+      why: Under-provisions recent business.
+    - id: c
+      text: Average all vintages
+      why: Hides the change.
+    - id: d
+      text: Ignore — chance
+      why: p ≈ 0.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C087
+    prompt: Audit plans to sample 50 of 200 files 'as usual'. What do you ask, and how should the size be set?
+    model: "Ask what error rate audit must detect and with what confidence. Size with the hypergeometric: for 10 faulty in 200, 50 files give {{ a.d2_hyp_p_detect }}% detection; {{ a.d2_hyp_n_for_95 }} files give 95%. Smaller error counts need much larger samples."
+    rubric: 'Full: detection target + hypergeometric sizing. Partial: one of them.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C086
+    prompt: Pricing uses Poisson claim frequency because the mean matches. What do you check?
+    options:
+    - id: a
+      text: Dispersion and the share of multi-claim policies
+      correct: true
+      why: Tail drives cost.
+    - id: b
+      text: The mean again
+      why: Already matches.
+    - id: c
+      text: Only zeros
+      why: Insufficient.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C085
+    prompt: Quickest test of whether a count model is plausible?
+    options:
+    - id: a
+      text: Variance-to-mean ratio
+      correct: true
+      why: Seconds to compute; decides Poisson vs NB.
+    - id: b
+      text: R²
+      why: No.
+    - id: c
+      text: Skewness of a different variable
+      why: No.
+    - id: d
+      text: AUC
+      why: No.
+- id: L2.3-F
+  title: L2.3 Continuous distributions (Basic → Advanced)
+  lesson: L2.3
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C092
+    prompt: Which family fits basket value best by AIC?
+    options:
+    - id: a
+      text: "{{ a.d2_basket_best }}"
+      correct: true
+      why: "AIC {{ a.d2_basket_aic[a.d2_basket_best] | n }}."
+    - id: b
+      text: normal
+      why: Worst — data are positive and skewed.
+    - id: c
+      text: uniform
+      why: Not a candidate.
+    - id: d
+      text: Cauchy
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C104
+    prompt: ΔAIC between two fits is 1.5. Interpretation?
+    options:
+    - id: a
+      text: Practically tied — choose the simpler or more interpretable
+      correct: true
+      why: ΔAIC < 2.
+    - id: b
+      text: Decisive
+      why: Needs > 10.
+    - id: c
+      text: Lower one is wrong
+      why: No.
+    - id: d
+      text: Use a p-value instead
+      why: No.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C095
+    prompt: Weibull shape k for gaps between a customer's baskets?
+    answer: "{{ a.d2_gap_weibull_k }}"
+    tolerance_abs: 0.05
+    explanation: k ≈ 1 → close to exponential (constant hazard).
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C094
+    prompt: "Fitted gamma P99 severity {{ a.d2_sev_p99_gamma | n }}, empirical P99 {{ a.d2_sev_p99_emp | n }}. Meaning?"
+    options:
+    - id: a
+      text: The model under-states the tail — treat large losses separately
+      correct: true
+      why: Catastrophic claims.
+    - id: b
+      text: Fit is perfect
+      why: Tail gap.
+    - id: c
+      text: Use a normal
+      why: Worse.
+    - id: d
+      text: Delete large claims
+      why: They are real costs.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C090
+    prompt: '% of bureau scores within 1 SD of the mean?'
+    answer: "{{ a.d2_bureau_within1sd_pct }}"
+    tolerance_abs: 0.3
+    unit: '%'
+    explanation: Close to the normal's 68%.
+  - id: q6
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C098
+    prompt: Why does the running mean of Cauchy draws never settle?
+    options:
+    - id: a
+      text: The Cauchy distribution has no mean — tails are too heavy
+      correct: true
+      why: LLN requires a finite mean.
+    - id: b
+      text: Too few draws
+      why: More draws don't help.
+    - id: c
+      text: Random seed
+      why: No.
+    - id: d
+      text: Rounding
+      why: No.
+  - id: q7
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C101
+    prompt: Two-sided 95% t critical value with 5 degrees of freedom?
+    answer: "{{ a.d2_t_crit_df5 }}"
+    tolerance_abs: 0.01
+    explanation: "Versus {{ a.d2_z_crit }} for the normal — heavier tails at small n."
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C099
+    prompt: Weekly price changes have a sharp peak and fat tails. Better than normal?
+    options:
+    - id: a
+      text: Laplace
+      correct: true
+      why: AIC far lower.
+    - id: b
+      text: Uniform
+      why: No.
+    - id: c
+      text: Beta
+      why: Bounded 0–1.
+    - id: d
+      text: Exponential
+      why: Positive only.
+- id: L2.3-L
+  title: L2.3 Tails and risk (Leader)
+  lesson: L2.3
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C094
+    prompt: Pricing fitted a gamma to attritional claims and excluded three catastrophic ones without noting it. Concern?
+    options:
+    - id: a
+      text: Premiums ignore large-loss cost; require an explicit large-loss model or loading
+      correct: true
+      why: "Mean severity rises from {{ a.d2_sev_mean_nocat | n }} to {{ a.d2_sev_mean_all | n }} with them."
+    - id: b
+      text: Fine — outliers
+      why: They are real costs.
+    - id: c
+      text: Use median severity
+      why: Worse.
+    - id: d
+      text: No concern
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C104
+    prompt: Which single check do you demand on any fitted distribution used for risk?
+    options:
+    - id: a
+      text: Fitted vs empirical high quantiles (P99)
+      correct: true
+      why: The tail drives reserves and limits.
+    - id: b
+      text: AIC only
+      why: Can hide tail misfit.
+    - id: c
+      text: Mean only
+      why: No.
+    - id: d
+      text: Colour of the plot
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C103
+    prompt: A junior assumes normally distributed losses for a stress scenario. What do you ask for?
+    model: Evidence on the shape (Q-Q, tail quantiles), a fat-tailed alternative (t, Laplace, lognormal/gamma with a large-loss component), and stress results under both. Normal tails usually understate extreme losses.
+    rubric: 'Full: evidence + alternative + comparison. Partial: one element.'
+  - id: q4
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C095
+    prompt: Churn time has Weibull k < 1. Operational implication?
+    options:
+    - id: a
+      text: Risk is highest early in the relationship — invest in onboarding
+      correct: true
+      why: Decreasing hazard.
+    - id: b
+      text: Risk rises with tenure
+      why: That's k > 1.
+    - id: c
+      text: Constant risk
+      why: k = 1.
+    - id: d
+      text: None
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C101
+    prompt: Why use t rather than z critical values with small samples?
+    options:
+    - id: a
+      text: The SD is estimated, adding uncertainty; t has heavier tails
+      correct: true
+      why: "{{ a.d2_t_crit_df5 }} vs {{ a.d2_z_crit }} at df 5."
+    - id: b
+      text: t is more precise
+      why: It is more honest, not more precise.
+    - id: c
+      text: Convention only
+      why: No.
+    - id: d
+      text: No difference
+      why: There is at small n.
+- id: L2.4-F
+  title: L2.4 Sampling and bias (Basic → Advanced)
+  lesson: L2.4
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C070
+    prompt: "Promo lines show {{ a.d2_simpson_overall_pct }}% units per line overall but more within every format. This is…"
+    options:
+    - id: a
+      text: Simpson's paradox caused by format mix
+      correct: true
+      why: Promos concentrated in Express.
+    - id: b
+      text: A data error
+      why: No.
+    - id: c
+      text: Random noise
+      why: Systematic.
+    - id: d
+      text: Survivorship bias
+      why: Different bias.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C068
+    prompt: True Snacks category growth (%) including delisted SKUs?
+    answer: "{{ a.d2_surv_true_pct }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: "Versus {{ a.d2_surv_current_pct }}% using the current range."
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C067
+    prompt: "Default rate from branch-acquired accounts only is {{ a.d2_branch_only_pct }}% vs {{ a.d2_true_default_pct }}% overall. Bias?"
+    options:
+    - id: a
+      text: Convenience/selection bias — riskier partner customers excluded
+      correct: true
+      why: Sampling frame differs.
+    - id: b
+      text: Random error
+      why: Systematic.
+    - id: c
+      text: No bias
+      why: No.
+    - id: d
+      text: Non-response
+      why: Not quite.
+  - id: q4
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C063
+    prompt: 'True or false: a bigger sample removes bias.'
+    options:
+    - id: a
+      text: False — bias is systematic; more data from the same biased frame gives a more precise wrong answer
+      correct: true
+      why: Only sampling error shrinks.
+    - id: b
+      text: 'True'
+      why: No.
+    - id: c
+      text: True, beyond 10,000 rows
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C065
+    prompt: "Stratifying by channel barely reduced the SE ({{ a.d2_srs_se_pp }} → {{ a.d2_strat_se_pp }} pp). Why?"
+    options:
+    - id: a
+      text: Most variation in default is within channels
+      correct: true
+      why: Gains depend on between-strata differences relative to within.
+    - id: b
+      text: Stratification is broken
+      why: No.
+    - id: c
+      text: Wrong weights
+      why: Weights were correct.
+    - id: d
+      text: Too many samples
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C071
+    prompt: "Displays accompany {{ a.d2_disp_promo_pct }}% of promo lines. For the promo effect, display is a…"
+    options:
+    - id: a
+      text: Confounder
+      correct: true
+      why: Related to treatment and outcome.
+    - id: b
+      text: Mediator
+      why: A mediator lies on the path from promotion to sales; displays are assigned alongside promotions, not caused by them.
+    - id: c
+      text: Instrument
+      why: No.
+    - id: d
+      text: Irrelevant
+      why: No.
+  - id: q7
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C067
+    prompt: Why can't booked-account data tell you the default rate below the old approval cut-off?
+    options:
+    - id: a
+      text: No one below the cut-off was approved, so their outcomes were never observed
+      correct: true
+      why: Selection on the outcome-relevant score.
+    - id: b
+      text: Not enough accounts
+      why: There are zero.
+    - id: c
+      text: Data error
+      why: No.
+    - id: d
+      text: It can
+      why: No.
+  - id: q8
+    type: multi
+    difficulty: 2
+    concepts:
+    - C067
+    - C068
+    - C069
+    prompt: Which are examples of bias from who is in the data? (Select all.)
+    options:
+    - id: a
+      text: Current product master only
+      correct: true
+      why: Survivorship.
+    - id: b
+      text: Loyalty members chose to join
+      correct: true
+      why: Self-selection.
+    - id: c
+      text: Booked accounts only
+      correct: true
+      why: Selection.
+    - id: d
+      text: A random sample of all accounts
+      why: Unbiased by design.
+- id: L2.4-L
+  title: L2.4 Bias in decisions (Leader)
+  lesson: L2.4
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C070
+    prompt: "The board deck says 'promotions reduce units per line by {{ a.d2_simpson_overall_pct | abs }}%'. Response?"
+    options:
+    - id: a
+      text: 'Withdraw it: within every format promotions increase units; the pooled figure reflects format mix'
+      correct: true
+      why: Simpson's paradox.
+    - id: b
+      text: Cut promotions
+      why: Wrong conclusion.
+    - id: c
+      text: Add a footnote only
+      why: The headline is wrong.
+    - id: d
+      text: Ask for more data
+      why: The data already answer it.
+  - id: q2
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C067
+    prompt: Credit wants to lower the cut-off using a model trained on booked accounts. Recommendation?
+    options:
+    - id: a
+      text: Run a small controlled approval test below the cut-off before changing policy
+      correct: true
+      why: Risk there is unobserved.
+    - id: b
+      text: Extrapolate the model
+      why: Guesswork.
+    - id: c
+      text: "Assume the lowest booked decile's rate ({{ a.d2_booked_low_def_pct }}%)"
+      why: Declined applicants are riskier.
+    - id: d
+      text: Never change the cut-off
+      why: Too rigid.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C071
+    prompt: "Marketing reports loyalty members' baskets are {{ a.d2_loyal_naive_pct }}% bigger and wants to claim the programme caused it. What do you say?"
+    model: 'That is a comparison of self-selected groups: big spenders are more likely to join. It shows association, not effect. To estimate the programme''s effect we need pre/post data on joiners vs similar non-joiners (difference-in-differences or matching, Day 9) or a test.'
+    rubric: 'Full: self-selection + design to estimate effect. Partial: one.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C068
+    prompt: Which data asset most often hides survivorship bias?
+    options:
+    - id: a
+      text: Current master data (active products, active customers, booked accounts)
+      correct: true
+      why: Failures were removed.
+    - id: b
+      text: Raw event logs
+      why: Usually complete.
+    - id: c
+      text: Calendars
+      why: No.
+    - id: d
+      text: Random samples
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C065
+    prompt: When is stratified sampling worth it?
+    options:
+    - id: a
+      text: To guarantee enough units in small subgroups, or when strata differ strongly on the outcome
+      correct: true
+      why: Otherwise gains are small.
+    - id: b
+      text: Always — it halves the SE
+      why: Not here.
+    - id: c
+      text: Never
+      why: It has uses.
+    - id: d
+      text: Only for binary outcomes
+      why: No.
+- id: L2.5-F
+  title: L2.5 LLN, CLT, Monte Carlo (Basic → Advanced)
+  lesson: L2.5
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C105
+    prompt: The law of large numbers says…
+    options:
+    - id: a
+      text: Sample averages get closer to the true mean as n grows
+      correct: true
+      why: Definition.
+    - id: b
+      text: Data become normal
+      why: That's not it.
+    - id: c
+      text: Outliers disappear
+      why: No.
+    - id: d
+      text: Variance increases
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C107
+    prompt: Formula SE of the mean basket for n = 200 (σ/√n)?
+    answer: "{{ a.d2_clt[200].se_formula }}"
+    tolerance_abs: 0.2
+    explanation: "Simulated {{ a.d2_clt[200].se_sim }}."
+  - id: q3
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C106
+    prompt: "Skew of sample means at n = 30 is still {{ a.d2_clt[30].skew }}. Why?"
+    options:
+    - id: a
+      text: Basket value is extremely heavy-tailed; convergence to normal is slow
+      correct: true
+      why: n ≥ 30 is a rule for moderate skew.
+    - id: b
+      text: The CLT is false
+      why: It holds asymptotically.
+    - id: c
+      text: Simulation error
+      why: No.
+    - id: d
+      text: n is too large
+      why: No.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C108
+    prompt: What does a Monte Carlo simulation produce?
+    options:
+    - id: a
+      text: A distribution of outcomes from repeatedly sampling uncertain inputs
+      correct: true
+      why: Then read P(loss), ranges.
+    - id: b
+      text: A single best estimate
+      why: It gives a distribution.
+    - id: c
+      text: A p-value
+      why: No.
+    - id: d
+      text: Causal effects
+      why: No.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C108
+    prompt: Simulated probability (%) that the Hair Care rollout loses money?
+    answer: "{{ a.d2_mc_p_loss_pct }}"
+    tolerance_abs: 1
+    unit: '%'
+    explanation: Positive expected P&L, meaningful downside.
+  - id: q6
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C108
+    prompt: 'True or false: a Monte Carlo needs a fixed random seed to be reproducible.'
+    options:
+    - id: a
+      text: True — otherwise results change slightly every run
+      correct: true
+      why: Reproducibility.
+    - id: b
+      text: False — randomness is the point
+      why: Seeds keep randomness reproducible.
+    - id: c
+      text: False — use more draws instead
+      why: Both help; seeds ensure identical reruns.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C108
+    prompt: "Portfolio loss P99 is {{ a.d2_port_ratio }}× expected loss. What causes the fat tail?"
+    options:
+    - id: a
+      text: A shared economic factor makes defaults correlated
+      correct: true
+      why: Bad years hit many accounts at once.
+    - id: b
+      text: Small portfolio
+      why: 25,000 accounts.
+    - id: c
+      text: LGD only
+      why: Secondary.
+    - id: d
+      text: Rounding
+      why: No.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C105
+    prompt: "After 10 random baskets the running mean was {{ a.d2_lln_mean_10 }} (true {{ a.d2_pop_mean }}). Lesson?"
+    options:
+    - id: a
+      text: Small samples of heavy-tailed data can be far off
+      correct: true
+      why: Early KPIs are noisy.
+    - id: b
+      text: The data are wrong
+      why: No.
+    - id: c
+      text: Means are useless
+      why: With enough data they settle.
+    - id: d
+      text: Use the max
+      why: No.
+- id: L2.5-L
+  title: L2.5 Risk ranges (Leader)
+  lesson: L2.5
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C108
+    prompt: "Rollout: mean P&L {{ a.d2_mc_pnl_mean | n }}, P(loss) {{ a.d2_mc_p_loss_pct }}%, reversible within a quarter. Decision?"
+    options:
+    - id: a
+      text: Staged rollout with a holdout — reversible downside, positive expectation
+      correct: true
+      why: Learn while limiting risk.
+    - id: b
+      text: Full rollout
+      why: Ignores a one-in-five downside.
+    - id: c
+      text: Reject
+      why: Positive EV, reversible.
+    - id: d
+      text: Wait a year
+      why: Costly delay.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C107
+    prompt: A team reports a day-one KPI from 40 transactions. Response?
+    options:
+    - id: a
+      text: Set a minimum sample before reporting; the SE is too large
+      correct: true
+      why: LLN.
+    - id: b
+      text: Celebrate
+      why: Noise.
+    - id: c
+      text: Escalate
+      why: Noise.
+    - id: d
+      text: Average with last year
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C108
+    prompt: What must a Monte Carlo deliverable include before you trust it?
+    model: Every input with its distribution and source, correlations between inputs, number of draws and seed, outputs (mean, P5–P95, P(loss)) and a sensitivity/tornado showing which inputs drive the spread.
+    rubric: 'Full: inputs + correlations + reproducibility + outputs + sensitivity. Partial: outputs only.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C108
+    prompt: Why does correlation between defaults matter for capital?
+    options:
+    - id: a
+      text: It fattens the loss tail — bad years are much worse than average
+      correct: true
+      why: P99 ≫ EL.
+    - id: b
+      text: It lowers expected loss
+      why: EL unchanged.
+    - id: c
+      text: It doesn't
+      why: It does.
+    - id: d
+      text: It only affects small books
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C106
+    prompt: A junior uses a t-interval for mean basket value with n = 30. Concern?
+    options:
+    - id: a
+      text: Heavy tails — sample means are still skewed; prefer a bootstrap or larger n
+      correct: true
+      why: "Skew {{ a.d2_clt[30].skew }} at n = 30."
+    - id: b
+      text: None
+      why: See a.
+    - id: c
+      text: Use z instead
+      why: Same issue.
+    - id: d
+      text: Use n = 10
+      why: Worse.
+- id: L2.6-F
+  title: L2.6 Benford (Basic → Advanced)
+  lesson: L2.6
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 1
+    concepts:
+    - C109
+    prompt: Benford's expected share (%) of first digit 1?
+    answer: "{{ a.d2_ben_digit1_theory_pct }}"
+    tolerance_abs: 0.2
+    unit: '%'
+    explanation: log₁₀(2).
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C109
+    prompt: Which data are least likely to follow Benford?
+    options:
+    - id: a
+      text: Shelf prices in a narrow range
+      correct: true
+      why: Need several orders of magnitude.
+    - id: b
+      text: Invoice amounts
+      why: Often conform.
+    - id: c
+      text: Transaction values
+      why: Often conform.
+    - id: d
+      text: Populations of towns
+      why: Classic example.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C109
+    prompt: BR07's first-digit MAD (4 decimals)?
+    answer: "{{ a.d2_ben_br07 }}"
+    tolerance_abs: 0.003
+    explanation: "Peer median {{ a.d2_ben_peer_med_f }}."
+  - id: q4
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C109
+    prompt: All retail stores exceed Nigrini's 0.015 nonconformity threshold. Conclusion?
+    options:
+    - id: a
+      text: Line revenues span too narrow a range to follow Benford; compare stores with peers
+      correct: true
+      why: "Peer median {{ a.d2_ben_peer_med_r }}."
+    - id: b
+      text: All stores are fabricating
+      why: No.
+    - id: c
+      text: Benford is wrong
+      why: It just doesn't apply here.
+    - id: d
+      text: Raise the threshold
+      why: Peer comparison is better.
+  - id: q5
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C109
+    prompt: "Branch {{ a.d2_small_branch }} has MAD {{ a.d2_small_branch_mad }} ('marginal'); a genuine sample of its size would have ~{{ a.d2_small_branch_expmad }}. Action?"
+    options:
+    - id: a
+      text: None — consistent with chance at its sample size
+      correct: true
+      why: Small samples deviate more.
+    - id: b
+      text: Escalate to audit
+      why: False alarm.
+    - id: c
+      text: Delete its data
+      why: No.
+    - id: d
+      text: Close the branch
+      why: No.
+  - id: q6
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C110
+    prompt: Share (%) of S033 revenues that are multiples of 0.50?
+    answer: "{{ a.d2_round_s033_pct }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: "Peer median {{ a.d2_round_peer_pct }}%."
+  - id: q7
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C109
+    prompt: 'True or false: a Benford deviation proves fraud.'
+    options:
+    - id: a
+      text: False — it justifies a closer look; corroborate with other evidence
+      correct: true
+      why: Many legitimate causes.
+    - id: b
+      text: 'True'
+      why: No.
+    - id: c
+      text: True if p < 0.001
+      why: Large n makes p tiny for trivial deviations.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C109
+    prompt: Best ranking statistic for Benford across groups of different sizes?
+    options:
+    - id: a
+      text: MAD adjusted for expected MAD at that n (excess MAD)
+      correct: true
+      why: Comparable across sizes.
+    - id: b
+      text: χ² p-value
+      why: Driven by n.
+    - id: c
+      text: Count of digit 9
+      why: Too narrow.
+    - id: d
+      text: Mean amount
+      why: No.
+- id: L2.6-L
+  title: L2.6 Escalating digit tests (Leader)
+  lesson: L2.6
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C109
+    - C110
+    prompt: "S033: MAD {{ a.d2_ben_s033 }} (peers ~{{ a.d2_ben_peer_med_r }}), {{ a.d2_round_s033_pct }}% rounded, and revenue ≠ qty × price on hundreds of lines. Action?"
+    options:
+    - id: a
+      text: Escalate to internal audit with an evidence pack; don't confront the store first
+      correct: true
+      why: Three independent indicators.
+    - id: b
+      text: Ignore — retail isn't Benford
+      why: Peer comparison still flags it.
+    - id: c
+      text: Fire the manager
+      why: Evidence ≠ proof.
+    - id: d
+      text: Recompute revenue and move on
+      why: Hides a control failure.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C109
+    prompt: What should a Benford escalation policy require?
+    options:
+    - id: a
+      text: Beyond-peer excess deviation AND at least one corroborating indicator
+      correct: true
+      why: Limits false accusations.
+    - id: b
+      text: Any marginal band
+      why: Too many false alarms.
+    - id: c
+      text: χ² p < 0.05
+      why: Trivial at large n.
+    - id: d
+      text: Manager intuition
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C109
+    prompt: Write the three-sentence note to internal audit about BR07.
+    model: "Branch BR07's 3-month transaction amounts deviate strongly from Benford's distribution (MAD {{ a.d2_ben_br07 }} vs a peer median of {{ a.d2_ben_peer_med_f }}, far beyond what its sample size explains) and are unusually round. Other branches of similar size conform. We recommend a review of how these amounts are recorded; this is a screening result, not evidence of wrongdoing."
+    rubric: 'Full: quantified deviation + peer context + recommendation + no accusation. Partial: missing peer context or overclaims.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C109
+    prompt: Why include a sample-size adjustment?
+    options:
+    - id: a
+      text: Small units deviate more by chance and would be falsely flagged
+      correct: true
+      why: Expected MAD grows as n shrinks.
+    - id: b
+      text: To make big units look worse
+      why: No.
+    - id: c
+      text: Regulation requires it
+      why: Good practice, not necessarily regulation.
+    - id: d
+      text: No reason
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C109
+    prompt: Audit asks for 'the Benford chart'. What else do they need?
+    options:
+    - id: a
+      text: Data extract, config, data fingerprint and method notes for reproducibility
+      correct: true
+      why: Chain of evidence.
+    - id: b
+      text: Nothing
+      why: Insufficient.
+    - id: c
+      text: A larger chart
+      why: No.
+    - id: d
+      text: The analyst's opinion
+      why: Evidence first.
+- id: L2.7-F
+  title: L2.7 Linear algebra (Basic → Advanced)
+  lesson: L2.7
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C111
+    prompt: Cosine similarity of 1 between two vectors means…
+    options:
+    - id: a
+      text: They point in the same direction
+      correct: true
+      why: Angle 0.
+    - id: b
+      text: They are unrelated
+      why: That's 0.
+    - id: c
+      text: They are opposite
+      why: That's −1.
+    - id: d
+      text: They have equal length
+      why: Length is normalised away.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C111
+    prompt: Cosine similarity of Pasta and Pasta Sauce basket vectors (3 decimals)?
+    answer: "{{ a.d2_cos_pasta_sauce }}"
+    tolerance_abs: 0.01
+    explanation: "Versus {{ a.d2_cos_pasta_shampoo }} for Pasta–Shampoo."
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C113
+    prompt: A determinant of 0 means the matrix is…
+    options:
+    - id: a
+      text: Singular — some columns are linear combinations of others
+      correct: true
+      why: No inverse.
+    - id: b
+      text: Identity
+      why: det = 1.
+    - id: c
+      text: Very large
+      why: No.
+    - id: d
+      text: Normal
+      why: No.
+  - id: q4
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C115
+    - C114
+    prompt: "The smallest eigenvalue of the credit correlation matrix is {{ a.d2_eig[-1] }} with loadings ~±0.71 on income and limit. Meaning?"
+    options:
+    - id: a
+      text: Income and limit are near-duplicates (collinear)
+      correct: true
+      why: Their difference barely varies.
+    - id: b
+      text: Income is unimportant
+      why: Eigenvalues measure redundancy, not importance.
+    - id: c
+      text: The matrix is wrong
+      why: No.
+    - id: d
+      text: Limit causes income
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C117
+    prompt: In least squares, residuals are…
+    options:
+    - id: a
+      text: Orthogonal to every predictor column
+      correct: true
+      why: "Max |Xᵀe| ≈ {{ a.d2_ls_orth }}."
+    - id: b
+      text: Always zero
+      why: No.
+    - id: c
+      text: Equal to y
+      why: No.
+    - id: d
+      text: Correlated with X
+      why: No — by construction they're not.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C112
+    prompt: Xβ in a linear model computes…
+    options:
+    - id: a
+      text: Each prediction as a weighted sum of that row's values
+      correct: true
+      why: Matrix-vector product.
+    - id: b
+      text: The mean of X
+      why: No.
+    - id: c
+      text: The inverse
+      why: No.
+    - id: d
+      text: Correlations
+      why: No.
+  - id: q7
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C116
+    prompt: Share (%) of variation in customers' category-spend shares captured by two singular vectors?
+    answer: "{{ a.d2_svd_share2 }}"
+    tolerance_abs: 1
+    unit: '%'
+    explanation: Basis of PCA.
+  - id: q8
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C113
+    prompt: 'True or false: computing (XᵀX)⁻¹ explicitly is the best way to get regression coefficients.'
+    options:
+    - id: a
+      text: False — QR/SVD solvers are numerically stabler, especially with collinear columns
+      correct: true
+      why: Inversion amplifies rounding error.
+    - id: b
+      text: 'True'
+      why: No.
+    - id: c
+      text: True for small data
+      why: Still unnecessary.
+- id: L2.7-L
+  title: L2.7 Linear algebra for reviewers (Leader)
+  lesson: L2.7
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C114
+    prompt: Income and limit coefficients flip sign between model versions. First diagnostic?
+    options:
+    - id: a
+      text: Eigenvalues / VIF of the predictors — likely collinearity
+      correct: true
+      why: "Smallest eigenvalue {{ a.d2_eig[-1] }}."
+    - id: b
+      text: Retrain with a new seed
+      why: Doesn't address cause.
+    - id: c
+      text: Add more variables
+      why: Worse.
+    - id: d
+      text: Ignore
+      why: Unstable coefficients mislead.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C116
+    prompt: A junior reduces 40 features to 5 PCA components. What do you ask?
+    options:
+    - id: a
+      text: What each component means in business terms and how much variance it keeps
+      correct: true
+      why: Interpretability and information loss.
+    - id: b
+      text: Why not 6?
+      why: Secondary.
+    - id: c
+      text: Nothing
+      why: No.
+    - id: d
+      text: Use 40
+      why: Not necessarily.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C114
+    prompt: Explain to a business stakeholder why the model can't say whether income or limit drives risk.
+    model: "The bank sets limits from income, so the two move almost in lockstep (correlation {{ a.d1_il_pearson }}). The data contain almost no cases where one changes without the other, so the model cannot separate their effects. We can measure their combined effect reliably, or use one of them."
+    rubric: 'Full: mechanism + ''cannot separate'' + practical option. Partial: one.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C113
+    prompt: Code-review rule for matrix inversion?
+    options:
+    - id: a
+      text: Use library solvers (QR/SVD/lstsq), never hand-inversion
+      correct: true
+      why: Stability.
+    - id: b
+      text: Always invert
+      why: No.
+    - id: c
+      text: Invert twice to check
+      why: No.
+    - id: d
+      text: Use Excel
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C111
+    prompt: Where does cosine similarity show up in your stack?
+    options:
+    - id: a
+      text: Recommendations, product affinity, text embeddings and RAG retrieval
+      correct: true
+      why: Similarity of vectors.
+    - id: b
+      text: Only in physics
+      why: No.
+    - id: c
+      text: Nowhere
+      why: No.
+    - id: d
+      text: Only regression
+      why: No.
+- id: D2-GATE
+  title: Day 2 gate (pass 75%)
+  lesson: D2
+  track: Mixed
+  pass_mark: 75
+  questions:
+  - id: g01
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C078
+    prompt: P(fraud | alert) for the inquiries alert, %?
+    answer: "{{ a.d2_alert_ppv_bayes_pct }}"
+    tolerance_abs: 0.3
+    unit: '%'
+    explanation: Bayes with base rate.
+  - id: g02
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C076
+    prompt: 'P(default | partner) vs P(partner | default):'
+    options:
+    - id: a
+      text: "{{ a.d2_pd_partner_pct }}% vs {{ a.d2_p_partner_given_default }}% — different quantities"
+      correct: true
+      why: Not interchangeable.
+    - id: b
+      text: Equal
+      why: No.
+    - id: c
+      text: "Both {{ a.d2_p_partner }}%"
+      why: That's P(partner).
+    - id: d
+      text: Cannot compute
+      why: Can.
+  - id: g03
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C085
+    prompt: Variance ≫ mean for weekly unit sales → use…
+    options:
+    - id: a
+      text: Negative binomial
+      correct: true
+      why: Over-dispersion.
+    - id: b
+      text: Poisson
+      why: Too little variance.
+    - id: c
+      text: Bernoulli
+      why: No.
+    - id: d
+      text: Uniform
+      why: No.
+  - id: g04
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C087
+    prompt: Files needed (of 200, 10 faulty) for 95% chance of finding at least one?
+    answer: "{{ a.d2_hyp_n_for_95 }}"
+    tolerance_abs: 0
+    explanation: Hypergeometric.
+  - id: g05
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C092
+    prompt: 'Best first family for positive, right-skewed spend:'
+    options:
+    - id: a
+      text: Lognormal (or gamma)
+      correct: true
+      why: Matches support and skew.
+    - id: b
+      text: Normal
+      why: No.
+    - id: c
+      text: Uniform
+      why: No.
+    - id: d
+      text: Bernoulli
+      why: No.
+  - id: g06
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C094
+    prompt: Fitted P99 well below empirical P99 means…
+    options:
+    - id: a
+      text: Tail under-modelled — separate large-loss treatment
+      correct: true
+      why: Tail drives cost.
+    - id: b
+      text: Good fit
+      why: No.
+    - id: c
+      text: Data error
+      why: No.
+    - id: d
+      text: Use the mean
+      why: No.
+  - id: g07
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C070
+    prompt: Pooled and within-group comparisons disagree in sign. This is…
+    options:
+    - id: a
+      text: Simpson's paradox
+      correct: true
+      why: Mix variable.
+    - id: b
+      text: Regression to the mean
+      why: No.
+    - id: c
+      text: Multicollinearity
+      why: No.
+    - id: d
+      text: Overfitting
+      why: No.
+  - id: g08
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C063
+    prompt: 'True or false: more data fixes a biased sampling frame.'
+    options:
+    - id: a
+      text: 'False'
+      correct: true
+      why: Bias is systematic.
+    - id: b
+      text: 'True'
+      why: No.
+  - id: g09
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C106
+    prompt: With heavy tails, n = 30 sample means are…
+    options:
+    - id: a
+      text: Often still skewed — use bootstrap or larger n
+      correct: true
+      why: Slow CLT convergence.
+    - id: b
+      text: Exactly normal
+      why: No.
+    - id: c
+      text: Useless
+      why: No.
+    - id: d
+      text: Uniform
+      why: No.
+  - id: g10
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C108
+    prompt: Monte Carlo P(loss) for the Hair Care rollout, %?
+    answer: "{{ a.d2_mc_p_loss_pct }}"
+    tolerance_abs: 1
+    unit: '%'
+    explanation: L2.5.
+  - id: g11
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C109
+    prompt: Which unit should be escalated on digit tests?
+    options:
+    - id: a
+      text: One far beyond peers after a sample-size adjustment, with corroborating evidence
+      correct: true
+      why: S033 / BR07.
+    - id: b
+      text: Every unit above 0.015
+      why: Ignores data type and n.
+    - id: c
+      text: The smallest unit
+      why: Chance.
+    - id: d
+      text: None ever
+      why: No.
+  - id: g12
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C114
+    prompt: A near-zero eigenvalue of the predictors' correlation matrix signals…
+    options:
+    - id: a
+      text: Collinearity — unstable regression coefficients
+      correct: true
+      why: Redundant combination.
+    - id: b
+      text: A strong predictor
+      why: No.
+    - id: c
+      text: Perfect fit
+      why: No.
+    - id: d
+      text: Missing data
+      why: No.

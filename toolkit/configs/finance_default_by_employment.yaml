@@ -1,0 +1,7 @@
+# L3.5: is default rate associated with employment type?
+recipe: rcp_multi_group_test
+dataset: {name: meridian_accounts, path: data/finance/accounts.parquet}
+columns: {group: employment_type, target: default_12m}
+filters: []
+params: {kind: binary, alpha: 0.05}
+output: {folder: "outputs/{recipe}/{date}_finance_default_by_employment"}

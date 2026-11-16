@@ -1,0 +1,7 @@
+# L7.6: ABC/XYZ and safety stock for all SKUs (chain weekly demand), lead time 2 weeks.
+recipe: rcp_inventory
+dataset: {name: northstar_weekly_sku_chain, path: data/retail/weekly_sku_chain.parquet}
+columns: {item: sku, time: week, target: units, value: revenue}
+filters: []
+params: {lead_time: 2, service_levels: [0.90, 0.95, 0.99], abc: [0.8, 0.95], xyz: [0.5, 1.0], top_n: 10}
+output: {folder: "outputs/{recipe}/{date}_retail_inventory_skus"}

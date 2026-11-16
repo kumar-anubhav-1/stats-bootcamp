@@ -1,0 +1,337 @@
+# Day 6 exercises (15 retail + 15 finance). Values are computed from the data.
+retail:
+  - id: R6-1
+    lesson: L6.1
+    tier: Basic
+    title: Customer features at an observation point
+    framing: CRM wants to predict which customers will shop in the next half year.
+    deliverable: Customer features from weeks 1–78 (baskets, log revenue, recency at week 78, promo share, categories, loyalty, tenure); target = purchase in weeks 79–104; logistic test AUC.
+    expected: "{{ a.d6_r_customers | n }} customers, {{ a.d6_r_repeat_pct }}% repeat; test AUC {{ a.d6_r_auc_logit }} (GBM {{ a.d6_r_auc_gbm }})."
+    tolerance: "± 0.03"
+    model: "No signal: past shopping does not predict returning in this data. That is a valid, useful finding."
+    wrong: "Tuning the model until AUC rises — there is nothing to find."
+    leader: What would you tell CRM about targeting on past behaviour here?
+  - id: R6-2
+    lesson: L6.1
+    tier: Applied
+    title: The leaky version
+    framing: A junior reports AUC 0.99 for the same task.
+    deliverable: Recompute features over weeks 1–104 and refit; explain the result.
+    expected: "AUC {{ a.d6_r_auc_leaky }}."
+    tolerance: "± 0.01"
+    model: "Recency at week 104 directly encodes whether the customer shopped after week 78 — temporal leakage."
+    wrong: "Celebrating the model."
+    leader: Write the one-line rule that would have prevented this.
+  - id: R6-3
+    lesson: L6.1
+    tier: Stretch
+    title: A feature specification
+    framing: Document the honest feature set for the CRM team.
+    deliverable: Table with name, definition, window vs observation point, source, missing handling, leakage check for each feature.
+    expected: "Seven features, all from weeks ≤ 78; recency measured at week 78; tenure from the customer master at signup."
+    tolerance: "—"
+    model: "A specification makes leakage reviewable and production-ready."
+    wrong: "Features without windows."
+    leader: Who should sign off a feature specification?
+  - id: R6-4
+    lesson: L6.2
+    tier: Basic
+    title: Trees on retail data
+    framing: Would gradient boosting rescue the repeat-purchase model?
+    deliverable: GBM vs logistic test AUC on the honest features.
+    expected: "GBM {{ a.d6_r_auc_gbm }} vs logistic {{ a.d6_r_auc_logit }}."
+    tolerance: "± 0.03"
+    model: "No algorithm finds signal that isn't there."
+    wrong: "Switching algorithms hoping for lift."
+    leader: When is 'try a fancier model' the wrong instinct?
+  - id: R6-5
+    lesson: L6.2
+    tier: Applied
+    title: Overfitting a deep tree
+    framing: Explain tree overfitting with the default data (shared case study).
+    deliverable: Train vs test AUC of an unrestricted tree; depth-4 tree; random forest.
+    expected: "Deep tree train {{ a.d6_tree_deep_train_auc }} / test {{ a.d6_models.tree_deep.auc }}; depth-4 test {{ a.d6_models.tree_depth4.auc }}; forest {{ a.d6_models.random_forest.auc }}."
+    tolerance: "± 0.02"
+    model: "A deep tree memorises noise; constraining depth or averaging many trees fixes it."
+    wrong: "Using training AUC."
+    leader: How would you explain overfitting to a store manager?
+  - id: R6-6
+    lesson: L6.3
+    tier: Basic
+    title: Learner niches
+    framing: Retail wants to route customer reviews into topics and recommend similar products.
+    deliverable: Recommend a learner for each and justify.
+    expected: "Reviews: Naive Bayes or linear SVM baseline on TF-IDF, then embeddings (L9.3). Similar products: KNN / cosine similarity on purchase vectors (L2.7)."
+    tolerance: "—"
+    model: "Match the learner to the data type; tabular models aren't the answer to text or similarity."
+    wrong: "GBM for raw text."
+    leader: What baseline would you demand before an LLM-based classifier?
+  - id: R6-7
+    lesson: L6.4
+    tier: Basic
+    title: Leakage taxonomy
+    framing: Classify four retail leakage risks.
+    deliverable: "Classify: (a) recency at week 104; (b) scaler fit on all customers; (c) same customer in train and test across two years; (d) 'returned_later' flag."
+    expected: "(a) temporal; (b) preprocessing; (c) group; (d) target."
+    tolerance: "exact"
+    model: "Each has a standard defence: observation point, pipelines, grouped CV, feature timeline audit."
+    wrong: "Treating all as 'overfitting'."
+    leader: Which of these is hardest to catch in code review?
+  - id: R6-8
+    lesson: L6.4
+    tier: Applied
+    title: Time-series cross-validation design
+    framing: Forecast-style models (weekly sales) need validation.
+    deliverable: Describe a rolling-origin validation for a weekly model (folds, horizons).
+    expected: "Train weeks 1–52 → validate 53–60; train 1–60 → validate 61–68; … never train on the future."
+    tolerance: "—"
+    model: "Rolling origin mimics deployment; random folds leak future seasonality (Day 7)."
+    wrong: "Shuffled k-fold on weekly data."
+    leader: How many folds are enough?
+  - id: R6-9
+    lesson: L6.5
+    tier: Basic
+    title: Accuracy paradox for returns abuse
+    framing: 30 abusive customers among ~1,300.
+    deliverable: Accuracy of predicting 'not abusive' for everyone; which metrics to use instead.
+    expected: "≈ 97.7% accuracy with zero detection; use precision@k and PR-AUC."
+    tolerance: "± 0.5 pp"
+    model: "With rare positives accuracy is meaningless; size the review queue and measure precision within it."
+    wrong: "Reporting accuracy."
+    leader: How many accounts can loss prevention review per month?
+  - id: R6-10
+    lesson: L6.5
+    tier: Applied
+    title: Resampling inside folds
+    framing: A junior oversampled abusers before splitting.
+    deliverable: Explain the leak and the fix.
+    expected: "Duplicated minority rows appear in train and test → inflated scores. Resample inside each training fold only (pipeline)."
+    tolerance: "—"
+    model: "Any data-dependent preprocessing belongs inside the cross-validation loop."
+    wrong: "SMOTE on the whole dataset."
+    leader: Add this to your code-review checklist.
+  - id: R6-11
+    lesson: L6.6
+    tier: Basic
+    title: Lift for a campaign
+    framing: Marketing can mail 30% of customers.
+    deliverable: Using the default model's lift table as a stand-in, explain what share of responders a top-30% selection captures and what lift means.
+    expected: "Top 30% captures {{ a.d6_top3_capture }}% of positives; top decile lift {{ a.d6_lift_deciles[0] }}."
+    tolerance: "± 1 pp"
+    model: "Gains charts translate a model into campaign economics: response captured vs share contacted."
+    wrong: "Reporting AUC to marketing."
+    leader: How would you pick the mailing depth?
+  - id: R6-12
+    lesson: L6.6
+    tier: Applied
+    title: Threshold from costs
+    framing: A coupon costs 2; a responder is worth 15.
+    deliverable: Derive the score threshold above which sending a coupon pays.
+    expected: "Send if p × 15 > 2 → p > 0.133."
+    tolerance: "± 0.005"
+    model: "Expected value threshold = cost ÷ value; requires calibrated probabilities."
+    wrong: "Using 0.5."
+    leader: What if the model is not calibrated?
+  - id: R6-13
+    lesson: L6.6
+    tier: Stretch
+    title: Calibration check
+    framing: Is the score a probability?
+    deliverable: Read the calibration table (default model); explain how you would recalibrate a miscalibrated model.
+    expected: "In-sample deciles track (top: predicted {{ a.d6_calib[-1][0] }}% vs observed {{ a.d6_calib[-1][1] }}%); recalibrate with Platt or isotonic on recent data."
+    tolerance: "± 1 pp"
+    model: "Calibration is a separate property from ranking."
+    wrong: "Assuming high AUC implies calibration."
+    leader: Which decisions need calibration, which only ranking?
+  - id: R6-14
+    lesson: L6.7
+    tier: Basic
+    title: Importance pitfalls
+    framing: The returns model shows 'customer_id' as the top feature in impurity importance.
+    deliverable: Explain why and what to use instead.
+    expected: "Impurity importance favours high-cardinality features and is computed on training data; use permutation importance on held-out data, and drop IDs."
+    tolerance: "—"
+    model: "IDs memorise; they are never legitimate features."
+    wrong: "Concluding certain customers drive returns."
+    leader: What would make you reject a model on its importance chart?
+  - id: R6-15
+    lesson: L6.7
+    tier: Applied
+    title: Explaining to store managers
+    framing: Present return-risk drivers.
+    deliverable: Translate the L5.3 return model's odds ratios into three manager-friendly statements.
+    expected: "Electronics ~2× the odds of return; pricier items more likely returned; channel makes little difference."
+    tolerance: "—"
+    model: "Plain-language, directional, with a caveat that prediction is weak (AUC ~0.55)."
+    wrong: "Presenting SHAP plots to managers."
+    leader: How do you stop managers over-reading weak models?
+  - {id: R6-16, lesson: L6.8, tier: Basic, title: "Demand bake-off", framing: "Supply chain wants the best store-level Beverages forecast.", deliverable: "Compare seasonal naive and seven learners by MAE on the last 16 weeks.", expected: "Best {{ a.d6l_demand_best }}; every model beats naive (MAE {{ a.d6l_demand['Seasonal naive (same week last year)'].mae }}); best beats linear by only {{ a.d6l_demand_gain_vs_linear }}%.", tolerance: "± 1 unit MAE", model: "Features carry signal; the gain over linear is small.", wrong: "Picking the most complex model without a naive row.", leader: "Is a 4% MAE gain worth a new model to monitor?"}
+  - {id: R6-17, lesson: L6.8, tier: Applied, title: "Match algorithm to problem", framing: "Five NorthStar requests arrive.", deliverable: "Pick an algorithm for: weekly demand, coupon response, 'customers like you', review routing, customer segments.", expected: "GBM or linear with lags; logistic; KNN/embeddings; Naive Bayes or transformer embeddings; k-means.", tolerance: "—", model: "Choose by outcome type and need for explanation.", wrong: "Neural networks for everything.", leader: "Which one would you start this quarter?"}
+finance:
+  - id: F6-1
+    lesson: L6.1
+    tier: Basic
+    title: Behavioural features
+    framing: Collections wants an early-warning score at month 3.
+    deliverable: Months 1–3 features (max DPD, average utilisation, payment ÷ minimum due) added to application data; AUC gain; default by early arrears.
+    expected: "AUC {{ a.d6_models.gbm.auc }} → {{ a.d6_beh_auc }} (+{{ a.d6_beh_gain }}); default {{ a.d6_beh_dpd_default }}% with early arrears vs {{ a.d6_beh_nodpd_default }}%."
+    tolerance: "± 0.01"
+    model: "Early behaviour adds real signal and is available at the observation point."
+    wrong: "Using months 1–12 behaviour to predict 12-month default."
+    leader: How often should a behavioural score refresh?
+  - id: F6-2
+    lesson: L6.2
+    tier: Basic
+    title: Logistic vs boosting
+    framing: Should we replace the logistic default model?
+    deliverable: "Run `finance_classifier_default.yaml`: test AUC, PR-AUC, KS, Brier, train AUC for both."
+    expected: "Logistic ≈ {{ a.d6_models.logistic.auc }}, GBM ≈ {{ a.d6_models.gbm.auc }} (train {{ a.d6_gbm_train_auc }})."
+    tolerance: "± 0.01"
+    model: "No meaningful gain; GBM overfits more. Keep logistic, use GBM as a challenger."
+    wrong: "Switching because GBM is 'more advanced'."
+    leader: What evidence would justify switching?
+  - id: F6-3
+    lesson: L6.2
+    tier: Applied
+    title: Engineered logistic
+    framing: Capture non-linearity without a black box.
+    deliverable: Add utilisation > 80% / > 90% flags and a young × high-DTI flag; compare AUC.
+    expected: "AUC {{ a.d6_logit_eng.auc }} vs {{ a.d6_models.logistic.auc }} plain."
+    tolerance: "± 0.005"
+    model: "Small, explainable terms recover what a GBM would learn."
+    wrong: "Adding dozens of interactions blindly."
+    leader: Where is the line between engineering and overfitting?
+  - id: F6-4
+    lesson: L6.3
+    tier: Basic
+    title: Vendor SVM
+    framing: A vendor's SVM 'beats your model'.
+    deliverable: Same-data bake-off (6,000 training accounts) of logistic, NB, KNN, SVM, GBM.
+    expected: "{% for k, v in a.d6_bake.items() %}{{ k }} {{ v.auc }}; {% endfor %}"
+    tolerance: "± 0.02"
+    model: "Logistic wins on this data; SVM's probabilities also need calibration."
+    wrong: "Accepting the vendor's own test set."
+    leader: What would your vendor evaluation protocol require?
+  - id: F6-5
+    lesson: L6.4
+    tier: Basic
+    title: Spot the leak
+    framing: "A model scores AUC 0.98."
+    deliverable: "Run `finance_classifier_leaky.yaml`; name the dominant feature and explain."
+    expected: "AUC ≈ {{ a.d6_leak_gbm_auc }}; dominant {{ a.d6_leak_top }}; collections accounts default {{ a.d6_collections_default_rate }}%."
+    tolerance: "± 0.01"
+    model: "Post-outcome fields; remove them. Clean AUC ≈ {{ a.d6_models.logistic.auc }}."
+    wrong: "Shipping the 0.98 model."
+    leader: How would you build leakage checks into the model-approval process?
+  - id: F6-6
+    lesson: L6.4
+    tier: Applied
+    title: Out-of-time validation
+    framing: Will the model work on 2025 applicants?
+    deliverable: "Run `finance_classifier_oot.yaml`: OOT AUC and mean predicted vs actual default."
+    expected: "Logistic OOT AUC {{ a.d6_oot_logistic_auc }}; predicted {{ a.d6_oot_logistic_pred_pct }}% vs actual {{ a.d6_oot_actual_pct }}%."
+    tolerance: "± 0.3 pp"
+    model: "Ranking holds reasonably; calibration fails badly because the population changed. Recalibrate and segment the partner channel."
+    wrong: "Approving on random-split metrics."
+    leader: What provisioning impact does a 40% under-prediction have?
+  - id: F6-7
+    lesson: L6.4
+    tier: Stretch
+    title: Tuning budget
+    framing: The team wants a week to tune GBM.
+    deliverable: Small grid (learning rate × leaves) with CV; range of CV AUC.
+    expected: "Best {{ a.d6_grid_best }}; range {{ a.d6_grid_range }}."
+    tolerance: "± 0.005"
+    model: "Tuning moves AUC by about a hundredth; features and validation matter more."
+    wrong: "Spending the week on tuning."
+    leader: Where would you spend the week instead?
+  - id: F6-8
+    lesson: L6.5
+    tier: Basic
+    title: Fraud queue of 100
+    framing: Investigators can work 100 accounts a month.
+    deliverable: Precision and recall at 100 for logistic, weighted logistic and GBM; ROC-AUC vs PR-AUC.
+    expected: "Logistic precision@100 {{ a.d6_fraud.logistic.prec_at[100] }}%, recall {{ a.d6_fraud.logistic.recall_at100 }}%; ROC-AUC {{ a.d6_fraud.logistic.roc_auc }}, PR-AUC {{ a.d6_fraud.logistic.pr_auc }}."
+    tolerance: "± 5 pp"
+    model: "About a quarter of the queue is fraud — far above the 0.7% base rate."
+    wrong: "Reporting accuracy {{ a.d6_allzero_acc }}% of an all-zero model."
+    leader: Is a 27% hit rate good enough for the fraud team?
+  - id: F6-9
+    lesson: L6.5
+    tier: Applied
+    title: Class weights and probabilities
+    framing: The weighted model says many accounts are 'likely fraud'.
+    deliverable: Accounts flagged at p ≥ 0.5 and mean predicted probability, weighted vs unweighted.
+    expected: "Weighted flags {{ a.d6_fraud.logistic_weighted.flagged_at_05 | n }} (mean {{ a.d6_fraud.logistic_weighted.mean_p }}%) vs {{ a.d6_fraud.logistic.flagged_at_05 }} (mean {{ a.d6_fraud.logistic.mean_p }}%)."
+    tolerance: "± 10%"
+    model: "Weights inflate probabilities without improving ranking; recalibrate or rank."
+    wrong: "Telling customers they have a 40% fraud probability."
+    leader: Where could inflated probabilities cause harm?
+  - id: F6-10
+    lesson: L6.5
+    tier: Stretch
+    title: Network features
+    framing: Fraud rings share devices.
+    deliverable: Fraud rate among accounts sharing a device with ≥ 5 others.
+    expected: "{{ a.d6_ring_n }} accounts; fraud rate {{ a.d6_ring_fraud_rate }}%."
+    tolerance: "± 3 pp"
+    model: "Shared-device counts are the strongest fraud signal (F07); graph methods (L8.6) recover the rings."
+    wrong: "Ignoring the link table."
+    leader: What privacy controls apply to device data?
+  - id: F6-11
+    lesson: L6.6
+    tier: Basic
+    title: Cost-based cut-off
+    framing: Credit asks for the approval cut-off.
+    deliverable: Expected cost by PD threshold with LGD × EAD for misses and lost margin for declines; best threshold.
+    expected: "Best PD ≥ {{ a.d6_thr_best.t }} (decline {{ a.d6_thr_best.decline_pct }}%, cost {{ a.d6_thr_best.cost }}m vs {{ a.d6_thr_cost_none }}m with no model)."
+    tolerance: "± 0.02"
+    model: "The cost curve is flat near the minimum; choose within the band to fit risk appetite and growth."
+    wrong: "Using 0.5 (declines almost nobody)."
+    leader: How would growth targets change your choice?
+  - id: F6-12
+    lesson: L6.6
+    tier: Applied
+    title: Gini, KS and lift
+    framing: Model validation asks for standard metrics.
+    deliverable: Gini, KS, top-decile lift and capture.
+    expected: "Gini {{ a.d6_gini }}; KS {{ a.d6_ks }}; lift {{ a.d6_lift_deciles[0] }}; top-decile capture {{ a.d6_top_decile_capture }}%."
+    tolerance: "± 0.01"
+    model: "Within normal ranges for application scorecards."
+    wrong: "Reporting only AUC."
+    leader: Which metric goes on the board pack?
+  - id: F6-13
+    lesson: L6.6
+    tier: Stretch
+    title: Calibration for provisioning
+    framing: Finance uses PDs for provisions.
+    deliverable: Calibration table and Brier score; compare with out-of-time calibration (L6.4).
+    expected: "In-sample tracks; Brier {{ a.d6_brier }} vs {{ a.d6_brier_base }} baseline; out of time predicted {{ a.d6_oot_logistic_pred_pct }}% vs actual {{ a.d6_oot_actual_pct }}%."
+    tolerance: "± 0.001"
+    model: "Recalibrate on recent vintages before provisioning; monitor monthly."
+    wrong: "Using in-sample calibration for provisions."
+    leader: Who owns recalibration?
+  - id: F6-14
+    lesson: L6.7
+    tier: Basic
+    title: Global drivers
+    framing: The risk committee wants to know what the model relies on.
+    deliverable: Permutation importance (top 6) for the GBM default model.
+    expected: "{{ a.d6_perm_imp | kv }}."
+    tolerance: "ranking"
+    model: "Bureau score dominates; channel and utilisation follow."
+    wrong: "Using impurity importance from training data."
+    leader: Any driver that worries you from a fairness view?
+  - id: F6-15
+    lesson: L6.7
+    tier: Applied
+    title: Adverse-action reasons
+    framing: A declined applicant asks why.
+    deliverable: Top three reasons for the highest-PD applicant from logistic contributions.
+    expected: "PD {{ a.d6_case_pd }}%; reasons {{ a.d6_case_reasons | join(', ') }} ({{ a.d6_case_values | kv }})."
+    tolerance: "—"
+    model: "Reasons must be specific and accurate; partner channel is a factor the customer can't change — check how it is worded and whether it is allowed."
+    wrong: "Giving 'model score too low' as the reason."
+    leader: Which reasons would compliance accept?
+  - {id: F6-16, lesson: L6.8, tier: Basic, title: "Default bake-off", framing: "The CRO asks what 'more advanced' buys.", deliverable: "Eight classifiers on the same split: AUC, PR-AUC, explainability.", expected: "Winner {{ a.d6l_credit_best }} (AUC {{ a.d6l_credit['Logistic regression'].auc }}); gradient boosting {{ a.d6l_credit['Gradient boosting'].auc }}; SVM {{ a.d6l_credit['Support vector machine (RBF)'].auc }}.", tolerance: "± 0.01 AUC", model: "Simple model ties or wins; complexity unjustified here.", wrong: "Choosing the MLP because it is 'AI'.", leader: "What would justify switching?"}
+  - {id: F6-17, lesson: L6.8, tier: Stretch, title: "Fraud ladder", framing: "Repeat for fraud.", deliverable: "Same bake-off with fraud_flag; rank by PR-AUC.", expected: "Tree ensembles usually gain more on rare, interacting fraud signals; report PR-AUC vs base rate.", tolerance: "—", model: "The best rung depends on the problem.", wrong: "Ranking by accuracy.", leader: "Review capacity → which threshold?"}

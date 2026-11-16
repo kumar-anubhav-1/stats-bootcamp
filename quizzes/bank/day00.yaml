@@ -1,0 +1,1156 @@
+quizzes:
+- id: L0.1-F
+  title: L0.1 Your workbench
+  lesson: L0.1
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts: &id001
+    - C290
+    prompt: Why does the course recommend GitHub Codespaces or the dev container?
+    options:
+    - id: a
+      text: Everyone gets an identical, pre-installed environment
+      correct: true
+      why: Same Python and library versions → same results for every learner.
+    - id: b
+      text: It makes Claude Code more accurate
+      why: The environment does not change the model; it changes reproducibility.
+    - id: c
+      text: It removes the need for Git
+      why: Git is still used for history and sharing.
+    - id: d
+      text: It is required by MkDocs
+      why: The website is unrelated to where you run analyses.
+  - id: q2
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C287
+    prompt: What is `CLAUDE.md` in this repository?
+    options:
+    - id: a
+      text: The working rules Claude Code follows in this repo
+      correct: true
+      why: It instructs the assistant to state assumptions, report row loss, never invent numbers, etc.
+    - id: b
+      text: A log of your chat history
+      why: Chat history is not stored there.
+    - id: c
+      text: The data dictionary
+      why: Data dictionaries live in `data/<domain>/`.
+    - id: d
+      text: A licence file
+      why: No.
+  - id: q3
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C289
+    prompt: 'True or false: if Claude Code''s summary of the repository mentions a folder that does not exist, you should accept it because the AI read the files.'
+    options:
+    - id: a
+      text: False — verify claims against the actual files; invented details are a known AI error
+      correct: true
+      why: Hallucinated details happen; checking is your job.
+    - id: b
+      text: True — the assistant has read access to the repo
+      why: Access does not guarantee accuracy.
+    - id: c
+      text: True — small errors don't matter for setup
+      why: The habit of verifying starts here.
+  - id: q4
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C290
+    prompt: Where does every analysis you run get saved?
+    options:
+    - id: a
+      text: A dated folder under `outputs/`
+      correct: true
+      why: Each recipe run writes narrative, tables, plots and manifests there.
+    - id: b
+      text: Inside `data/`
+      why: Data folders hold inputs only.
+    - id: c
+      text: Only in the chat
+      why: Results must be files so they can be checked and reproduced.
+    - id: d
+      text: In `docs/`
+      why: '`docs/` is the website.'
+  - id: q5
+    type: multi
+    difficulty: 2
+    concepts:
+    - C290
+    - C292
+    prompt: Which requests can you make to Claude Code instead of typing Git commands? (Select all that apply.)
+    options:
+    - id: a
+      text: Show me what changed since my last commit
+      correct: true
+      why: Claude Code can summarise diffs.
+    - id: b
+      text: Commit my changes with a clear message
+      correct: true
+      why: It stages and commits, showing the message first.
+    - id: c
+      text: Undo my last change to a config file
+      correct: true
+      why: It can restore previous versions.
+    - id: d
+      text: Guarantee my analysis is statistically correct
+      why: Git tracks changes; it does not validate statistics.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Claude Code proposes deleting the `outputs/` folder 'to tidy up'. You should…
+    options:
+    - id: a
+      text: Ask what it contains and why, then decline unless it is truly scratch
+      correct: true
+      why: Never approve an action you don't understand.
+    - id: b
+      text: Accept — tidiness matters
+      why: Outputs are your audit trail.
+    - id: c
+      text: Let it delete everything in data/ too
+      why: Data is regenerated, but never delete without understanding.
+    - id: d
+      text: Ignore the message
+      why: 'Answer it: unclear actions should be questioned.'
+    concepts: *id001
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: Your colleague gets a different number from the same config. First check?
+    options:
+    - id: a
+      text: Same data version (seed/hash) and same config file
+      correct: true
+      why: Reproducibility = same data + same config + same code.
+    - id: b
+      text: Their laptop speed
+      why: Speed doesn't change results.
+    - id: c
+      text: Font settings
+      why: Irrelevant.
+    - id: d
+      text: Re-run until it matches
+      why: That hides the cause.
+    concepts: *id001
+  - id: t3
+    type: mcq
+    difficulty: 2
+    prompt: Why commit your config files to Git?
+    options:
+    - id: a
+      text: So anyone can rerun and review exactly what you did
+      correct: true
+      why: Configs are the record of your analysis.
+    - id: b
+      text: Git makes code faster
+      why: No.
+    - id: c
+      text: It's required by Python
+      why: No.
+    - id: d
+      text: To delete old versions
+      why: Git keeps history.
+    concepts: *id001
+- id: L0.2-F
+  title: L0.2 Vibe-coding playbook (Basic → Advanced)
+  lesson: L0.2
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C287
+    prompt: Which sentence prevents most "wrong test" errors when added to an analytical prompt?
+    options:
+    - id: a
+      text: '"Before running, state the unit of analysis, method, assumptions and fallback; wait for my OK."'
+      correct: true
+      why: Forces the plan into the open before any number exists.
+    - id: b
+      text: '"Be accurate."'
+      why: Too vague to change behaviour.
+    - id: c
+      text: '"Use Python."'
+      why: Irrelevant to correctness.
+    - id: d
+      text: '"Make it quick."'
+      why: Speed is not the issue.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C287
+    prompt: In the CQ-DMCOA prompt anatomy, what does the **D** stand for and contain?
+    options:
+    - id: a
+      text: Data — grain, filters and unit of analysis
+      correct: true
+      why: E.g. 'stores were randomised; one row per store'.
+    - id: b
+      text: Deadline
+      why: Not part of the anatomy.
+    - id: c
+      text: Dashboard
+      why: No.
+    - id: d
+      text: Decision only
+      why: The decision belongs with the Question.
+  - id: q3
+    type: multi
+    difficulty: 2
+    concepts:
+    - C289
+    prompt: Which are part of the six-check verification protocol? (Select all.)
+    options:
+    - id: a
+      text: Row accounting
+      correct: true
+      why: Rows in, removed and analysed.
+    - id: b
+      text: Reproduce a key number two ways
+      correct: true
+      why: Independent recomputation catches many errors.
+    - id: c
+      text: Look at the plot before the verdict
+      correct: true
+      why: Distributions and residuals reveal problems tests hide.
+    - id: d
+      text: Ask the AI if it is confident
+      why: Self-reported confidence is not verification.
+    - id: e
+      text: 'Challenge: what would change the conclusion?'
+      correct: true
+      why: Surfaces alternative explanations.
+  - id: q4
+    type: spot_error
+    difficulty: 2
+    concepts:
+    - C289
+    prompt: 'Claude Code reports: *"Average basket value is 58.9 across 25,000 rows."* What is the most likely problem?
+
+      '
+    options:
+    - id: a
+      text: It averaged at the line grain (25,000 rows), not the basket grain
+      correct: true
+      why: Basket value needs one row per basket; the table has one row per line.
+    - id: b
+      text: 58.9 is too low for a grocery basket
+      why: Plausibility depends on the market; the grain error is certain.
+    - id: c
+      text: It should have used the median
+      why: Possibly better, but the grain is the error.
+    - id: d
+      text: Nothing is wrong
+      why: '''25,000 rows'' reveals line grain.'
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C083
+    prompt: Reproduce the bank's 12-month default rate (in %) by a method of your choice.
+    answer: "{{ a.fi_default_pct }}"
+    tolerance_abs: 0.05
+    unit: '%'
+    explanation: Count of accounts with `default_12m = True` divided by all accounts. If two methods disagree, find out why before reporting.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C289
+    prompt: A model on 1% fraud data is reported as "99% accurate". Which catalogue error is this?
+    options:
+    - id: a
+      text: One-metric over-trust (base rate ignored)
+      correct: true
+      why: Predicting 'no fraud' for everyone is 99% accurate.
+    - id: b
+      text: Data leakage
+      why: Possible elsewhere, but the symptom here is the metric.
+    - id: c
+      text: Silently dropped rows
+      why: No evidence of that.
+    - id: d
+      text: p-hacking
+      why: No multiple testing involved.
+  - id: q7
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C289
+    prompt: You ask about NorthStar's market share and Claude Code gives a precise figure. What should you do?
+    options:
+    - id: a
+      text: Ask which output file contains the number; the data has no market-share field
+      correct: true
+      why: 'A number with no source is a likely hallucination (error #8).'
+    - id: b
+      text: Use it — it is precise
+      why: Precision is not accuracy.
+    - id: c
+      text: Round it and use it
+      why: Still unsourced.
+    - id: d
+      text: Ask it to be more confident
+      why: Irrelevant.
+  - id: q8
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C287
+    prompt: 'True or false: the vibe-coding loop ends when Claude Code prints a result.'
+    options:
+    - id: a
+      text: False — it ends after verification and saving (commit + notes)
+      correct: true
+      why: Unverified, unsaved results are not finished work.
+    - id: b
+      text: True — the result is the deliverable
+      why: A result without checks cannot be trusted.
+    - id: c
+      text: True, if the p-value is small
+      why: p-values say nothing about correctness of the pipeline.
+- id: L0.2-L
+  title: L0.2 Reviewing AI-generated work (Leader)
+  lesson: L0.2
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C289
+    - C292
+    prompt: 'A junior shows you: *"Promo increased sales, p = 0.003."* No row counts, no interval. What is your **first** question?
+
+      '
+    options:
+    - id: a
+      text: '"What was the unit of analysis and how many independent units went in?"'
+      correct: true
+      why: A tiny p often comes from analysing lines instead of randomised units.
+    - id: b
+      text: '"Can we get p below 0.001?"'
+      why: Chasing p is the wrong goal.
+    - id: c
+      text: '"Which chart colour did you use?"'
+      why: Irrelevant.
+    - id: d
+      text: '"Great — when can we roll out?"'
+      why: Not reviewed yet.
+  - id: q2
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C149
+    prompt: A junior's deck shows one significant segment out of "several we looked at". What do you ask?
+    options:
+    - id: a
+      text: '"How many tests did you run in total, including ones not shown?"'
+      correct: true
+      why: Multiple testing inflates false positives.
+    - id: b
+      text: '"Which segment is biggest?"'
+      why: Size doesn't address the issue.
+    - id: c
+      text: '"Can you add more segments?"'
+      why: Makes it worse.
+    - id: d
+      text: Nothing — one significant result is enough
+      why: Not after many looks.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C287
+    prompt: Which is the strongest team standard for "checked" AI-assisted analysis?
+    options:
+    - id: a
+      text: Row accounting + effect size with CI + assumption checks + reproducible from config + named reviewer
+      correct: true
+      why: Covers provenance, uncertainty, validity, reproducibility and accountability.
+    - id: b
+      text: The analyst re-ran it once
+      why: Re-running reproduces errors too.
+    - id: c
+      text: The AI said it was confident
+      why: Not evidence.
+    - id: d
+      text: p < 0.05
+      why: Says nothing about pipeline correctness.
+  - id: q4
+    type: open
+    difficulty: 3
+    concepts:
+    - C292
+    prompt: Write the three coaching questions you ask about any number a junior brings you, in order.
+    model: '1. **Where did it come from?** (file, config, rows in and analysed)
+
+      2. **How sure are we?** (effect size, interval, assumptions checked)
+
+      3. **What would change your mind?** (alternative explanations, sensitivity)
+
+      '
+    rubric: 'Full marks: all three themes (provenance, uncertainty, alternatives) in a sensible order. Partial: two themes.'
+  - id: q5
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C202
+    prompt: A junior's churn model has AUC 0.97 on day one. Best response?
+    options:
+    - id: a
+      text: Ask when each input field becomes known relative to churn
+      correct: true
+      why: Implausibly high performance usually means leakage.
+    - id: b
+      text: Deploy immediately
+      why: Too good to be true until explained.
+    - id: c
+      text: Ask for an even higher AUC
+      why: Wrong direction.
+    - id: d
+      text: Switch to accuracy
+      why: Worse metric.
+- id: L0.3-F
+  title: L0.3 Build and validate the datasets (Basic → Advanced)
+  lesson: L0.3
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 1
+    concepts:
+    - C007
+    prompt: How many rows does the retail `transactions` table have?
+    answer: "{{ a.rt_rows }}"
+    tolerance_abs: 0
+    explanation: The generator trims the panel to exactly this many lines; any other number means you have a different version.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C009
+    prompt: How many `line_id` values are duplicated in `transactions`?
+    answer: "{{ a.rt_dup_lines }}"
+    tolerance_abs: 0
+    explanation: '`line_id` should be unique. Duplicates suggest re-ingestion — a finding to log, not something to delete silently.'
+  - id: q3
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C003
+    prompt: What is the grain of the retail `transactions` table?
+    options:
+    - id: a
+      text: One row per transaction line (product line on a receipt)
+      correct: true
+      why: Baskets contain many lines; returns are separate lines.
+    - id: b
+      text: One row per basket
+      why: That would be one row per `basket_id`.
+    - id: c
+      text: One row per customer
+      why: Customers have many baskets.
+    - id: d
+      text: One row per store-week
+      why: That is `weekly_store`.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C083
+    prompt: What percentage of Meridian accounts defaulted within 12 months?
+    answer: "{{ a.fi_default_pct }}"
+    tolerance_abs: 0.05
+    unit: '%'
+    explanation: A rare event — remember this base rate when you meet model accuracy claims.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C010
+    prompt: How many accounts have impossible ages (below 18 or 120 and above)?
+    answer: "{{ a.fi_bad_age }}"
+    tolerance_abs: 0
+    explanation: Validity rule. Log them; Day 1 decides treatment.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C003
+    - C005
+    prompt: Which key should be unique in `performance_monthly`?
+    options:
+    - id: a
+      text: '`account_id` + `month_on_book`'
+      correct: true
+      why: One row per account per month on book.
+    - id: b
+      text: '`account_id` alone'
+      why: Each account has up to 24 rows.
+    - id: c
+      text: '`calendar_month` alone'
+      why: Many accounts share a month.
+    - id: d
+      text: '`dpd`'
+      why: Not an identifier.
+  - id: q7
+    type: tf_reason
+    difficulty: 3
+    concepts:
+    - C012
+    prompt: 'True or false: the panel''s total revenue should equal the sum of `weekly_store` revenue.'
+    options:
+    - id: a
+      text: False — the transactions are a customer-panel sample; weekly tables cover the full chain
+      correct: true
+      why: Different scope; reconcile scope before numbers.
+    - id: b
+      text: True — both are NorthStar sales
+      why: Same company, different populations.
+    - id: c
+      text: True — otherwise the data is broken
+      why: Not if scopes differ by design (see data card).
+  - id: q8
+    type: multi
+    difficulty: 2
+    concepts:
+    - C008
+    prompt: Which belong in a validation report? (Select all.)
+    options:
+    - id: a
+      text: Row and column counts vs expectation
+      correct: true
+      why: Completeness of the extract.
+    - id: b
+      text: Grain statement and key uniqueness
+      correct: true
+      why: Prevents join explosions and wrong averages.
+    - id: c
+      text: Rows affected by each issue
+      correct: true
+      why: Quantifies impact.
+    - id: d
+      text: Rows deleted to make the data clean
+      why: Validation finds and counts; it does not change data.
+- id: L0.3-L
+  title: L0.3 Signing off an extract (Leader)
+  lesson: L0.3
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts: &id002
+    - C003
+    - C005
+    prompt: Revenue doubled after a junior joined transactions to a customer table. Most likely cause?
+    options:
+    - id: a
+      text: The customer table has more than one row per customer (join explosion)
+      correct: true
+      why: Many-to-many joins duplicate fact rows.
+    - id: b
+      text: Customers spent more
+      why: A join cannot change behaviour.
+    - id: c
+      text: Rounding
+      why: Doubling is not rounding.
+    - id: d
+      text: Duplicates in the calendar
+      why: Possible in theory but not from a customer join.
+  - id: q2
+    type: open
+    difficulty: 3
+    concepts:
+    - C012
+    prompt: "Explain to a junior why the panel's revenue ({{ a.rt_revenue_total | n }}) does not match the chain's weekly revenue, and what you would still reconcile."
+    model: The transaction file is a customer-panel sample of identified shoppers; the weekly tables are full-chain sales. Totals should not match. Reconcile what *should* match — e.g. weeks covered, stores present, promotion calendars, and trends (panel and chain should move together).
+    rubric: 'Full: names the scope difference and proposes a meaningful reconciliation. Partial: scope only.'
+  - id: q3
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C008
+    prompt: A junior "cleaned" the data by deleting all negative quantities before you saw the validation report. Problem?
+    options:
+    - id: a
+      text: Valid returns were deleted with errors, and the impact was not counted
+      correct: true
+      why: Negative quantities include legitimate returns; validation should count, not delete.
+    - id: b
+      text: No problem — negatives are always errors
+      why: Returns are negative by design here.
+    - id: c
+      text: They should also delete zeros
+      why: Wrong direction.
+    - id: d
+      text: Only a formatting issue
+      why: It changes results.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C003
+    prompt: The best coaching question to test whether a junior understands grain is…
+    options:
+    - id: a
+      text: '"What business entity does one row represent, and how do you know?"'
+      correct: true
+      why: Forces a business definition and evidence (key uniqueness).
+    - id: b
+      text: '"How many columns are there?"'
+      why: Not about grain.
+    - id: c
+      text: '"Which file format is it?"'
+      why: Irrelevant.
+    - id: d
+      text: '"Is it big?"'
+      why: Size ≠ grain.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: A junior reports the panel has 25,000 rows but the brief said 25,000 baskets. What do you ask?
+    options:
+    - id: a
+      text: 'What one row represents (grain): lines, baskets or customers?'
+      correct: true
+      why: Every number depends on grain.
+    - id: b
+      text: Nothing — numbers match
+      why: Same number, different grain.
+    - id: c
+      text: Ask for a bigger extract
+      why: Doesn't address grain.
+    - id: d
+      text: Ask for a chart
+      why: Grain first.
+    concepts: *id002
+- id: L0.4-F
+  title: L0.4 Toolkit and reuse (Basic → Advanced)
+  lesson: L0.4
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts: &id003
+    - C291
+    prompt: To reuse a recipe on a new dataset you should change…
+    options:
+    - id: a
+      text: Only the config (`dataset`, `columns`, `filters`, `params`)
+      correct: true
+      why: Recipes are tested logic; configs adapt them.
+    - id: b
+      text: The recipe code
+      why: Creates untested variants.
+    - id: c
+      text: The data to match the old column names
+      why: Mapping is the config's job.
+    - id: d
+      text: Both code and config
+      why: Code changes need review and regression checks.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C291
+    prompt: What does `--check-baseline` do?
+    options:
+    - id: a
+      text: Re-runs the config and compares every metric with the saved baseline
+      correct: true
+      why: Proves a change did not alter the original results.
+    - id: b
+      text: Checks the data for missing values
+      why: That is profiling.
+    - id: c
+      text: Checks your Git credentials
+      why: No.
+    - id: d
+      text: Runs the analysis faster
+      why: No.
+  - id: q3
+    type: spot_error
+    difficulty: 2
+    concepts:
+    - C291
+    prompt: 'Running the retail config on `transactions_renamed` prints: *"Role `target` is mapped to `quantity`, which is not in the dataset. Possible matches: units_sold."* What should you do?
+
+      '
+    options:
+    - id: a
+      text: Create a new config mapping target → units_sold (and the other roles), review it, then run
+      correct: true
+      why: The schema check worked; fix the mapping.
+    - id: b
+      text: Rename the columns in the data file
+      why: Changing data to fit code hides the mapping.
+    - id: c
+      text: Edit the recipe to look for `units_sold`
+      why: Breaks reuse for other datasets.
+    - id: d
+      text: Ignore the error
+      why: Nothing was analysed.
+  - id: q4
+    type: multi
+    difficulty: 2
+    concepts:
+    - C290
+    prompt: Which files does every recipe run write? (Select all.)
+    options:
+    - id: a
+      text: '`narrative.md`'
+      correct: true
+      why: Plain-English summary.
+    - id: b
+      text: '`row_accounting.md`'
+      correct: true
+      why: Every row removed and why.
+    - id: c
+      text: '`schema_report.md`'
+      correct: true
+      why: Did the data fit the recipe?
+    - id: d
+      text: '`run_manifest.json`'
+      correct: true
+      why: Config, data fingerprint, versions.
+    - id: e
+      text: A copy of the full dataset
+      why: Not needed; the manifest fingerprints it.
+  - id: q5
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C291
+    prompt: In a config, the `columns:` block maps…
+    options:
+    - id: a
+      text: Recipe roles (id, target, group…) to dataset column names
+      correct: true
+      why: That is what makes recipes portable.
+    - id: b
+      text: Column names to chart colours
+      why: No.
+    - id: c
+      text: Old column names to new ones permanently
+      why: It does not change the data.
+    - id: d
+      text: Columns to delete
+      why: No.
+  - id: q6
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C291
+    prompt: 'True or false: if a reused analysis runs without errors on a new file, its assumptions still hold.'
+    options:
+    - id: a
+      text: False — assumptions must be re-checked on the new data
+      correct: true
+      why: Running is not the same as being valid.
+    - id: b
+      text: True — the recipe is tested
+      why: Tested code can be misapplied.
+    - id: c
+      text: True, if the row count is similar
+      why: Similar size says nothing about distributions or grain.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: A NorthStar config ran on the bank's file without errors but the results look odd. Most useful next step?
+    options:
+    - id: a
+      text: Read the schema report and check the column mapping and units
+      correct: true
+      why: The schema report flags mismatched roles and units.
+    - id: b
+      text: Edit the recipe code
+      why: Never change recipe code to fit data.
+    - id: c
+      text: Trust it — no errors
+      why: No errors ≠ valid assumptions.
+    - id: d
+      text: Delete outliers
+      why: Diagnose first.
+    concepts: *id003
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: What does a saved baseline protect you from?
+    options:
+    - id: a
+      text: Silent changes in results when code, data or libraries change
+      correct: true
+      why: Regression checks catch unexpected drift in outputs.
+    - id: b
+      text: Slow runs
+      why: No.
+    - id: c
+      text: Typos in prompts
+      why: No.
+    - id: d
+      text: Missing data
+      why: Different problem.
+    concepts: *id003
+- id: L0.4-L
+  title: L0.4 Approving reused analyses (Leader)
+  lesson: L0.4
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts: &id004
+    - C291
+    prompt: A junior reused last quarter's config; the results look reasonable. Which checklist item most often catches a silent problem?
+    options:
+    - id: a
+      text: Stale parameters (dates, filters, thresholds copied from the old project)
+      correct: true
+      why: Old date filters silently exclude new data.
+    - id: b
+      text: Font size of the charts
+      why: Cosmetic.
+    - id: c
+      text: Number of slides
+      why: Irrelevant.
+    - id: d
+      text: Whether the junior used Codespaces
+      why: Environment matters less than parameters here.
+  - id: q2
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C011
+    prompt: Another bank's file gives a mean limit 100× ours. First hypothesis?
+    options:
+    - id: a
+      text: Units differ (minor currency units vs units)
+      correct: true
+      why: Unit mismatch is the classic reuse trap.
+    - id: b
+      text: Their customers are 100× richer
+      why: Implausible.
+    - id: c
+      text: The recipe is broken
+      why: The recipe faithfully computed what it was given.
+    - id: d
+      text: Sampling error
+      why: Not 100×.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C291
+    - C292
+    prompt: A junior changed recipe code "slightly" to handle a new file. List what you require before approving.
+    model: The diff reviewed and explained; the reason a config change was not enough; tests/regression check on the original configs passing (`--check-baseline`); schema report and row accounting for the new file; assumption checks re-run; version note / commit message describing what and why.
+    rubric: 'Full: diff review + regression check + new-file schema/rows + assumptions. Partial: two of these.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C291
+    prompt: Which evidence best shows a reused analysis did not break the original?
+    options:
+    - id: a
+      text: '`--check-baseline` passes on the original config'
+      correct: true
+      why: Every metric matches the saved baseline.
+    - id: b
+      text: The new run finished quickly
+      why: Speed is not evidence.
+    - id: c
+      text: The junior says nothing changed
+      why: Assertion, not evidence.
+    - id: d
+      text: The chart looks similar
+      why: Not precise enough.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: A team wants 20 copies of a recipe, one per business unit. Your advice?
+    options:
+    - id: a
+      text: One recipe, 20 configs — change data and mapping, not code
+      correct: true
+      why: Configuration over duplication keeps methods consistent.
+    - id: b
+      text: Approve 20 copies
+      why: Copies drift apart.
+    - id: c
+      text: One giant script
+      why: Hard to review.
+    - id: d
+      text: Let each team write their own
+      why: Inconsistent methods.
+    concepts: *id004
+- id: L0.5-F
+  title: L0.5 Data safety (Basic → Advanced)
+  lesson: L0.5
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts: &id005
+    - C293
+    prompt: You want to show Claude Code "just ten rows" of a confidential company file in an unapproved tool. What should you do?
+    options:
+    - id: a
+      text: Don't — use approved environments only, or a synthetic/anonymised sample
+      correct: true
+      why: Ten rows of personal data is still a disclosure.
+    - id: b
+      text: Fine if you delete the chat afterwards
+      why: Deletion does not undo disclosure.
+    - id: c
+      text: Fine if you remove names
+      why: Other fields can identify people.
+    - id: d
+      text: Fine for internal data
+      why: Depends on the data-class policy, not on 'internal'.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C293
+    prompt: Replacing customer IDs with a salted hash is called…
+    options:
+    - id: a
+      text: Pseudonymisation
+      correct: true
+      why: Reversible with the key — still personal data in most laws.
+    - id: b
+      text: Anonymisation
+      why: Not if it can be reversed or linked.
+    - id: c
+      text: Encryption at rest
+      why: Different control.
+    - id: d
+      text: Generalisation
+      why: Generalisation coarsens values (e.g. age bands).
+  - id: q3
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C293
+    prompt: 'True or false: removing names and IDs makes a dataset anonymous.'
+    options:
+    - id: a
+      text: False — combinations of quasi-identifiers can single people out
+      correct: true
+      why: Age + postcode + household size can be unique.
+    - id: b
+      text: True — no direct identifiers remain
+      why: Quasi-identifiers remain.
+    - id: c
+      text: True, if the file is small
+      why: Small files are often easier to re-identify.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C293
+    prompt: k-anonymity with k = 5 means…
+    options:
+    - id: a
+      text: Every combination of quasi-identifiers is shared by at least 5 records
+      correct: true
+      why: No one is unique on those fields.
+    - id: b
+      text: Five columns were removed
+      why: No.
+    - id: c
+      text: Five people can see the data
+      why: No.
+    - id: d
+      text: Data is encrypted 5 times
+      why: No.
+  - id: q5
+    type: multi
+    difficulty: 2
+    concepts:
+    - C293
+    prompt: Which are anonymisation techniques? (Select all.)
+    options:
+    - id: a
+      text: Generalisation (age → age band)
+      correct: true
+      why: Coarsens values.
+    - id: b
+      text: Suppression (drop rare values/rows)
+      correct: true
+      why: Removes risky records.
+    - id: c
+      text: Noise/rounding
+      correct: true
+      why: Perturbs values.
+    - id: d
+      text: Sorting the file
+      why: Does nothing for privacy.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C216
+    prompt: How may the bank's `protected_group` field be used?
+    options:
+    - id: a
+      text: Only to monitor fairness of decisions — never as a model input
+      correct: true
+      why: Using it as an input risks unlawful discrimination.
+    - id: b
+      text: As a predictor if it improves AUC
+      why: Not acceptable.
+    - id: c
+      text: To segment marketing
+      why: Not acceptable.
+    - id: d
+      text: It must be deleted
+      why: It is needed to measure fairness.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: A NorthStar loyalty extract has postcode, birth date and gender. Why is it still risky after removing names?
+    options:
+    - id: a
+      text: The combination can re-identify individuals (quasi-identifiers)
+      correct: true
+      why: Generalise or suppress quasi-identifiers.
+    - id: b
+      text: It isn't risky
+      why: Linkage attacks are common.
+    - id: c
+      text: Only names identify people
+      why: Quasi-identifiers do too.
+    - id: d
+      text: Because gender is sensitive only
+      why: The combination is the issue.
+    concepts: *id005
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: Which is safest for practising analysis?
+    options:
+    - id: a
+      text: Synthetic data like this course's datasets
+      correct: true
+      why: Synthetic data carries no customer risk.
+    - id: b
+      text: A copy of production data on your laptop
+      why: Breaches policy.
+    - id: c
+      text: Pseudonymised production data in a public AI tool
+      why: Still personal data.
+    - id: d
+      text: Screenshots of customer records
+      why: Still personal data.
+    concepts: *id005
+- id: L0.5-L
+  title: L0.5 Data safety (Leader)
+  lesson: L0.5
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts: &id006
+    - C293
+    prompt: A junior asks if they can use a customer file with a new AI tool. Best response?
+    options:
+    - id: a
+      text: '"What data class is it and which environment are you in?" — then apply the team''s data-class × tool matrix'
+      correct: true
+      why: Repeatable, policy-based decision.
+    - id: b
+      text: '"Yes, if it''s urgent"'
+      why: Urgency is not a control.
+    - id: c
+      text: '"Ask IT next month"'
+      why: Avoids the decision.
+    - id: d
+      text: '"Remove the names and go ahead"'
+      why: Not sufficient.
+  - id: q2
+    type: open
+    difficulty: 3
+    concepts:
+    - C293
+    prompt: What must happen before an anonymised extract leaves the secure environment?
+    model: A documented anonymisation step (pseudonymise IDs with a protected key, generalise quasi-identifiers, suppress rare values), a re-identification check (smallest group size / k-anonymity on quasi-identifiers), minimisation to required fields, and sign-off per the data-class policy.
+    rubric: 'Full: transformation + re-identification check + minimisation + sign-off. Partial: two of these.'
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C293
+    prompt: Pseudonymised data under most privacy laws is…
+    options:
+    - id: a
+      text: Still personal data
+      correct: true
+      why: It can be re-linked with the key.
+    - id: b
+      text: Anonymous data
+      why: Only if re-identification is not reasonably possible.
+    - id: c
+      text: Public data
+      why: No.
+    - id: d
+      text: Exempt from policy
+      why: No.
+  - id: q4
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C216
+    - C296
+    prompt: A model's accuracy improves when `protected_group` is added. A junior wants to include it. Decision?
+    options:
+    - id: a
+      text: Reject; use it only to monitor fairness, and check for proxies
+      correct: true
+      why: Legal and ethical red line; proxies can reintroduce the effect.
+    - id: b
+      text: Accept if the gain is large
+      why: Gain does not justify discrimination.
+    - id: c
+      text: Accept but don't document it
+      why: Worse.
+    - id: d
+      text: Accept for internal use only
+      why: Decisions still affect customers.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: A vendor demo needs 'a sample of real complaints'. Best response?
+    options:
+    - id: a
+      text: Provide synthetic or properly anonymised, approved samples under a data agreement
+      correct: true
+      why: Data minimisation and approvals first.
+    - id: b
+      text: Send 100 real complaints by email
+      why: Breach risk.
+    - id: c
+      text: Refuse any demo
+      why: Too blunt.
+    - id: d
+      text: Let the vendor access production
+      why: No.
+    concepts: *id006

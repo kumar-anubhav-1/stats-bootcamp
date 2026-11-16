@@ -1,0 +1,333 @@
+# Day 2 exercises (15 retail + 15 finance). Values are computed from the data.
+retail:
+  - id: R2-1
+    lesson: L2.1
+    tier: Basic
+    title: Conditional probability of a return
+    framing: "The returns desk asks: is a line more likely to be returned if it is Electronics?"
+    deliverable: Return rate (returns ÷ sales lines) overall, for Electronics, and for fresh food (Fresh Produce, Dairy, Bakery).
+    expected: "Overall {{ a.d2_p_return }}%; Electronics {{ a.d2_p_return_elec }}%; fresh food {{ a.d2_p_return_food }}%."
+    tolerance: "± 0.1 pp"
+    model: "P(return | Electronics) is about four times P(return | fresh food). Conditioning on category changes the answer — the overall rate describes neither."
+    wrong: "Quoting the overall rate for every category."
+    leader: Which categories would you prioritise for a returns-policy review, and what else would you check first?
+  - id: R2-2
+    lesson: L2.1
+    tier: Applied
+    title: Are promotion and display independent?
+    framing: Merchandising plans to evaluate promotions and displays separately.
+    deliverable: P(promo), P(display), observed P(both) vs P(promo) × P(display); P(display | promo).
+    expected: "P(promo) {{ a.d2_p_promo }}%, P(display) {{ a.d2_p_display }}%; P(both) {{ a.d2_p_both }}% vs {{ a.d2_p_both_if_indep }}% if independent; P(display | promo) {{ a.d2_p_disp_given_promo }}%."
+    tolerance: "± 0.2 pp"
+    model: "Far from independent: displays almost always accompany promotions. Their effects cannot be separated from this data without a design that varies them separately (R15, Day 4)."
+    wrong: "Estimating the display effect as if displays were assigned independently."
+    leader: What test design would you ask merchandising to run?
+  - id: R2-3
+    lesson: L2.2
+    tier: Basic
+    title: Poisson or negative binomial?
+    framing: "Store S001 needs a distribution for weekly Dairy units (safety stock, Day 7)."
+    deliverable: "Run `retail_fit_weekly_units.yaml`: mean, variance, dispersion, AIC of both families."
+    expected: "Mean {{ a.d2_s1_dairy_mean }}, variance {{ a.d2_s1_dairy_var }}, dispersion {{ a.d2_s1_dairy_disp }}; negative binomial wins clearly. Median dispersion across regular SKUs (chain): {{ a.d2_sku_disp_median }}."
+    tolerance: "± 0.1"
+    model: "Variance several times the mean → over-dispersed. A Poisson would understate week-to-week variability and lead to too little safety stock."
+    wrong: "Assuming Poisson because the data are counts."
+    leader: What is the business cost of using the Poisson here?
+  - id: R2-4
+    lesson: L2.2
+    tier: Applied
+    title: Waiting for a promotion basket
+    framing: How many baskets until a shopper's first basket containing a promoted item?
+    deliverable: Share of baskets with a promo item (p); geometric mean wait 1/p; P(at least one within 3 baskets).
+    expected: "p = {{ a.d2_p_promo_basket }}%; mean wait {{ a.d2_geom_mean_wait }} baskets; P(within 3) = {{ a.d2_geom_p_within3 }}%."
+    tolerance: "± 0.2"
+    model: "The geometric model assumes each basket independently has the same probability — reasonable as a first approximation; real shoppers differ (promo hunters), which a mixture would capture."
+    wrong: "Using 1 − p³ instead of 1 − (1 − p)³."
+    leader: Where would the independence assumption break for CRM targeting?
+  - id: R2-5
+    lesson: L2.3
+    tier: Basic
+    title: Fit a distribution to basket value
+    framing: The pricing team wants a parametric model of basket value.
+    deliverable: "Run `retail_fit_basket_value.yaml`: AIC for lognormal, gamma, Weibull, normal."
+    expected: "AIC — {{ a.d2_basket_aic | kv }}. Best: {{ a.d2_basket_best }}."
+    tolerance: "± 50 AIC"
+    model: "Positive, right-skewed spend is typically lognormal; the normal is far worse. Check the Q-Q plot: the best family can still miss the extreme tail (bulk buyers)."
+    wrong: "Picking normal because 'the CLT says so' — the CLT is about means, not individual values."
+    leader: When does the choice of distribution change a business decision?
+  - id: R2-6
+    lesson: L2.3
+    tier: Applied
+    title: Time between visits
+    framing: How long do customers wait between baskets?
+    deliverable: Median and mean gap (days) between a customer's consecutive baskets; Weibull shape k.
+    expected: "Median {{ a.d2_gap_median_days }} days, mean {{ a.d2_gap_mean_days }}; Weibull k = {{ a.d2_gap_weibull_k }} (n = {{ a.d2_gap_n | n }} gaps)."
+    tolerance: "± 0.05 for k"
+    model: "k ≈ 1 means a nearly constant chance of returning each day (close to exponential). k > 1: the chance rises with time since last visit; k < 1: the longer away, the less likely to return. Customers who never return are missing from gaps — censoring (Day 9)."
+    wrong: "Ignoring that only customers with two or more baskets contribute gaps."
+    leader: Why would gap analysis understate churn?
+  - id: R2-7
+    lesson: L2.3
+    tier: Stretch
+    title: Peaked, fat-tailed price changes
+    framing: Weekly log price changes in the price extract (non-zero changes only).
+    deliverable: AIC of Laplace vs normal fits; excess kurtosis.
+    expected: "AIC Laplace {{ a.d2_pc_aic_laplace | n }} vs normal {{ a.d2_pc_aic_normal | n }}; kurtosis {{ a.d2_pc_kurt }}."
+    tolerance: "± 50 AIC"
+    model: "Price changes are mostly small with occasional large jumps (promotions) — a sharp peak and fat tails that the Laplace captures better than the normal."
+    wrong: "Using a normal model and underestimating big price moves."
+    leader: Where in pricing risk would fat tails matter?
+  - id: R2-8
+    lesson: L2.4
+    tier: Basic
+    title: Simpson's paradox
+    framing: "A dashboard claims 'promotions reduce units per line'."
+    deliverable: Relative difference in quantity per line, promo vs non-promo, overall and within each format; promo share by format.
+    expected: "Overall {{ a.d2_simpson_overall_pct }}%; within format — {{ a.d2_simpson_within | kv('%') }}; promo share — {{ a.d2_simpson_promo_share | kv('%') }}."
+    tolerance: "± 0.5 pp"
+    model: "Promotions are concentrated in Express stores, where baskets are small top-ups. Pooling formats reverses the effect; within every format, promo lines sell more units (R14)."
+    wrong: "Reporting the pooled comparison."
+    leader: Which comparison do you allow on the dashboard, and how do you label it?
+  - id: R2-9
+    lesson: L2.4
+    tier: Applied
+    title: Survivorship bias in range reviews
+    framing: "Snacks 'grew' year on year according to the current product master."
+    deliverable: Year-2 vs year-1 Snacks growth using current SKUs only vs including archived (delisted) SKUs.
+    expected: "Current range {{ a.d2_surv_current_pct }}% vs true category {{ a.d2_surv_true_pct }}%."
+    tolerance: "± 0.5 pp"
+    model: "The delisted SKUs sold in year 1 and vanish from the current list, so the 'current range' comparison flatters growth (R16)."
+    wrong: "Joining sales to the current master with an inner join."
+    leader: What data must every range review include?
+  - id: R2-10
+    lesson: L2.5
+    tier: Basic
+    title: Watching the central limit theorem
+    framing: Basket value is extremely skewed (skew {{ a.d2_pop_skew }}). How skewed are averages of n baskets?
+    deliverable: Skewness and SE of 4,000 simulated sample means for n = 5, 30, 200; SE formula σ/√n.
+    expected: "Skew of means: n=5 {{ a.d2_clt[5].skew }}, n=30 {{ a.d2_clt[30].skew }}, n=200 {{ a.d2_clt[200].skew }}. SE (simulated vs formula): n=30 {{ a.d2_clt[30].se_sim }} vs {{ a.d2_clt[30].se_formula }}."
+    tolerance: "± 0.3 skew; ± 0.5 SE"
+    model: "Means become more symmetric as n grows, but with heavy tails 'n = 30' is not enough — the sampling distribution is still clearly skewed. The SE formula works well at every n."
+    wrong: "Assuming n ≥ 30 always makes means normal."
+    leader: When would you insist on a bootstrap instead of a t-interval?
+  - id: R2-11
+    lesson: L2.5
+    tier: Applied
+    title: The law of large numbers
+    framing: Track the running mean of randomly drawn baskets.
+    deliverable: Running mean after 10, 100 and 3,000 draws vs the population mean.
+    expected: "{{ a.d2_lln_mean_10 }} → {{ a.d2_lln_mean_100 }} → {{ a.d2_lln_mean_3000 }} (population {{ a.d2_pop_mean }})."
+    tolerance: "seed-dependent; direction must match"
+    model: "Small samples of heavy-tailed data can be wildly off; the average settles as n grows. 'Early results' from a few stores or days are not reliable."
+    wrong: "Reporting a weekly KPI from a handful of transactions as if it were stable."
+    leader: How do you stop teams reacting to day-one numbers?
+  - id: R2-12
+    lesson: L2.5
+    tier: Stretch
+    title: Monte Carlo rollout P&L
+    framing: Use the Hair Care test result (L3.4 preview) to simulate the annual rollout P&L, where rollout costs equal the margin on a 10% lift.
+    deliverable: Simulated lift ~ Normal(estimate, SE); P(loss), mean P&L, 5th–95th percentile.
+    expected: "Lift {{ a.d2_mc_lift_mu_pct }}% ± {{ a.d2_mc_lift_se_pct }}% (SE); P(loss) = {{ a.d2_mc_p_loss_pct }}%; mean P&L {{ a.d2_mc_pnl_mean | n }}; 90% range {{ a.d2_mc_pnl_p5 | n }} to {{ a.d2_mc_pnl_p95 | n }}."
+    tolerance: "± 1 pp for P(loss)"
+    model: "The expected P&L is positive, but there is about a one-in-five chance of losing money. Monte Carlo turns an interval into a decision-relevant risk number."
+    wrong: "Reporting only the expected P&L."
+    leader: Would you approve the rollout at this risk? What would reduce it?
+  - id: R2-13
+    lesson: L2.6
+    tier: Basic
+    title: Benford by store
+    framing: "Audit asks whether any store's revenue figures look manufactured."
+    deliverable: "Run `retail_benford_stores.yaml`: MAD and rounding share for the flagged store vs peers; first-digit-1 share."
+    expected: "S033 MAD {{ a.d2_ben_s033 }} vs peer median {{ a.d2_ben_peer_med_r }} (max {{ a.d2_ben_peer_max_r }}); rounded {{ a.d2_round_s033_pct }}% vs {{ a.d2_round_peer_pct }}%; digit 1: {{ a.d2_ben_digit1_s033_pct }}% (Benford {{ a.d2_ben_digit1_theory_pct }}%)."
+    tolerance: "± 0.005 MAD"
+    model: "Retail line revenues span only ~{{ a.d2_span_retail }} orders of magnitude, so even honest stores deviate from Benford (MAD ≈ {{ a.d2_ben_peer_med_r }}) — compare with peers. S033 stands far apart on both tests (R18)."
+    wrong: "Flagging every store because all exceed Nigrini's 0.015 threshold."
+    leader: What evidence would you take to audit, and what would you not claim?
+  - id: R2-14
+    lesson: L2.7
+    tier: Applied
+    title: Cosine similarity of products
+    framing: Which subcategories appear in the same baskets?
+    deliverable: Cosine similarity of basket vectors for Pasta vs Pasta Sauce and Pasta vs Shampoo.
+    expected: "Pasta–Sauce {{ a.d2_cos_pasta_sauce }}; Pasta–Shampoo {{ a.d2_cos_pasta_shampoo }}."
+    tolerance: "± 0.01"
+    model: "Each subcategory is a vector over baskets; cosine measures how often they point the same way. The planted association (R21) shows up — Day 8 turns this into market-basket rules."
+    wrong: "Using raw co-occurrence counts, which favour big categories."
+    leader: How would merchandising use this?
+  - id: R2-15
+    lesson: L2.7
+    tier: Stretch
+    title: SVD of shopping profiles
+    framing: Customers' category spend shares (customers with 3+ baskets).
+    deliverable: Share of variance captured by the first two singular vectors.
+    expected: "{{ a.d2_svd_share2 }}% from 2 components ({{ a.d2_svd_n }} customers × 12 categories)."
+    tolerance: "± 1 pp"
+    model: "Two directions summarise almost half of the variation in shopping mixes — the basis for PCA and segmentation (Day 8)."
+    wrong: "Running SVD on raw spend (dominated by big spenders) instead of shares."
+    leader: What would you name the first two directions after looking at their loadings?
+finance:
+  - id: F2-1
+    lesson: L2.1
+    tier: Basic
+    title: Bayes and the fraud alert
+    framing: "A proposed alert fires when `{{ a.d2_alert_rule }}`."
+    deliverable: Base rate, sensitivity, false-positive rate; P(fraud | alert) by Bayes' rule and directly; natural frequencies per 10,000 accounts.
+    expected: "Base {{ a.d2_fraud_base_pct }}%, sensitivity {{ a.d2_alert_sens_pct }}%, FPR {{ a.d2_alert_fpr_pct }}% → P(fraud | alert) = {{ a.d2_alert_ppv_bayes_pct }}% (direct: {{ a.d2_alert_ppv_direct_pct }}%). Per 10,000: {{ a.d2_nf_fraud }} frauds, {{ a.d2_nf_caught }} caught, {{ a.d2_nf_false }} false alarms."
+    tolerance: "± 0.1 pp"
+    model: "Even a rule that raises the fraud rate {{ a.d2_alert_lift }}-fold produces mostly false alarms, because fraud is rare. Natural frequencies make this obvious to non-statisticians."
+    wrong: "Reading sensitivity ({{ a.d2_alert_sens_pct }}%) as 'the chance an alert is fraud'."
+    leader: How many investigators does this alert need per 10,000 accounts, and is it worth it?
+  - id: F2-2
+    lesson: L2.1
+    tier: Applied
+    title: Confusing the inverse
+    framing: "A report says '{{ a.d2_p_partner_given_default }}% of defaulters came through the partner channel' and concludes partner customers are '{{ a.d2_p_partner_given_default }}% likely to default'."
+    deliverable: P(partner | default), P(default | partner), P(partner); odds and log-odds of default for partner vs branch.
+    expected: "P(partner | default) {{ a.d2_p_partner_given_default }}%; P(default | partner) {{ a.d2_pd_partner_pct }}%; P(partner) {{ a.d2_p_partner }}%. Odds {{ a.d2_odds_partner }} vs {{ a.d2_odds_branch }}; log-odds partner {{ a.d2_logodds_partner }}."
+    tolerance: "± 0.1"
+    model: "P(A | B) ≠ P(B | A). Partner customers default at {{ a.d2_pd_partner_pct }}% — high, but nowhere near {{ a.d2_p_partner_given_default }}%. Bayes links them through the base rates."
+    wrong: "Treating the two conditional probabilities as interchangeable."
+    leader: Rewrite the report's sentence correctly.
+  - id: F2-3
+    lesson: L2.2
+    tier: Basic
+    title: Are vintage defaults binomial?
+    framing: If every account had the same 4% default probability, vintage default counts would vary only by binomial chance.
+    deliverable: Default-rate range across vintages; chi-square test of equal rates for all vintages and for vintages before 2025Q2.
+    expected: "Rates {{ a.d2_vint_rate_min }}%–{{ a.d2_vint_rate_max }}%; all vintages p ≈ {{ a.d2_vint_chi2_p }}; excluding 2025Q2–Q3 p = {{ a.d2_vint_early_chi2_p }}."
+    tolerance: "± 0.05"
+    model: "Older vintages look like one binomial process; the two newest do not — something changed (population drift, F11)."
+    wrong: "Assuming one PD for all vintages."
+    leader: What does this imply for the PD used in provisioning?
+  - id: F2-4
+    lesson: L2.2
+    tier: Applied
+    title: Audit sampling
+    framing: Internal audit samples 50 of 200 loan files; 10 contain a documentation error.
+    deliverable: P(at least one error found) — hypergeometric vs binomial approximation; sample size for 95% detection.
+    expected: "Hypergeometric {{ a.d2_hyp_p_detect }}% vs binomial {{ a.d2_binom_p_detect }}%; n = {{ a.d2_hyp_n_for_95 }} files for 95%."
+    tolerance: "± 0.1 pp"
+    model: "Sampling a quarter of a small population without replacement makes detection more likely than the binomial suggests. Use the hypergeometric for audit plans on small populations."
+    wrong: "Using the binomial when sampling a large share of a finite population."
+    leader: Is 50 files enough? What error rate could it miss?
+  - id: F2-5
+    lesson: L2.2
+    tier: Stretch
+    title: Claims per policy
+    framing: Is claim frequency Poisson?
+    deliverable: Mean claims per policy; dispersion; observed vs Poisson share with 0 and with 2+ claims.
+    expected: "Mean {{ a.d2_claim_mean }}; dispersion {{ a.d2_claim_disp }}; zero claims {{ a.d2_claim_p0_obs }}% vs {{ a.d2_claim_p0_pois }}%; 2+ claims {{ a.d2_claim_p2_obs }}% vs {{ a.d2_claim_p2_pois }}%."
+    tolerance: "± 0.05"
+    model: "Mild over-dispersion, but the Poisson under-predicts multi-claim policies by more than half — the policies that matter most for pricing (F17)."
+    wrong: "Accepting Poisson because the mean and the zero share look fine."
+    leader: How would mis-modelling multi-claim policies affect premiums?
+  - id: F2-6
+    lesson: L2.3
+    tier: Basic
+    title: Claim severity
+    framing: "Run `finance_fit_claim_severity.yaml` (catastrophic claims above 100,000 excluded)."
+    deliverable: AIC by family; gamma shape; fitted vs empirical P99 (all claims); mean with and without catastrophic claims.
+    expected: "AIC — {{ a.d2_sev_aic | kv }} (best {{ a.d2_sev_best }}, shape {{ a.d2_sev_gamma_shape }}). P99: gamma {{ a.d2_sev_p99_gamma | n }} vs empirical {{ a.d2_sev_p99_emp | n }}. Mean {{ a.d2_sev_mean_all | n }} (all) vs {{ a.d2_sev_mean_nocat | n }}."
+    tolerance: "± 10 AIC"
+    model: "The candidates are close on AIC, and the best fit under-states the empirical tail, which is driven by three catastrophic claims. Model attritional and large losses separately (large-loss loading)."
+    wrong: "Fitting one distribution to all claims including catastrophes."
+    leader: What would you ask the pricing actuary about large losses?
+  - id: F2-7
+    lesson: L2.3
+    tier: Applied
+    title: Is the bureau score normal?
+    framing: Check the 68–95 rule.
+    deliverable: Share of accounts within 1 and 2 SD of the mean bureau score.
+    expected: "{{ a.d2_bureau_within1sd_pct }}% within 1 SD; {{ a.d2_bureau_within2sd_pct }}% within 2 SD."
+    tolerance: "± 0.3 pp"
+    model: "Close to the normal's 68% / 95% — the score is roughly symmetric (skew {{ a.d1_bureau_skew }}). Approximate normality is enough for many purposes; check tails before relying on extreme quantiles."
+    wrong: "Running a normality test on 25,000 rows and declaring the score 'not normal' as if that mattered."
+    leader: When does approximate normality matter for credit decisions?
+  - id: F2-8
+    lesson: L2.4
+    tier: Applied
+    title: Simple random vs stratified sampling
+    framing: Estimate the default rate from samples of 500 accounts.
+    deliverable: Standard error over 2,000 simulated samples — simple random vs stratified by acquisition channel.
+    expected: "SRS {{ a.d2_srs_se_pp }} pp vs stratified {{ a.d2_strat_se_pp }} pp (true rate {{ a.d2_true_default_pct }}%)."
+    tolerance: "± 0.05 pp"
+    model: "Stratification by channel barely helps here: most variation is within channels (a rare binary outcome). Its real value is guaranteeing enough partner-channel accounts to estimate that subgroup — use it to control subgroup sample sizes, not as a magic precision gain."
+    wrong: "Assuming stratification always shrinks the SE substantially."
+    leader: When is stratified sampling worth the complexity?
+  - id: F2-9
+    lesson: L2.4
+    tier: Basic
+    title: Selection bias — booked accounts only
+    framing: Credit wants to lower the approval cut-off using a model trained on booked accounts.
+    deliverable: Mean application score of booked vs declined; default rate of the lowest-scoring 10% of booked accounts.
+    expected: "Booked {{ a.d2_booked_score }} vs declined {{ a.d2_declined_score }} ({{ a.d2_declined_n | n }} declined); lowest-decile booked default {{ a.d2_booked_low_def_pct }}%."
+    tolerance: "± 1"
+    model: "Nobody below the old cut-off was approved, so performance there is unobserved. Extrapolating below the cut-off is guesswork (reject inference, F18)."
+    wrong: "Assuming declined applicants would behave like the lowest booked decile."
+    leader: How would you learn about risk below the cut-off safely?
+  - id: F2-10
+    lesson: L2.5
+    tier: Stretch
+    title: Monte Carlo portfolio loss
+    framing: Simulate 2,000 years of losses with one shared economic factor (correlation 0.05), PD 4%, LGD ~ Beta(3, 2).
+    deliverable: Expected loss, 99th percentile loss, and their ratio.
+    expected: "EL {{ a.d2_port_el | n }}; P99 {{ a.d2_port_p99 | n }} ({{ a.d2_port_ratio }}× EL)."
+    tolerance: "± 5%"
+    model: "Correlated defaults fatten the loss tail: a bad year costs several times an average year. This is the intuition behind capital and VaR (Day 9)."
+    wrong: "Assuming defaults are independent (tail far too thin)."
+    leader: Which number belongs in the budget and which in the capital plan?
+  - id: F2-11
+    lesson: L2.6
+    tier: Applied
+    title: Benford by branch — and a false alarm
+    framing: "Run `finance_benford_branches.yaml`."
+    deliverable: BR07 MAD and rounding vs peers; the highest-MAD honest branch, its n, MAD and the MAD expected by chance at that n.
+    expected: "BR07 MAD {{ a.d2_ben_br07 }} vs peer median {{ a.d2_ben_peer_med_f }}; first digit 1 = {{ a.d2_ben_digit1_br07_pct }}%. {{ a.d2_small_branch }}: n = {{ a.d2_small_branch_n }}, MAD {{ a.d2_small_branch_mad }} vs {{ a.d2_small_branch_expmad }} expected by chance."
+    tolerance: "± 0.002"
+    model: "BR07 fails decisively (F09). The next branch lands in Nigrini's 'marginal' band only because it is small — the recipe's expected-MAD column prevents a false accusation."
+    wrong: "Escalating every branch outside the 'acceptable' band."
+    leader: What threshold policy would you set for Benford escalation?
+  - id: F2-12
+    lesson: L2.7
+    tier: Applied
+    title: Eigenvalues reveal collinearity
+    framing: Correlation matrix of income, limit, bureau score, DTI, inquiries.
+    deliverable: Eigenvalues; ratio largest/smallest; loadings of the smallest eigenvector; determinant.
+    expected: "Eigenvalues {{ a.d2_eig }}; ratio {{ a.d2_eig_ratio }}; smallest-vector loadings {{ a.d2_small_eig_loadings | kv }}; det {{ a.d2_det }}."
+    tolerance: "± 0.01"
+    model: "One eigenvalue near zero means the matrix is nearly singular: income and limit (loadings ≈ ±0.71) almost duplicate each other. Regression coefficients on both will be unstable (F06, Day 5)."
+    wrong: "Reading a small eigenvalue as an unimportant variable — it marks a redundant combination."
+    leader: Which variable would you drop or combine, and how would you explain it to the business?
+  - id: F2-13
+    lesson: L2.7
+    tier: Stretch
+    title: Least squares as a projection
+    framing: Fit log(units) on log(price ratio) and promo for one SKU in the price extract.
+    deliverable: Coefficients from the normal equations (XᵀX)β = Xᵀy vs a least-squares solver; largest |Xᵀ residual|.
+    expected: "β = {{ a.d2_ls_beta }}; methods agree = {{ a.d2_ls_agree }}; max |Xᵀe| = {{ a.d2_ls_orth }}."
+    tolerance: "± 0.01"
+    model: "Residuals are orthogonal to every column of X — the fitted values are the projection of y onto the space spanned by the predictors. Solvers use QR/SVD rather than inverting XᵀX because inversion is unstable when columns are nearly collinear."
+    wrong: "Computing (XᵀX)⁻¹ explicitly on collinear data."
+    leader: Why should analysts never hand-invert matrices in production code?
+  - id: F2-14
+    lesson: L2.1
+    tier: Applied
+    title: Expected value — expected loss per account
+    framing: "Illustrative: EAD = limit for cards, 60% of principal for loans; LGD 60%; PD = portfolio default rate."
+    deliverable: Average EAD and expected loss per account.
+    expected: "EAD {{ a.d2_ead_mean | n }}; EL ≈ {{ a.d2_el_per_account | n }} per account."
+    tolerance: "± 5"
+    model: "Expected value = probability × amount. EL = PD × LGD × EAD is the same idea (Day 8). It averages outcomes; it says nothing about how bad a bad year can be (F2-10)."
+    wrong: "Multiplying PD by limit without LGD."
+    leader: Which of the three inputs is most uncertain for this book?
+  - id: F2-15
+    lesson: L2.4
+    tier: Basic
+    title: A convenience sample
+    framing: A junior estimates the default rate using branch-acquired accounts only ("they were easiest to pull").
+    deliverable: Default rate in branch accounts vs all accounts.
+    expected: "Branch {{ a.d2_branch_only_pct }}% vs all {{ a.d2_true_default_pct }}%."
+    tolerance: "± 0.05 pp"
+    model: "Convenience samples inherit the selection of whoever is easy to reach. The branch book excludes the riskier partner channel and understates portfolio risk by more than a quarter."
+    wrong: "Assuming any large sample is representative."
+    leader: What sampling frame would you insist on?

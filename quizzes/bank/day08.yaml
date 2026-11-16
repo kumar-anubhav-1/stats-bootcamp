@@ -1,0 +1,1818 @@
+quizzes:
+- id: L8.1-F
+  title: L8.1 Clustering (Basic → Advanced)
+  lesson: L8.1
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts: &id001
+    - C236
+    prompt: Before K-Means you should…
+    options:
+    - id: a
+      text: Scale the features
+      correct: true
+      why: Distance-based.
+    - id: b
+      text: Sort rows
+      why: No.
+    - id: c
+      text: Remove all outliers
+      why: Inspect, not remove all.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C236
+    prompt: Best silhouette k for customer clusters?
+    answer: "{{ a.d8_sil_best_k }}"
+    tolerance_abs: 0
+    explanation: But weak everywhere.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C236
+    prompt: Silhouette ≈ 0.15 means…
+    options:
+    - id: a
+      text: Weak structure — clusters overlap
+      correct: true
+      why: < 0.25.
+    - id: b
+      text: Strong clusters
+      why: '> 0.5.'
+    - id: c
+      text: Error
+      why: No.
+    - id: d
+      text: Perfect
+      why: No.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C236
+    prompt: ARI of K-Means (k = 5) vs planted segments?
+    answer: "{{ a.d8_ari }}"
+    tolerance_abs: 0.05
+    explanation: Partial recovery.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C238
+    prompt: DBSCAN is useful when…
+    options:
+    - id: a
+      text: Clusters have arbitrary shapes and you want noise labelled
+      correct: true
+      why: Density.
+    - id: b
+      text: You know k
+      why: K-Means.
+    - id: c
+      text: Data are 1-D
+      why: No.
+    - id: d
+      text: Always
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C241
+    prompt: t-SNE/UMAP maps should not be used to…
+    options:
+    - id: a
+      text: Define clusters or read distances
+      correct: true
+      why: Distort.
+    - id: b
+      text: Visualise
+      why: Fine.
+    - id: c
+      text: Explore
+      why: Fine.
+    - id: d
+      text: Present
+      why: With care.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Before K-means on revenue (thousands) and promo share (0–1), you must…
+    options:
+    - id: a
+      text: Standardise both features
+      correct: true
+      why: Distances need comparable scales.
+    - id: b
+      text: Sort the data
+      why: No.
+    - id: c
+      text: Remove promo share
+      why: No.
+    - id: d
+      text: Nothing
+      why: Revenue would dominate.
+    concepts: *id001
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: PCA's first component is…
+    options:
+    - id: a
+      text: The direction of maximum variance
+      correct: true
+      why: Ordered by variance.
+    - id: b
+      text: The most important business feature
+      why: Not necessarily.
+    - id: c
+      text: A cluster
+      why: No.
+    - id: d
+      text: The target
+      why: Unsupervised.
+    concepts: *id001
+- id: L8.1-L
+  title: L8.1 Segments (Leader)
+  lesson: L8.1
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts: &id002
+    - C236
+    prompt: Agency presents 7 personas with silhouette 0.1. Response?
+    options:
+    - id: a
+      text: Ask for sizes, stability and actions per segment
+      correct: true
+      why: Actionability.
+    - id: b
+      text: Adopt
+      why: Weak.
+    - id: c
+      text: Reject all segmentation
+      why: Some may be useful.
+    - id: d
+      text: Ask for 10
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C236
+    prompt: Most actionable segment found?
+    options:
+    - id: a
+      text: Promo hunters (~64% promo share)
+      correct: true
+      why: Distinct.
+    - id: b
+      text: Average shoppers
+      why: Not distinct.
+    - id: c
+      text: None
+      why: One stands out.
+    - id: d
+      text: Electronics buyers
+      why: Not found.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C236
+    prompt: Criteria for a good segment?
+    model: Distinct, sizeable, stable over time and seeds, and actionable (we would treat it differently with measurable value).
+    rubric: 'Full: 4 criteria. Partial: 2–3.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C240
+    prompt: "PCA 2 components explain {{ a.d8_pca_2 }}%. Implication?"
+    options:
+    - id: a
+      text: 2-D plots hide much of the structure
+      correct: true
+      why: Spread-out information.
+    - id: b
+      text: Two features suffice
+      why: No.
+    - id: c
+      text: PCA failed
+      why: No.
+    - id: d
+      text: Use t-SNE to cluster
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: A segment has 2% of customers but a catchy name. Your concern?
+    options:
+    - id: a
+      text: Too small to act on economically
+      correct: true
+      why: Sizeable is a criterion.
+    - id: b
+      text: None
+      why: Size matters.
+    - id: c
+      text: Name too catchy
+      why: Not the issue.
+    - id: d
+      text: Need more segments
+      why: No.
+    concepts: *id002
+- id: L8.2-F
+  title: L8.2 RFM/CLV (Basic → Advanced)
+  lesson: L8.2
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts: &id003
+    - C242
+    prompt: RFM stands for…
+    options:
+    - id: a
+      text: Recency, frequency, monetary
+      correct: true
+      why: Definition.
+    - id: b
+      text: Revenue, frequency, margin
+      why: No.
+    - id: c
+      text: Retention, frequency, mix
+      why: No.
+    - id: d
+      text: Risk, fraud, monitoring
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C242
+    prompt: Revenue share (%) of the top 10% of customers?
+    answer: "{{ a.d8_top10_rev_share }}"
+    tolerance_abs: 1
+    unit: '%'
+    explanation: Concentration.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C243
+    prompt: Simple CLV of the average customer?
+    answer: "{{ a.d8_clv }}"
+    tolerance_abs: 3
+    explanation: m(1+d)/(1+d−r).
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C243
+    prompt: CLV is most sensitive to…
+    options:
+    - id: a
+      text: Retention
+      correct: true
+      why: In the denominator.
+    - id: b
+      text: Discount rate only
+      why: Less.
+    - id: c
+      text: Customer ID
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C244
+    prompt: Share (%) of accounts censored (not churned by panel end)?
+    answer: "{{ a.d8_censored_pct }}"
+    tolerance_abs: 1
+    unit: '%'
+    explanation: F13.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C243
+    prompt: In non-contractual retail, churn is…
+    options:
+    - id: a
+      text: Unobserved — customers just stop; use BG/NBD-type models
+      correct: true
+      why: Latent.
+    - id: b
+      text: Recorded at cancellation
+      why: No contract.
+    - id: c
+      text: Zero
+      why: No.
+    - id: d
+      text: Same as returns
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: RFM 'R' for a customer who bought yesterday is…
+    options:
+    - id: a
+      text: High recency score (recent)
+      correct: true
+      why: Recency = days since last purchase, scored.
+    - id: b
+      text: Low
+      why: Recent = good.
+    - id: c
+      text: Undefined
+      why: No.
+    - id: d
+      text: Their revenue
+      why: That's M.
+    concepts: *id003
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: Why exclude bulk buyers when computing typical CLV?
+    options:
+    - id: a
+      text: They distort averages (R07) and belong in their own segment
+      correct: true
+      why: Heavy tails.
+    - id: b
+      text: They don't buy
+      why: They buy a lot.
+    - id: c
+      text: Regulation
+      why: No.
+    - id: d
+      text: They never return
+      why: Not why.
+    concepts: *id003
+- id: L8.2-L
+  title: L8.2 Customer value (Leader)
+  lesson: L8.2
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts: &id004
+    - C243
+    prompt: "Marketing wants to spend 60 per acquired customer. Average CLV {{ a.d8_clv }}. Response?"
+    options:
+    - id: a
+      text: Too high on average; justify via targeting high-CLV prospects and sensitivity
+      correct: true
+      why: CLV range.
+    - id: b
+      text: Approve
+      why: Exceeds CLV.
+    - id: c
+      text: Reject all marketing
+      why: Too blunt.
+    - id: d
+      text: Ignore CLV
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C244
+    prompt: Recent cohorts 'retain better'. Check…
+    options:
+    - id: a
+      text: Censoring — they haven't had time to churn
+      correct: true
+      why: Survival.
+    - id: b
+      text: Nothing
+      why: No.
+    - id: c
+      text: Fonts
+      why: No.
+    - id: d
+      text: Prices
+      why: Later.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C243
+    prompt: Present CLV to the CFO responsibly (2 sentences).
+    model: "Under constant retention of {{ a.d8_retention_y2 }}% and margin of {{ a.d8_ann_margin_per_cust }} a year, an average customer is worth about {{ a.d8_clv }} (top decile ~{{ a.d8_clv_top_decile }}). A 10-point retention change moves this substantially, so we use it as a range for budgeting, not a precise value."
+    rubric: 'Full: assumptions + number + sensitivity. Partial: number only.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C242
+    prompt: Revenue concentration is also…
+    options:
+    - id: a
+      text: A risk (dependence on few customers)
+      correct: true
+      why: Bulk buyers.
+    - id: b
+      text: Irrelevant
+      why: No.
+    - id: c
+      text: Always good
+      why: No.
+    - id: d
+      text: A data error
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Marketing wants to cut retention spend on gold customers. Ask?
+    options:
+    - id: a
+      text: Their retention and CLV sensitivity — small retention drops cost the most here
+      correct: true
+      why: CLV is retention-sensitive.
+    - id: b
+      text: Agree
+      why: Risky.
+    - id: c
+      text: Ask for colours
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+    concepts: *id004
+- id: L8.3-F
+  title: L8.3 Basket (Basic → Advanced)
+  lesson: L8.3
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts: &id005
+    - C245
+    prompt: Lift > 1 means…
+    options:
+    - id: a
+      text: Items bought together more than chance
+      correct: true
+      why: Definition.
+    - id: b
+      text: High confidence
+      why: Different.
+    - id: c
+      text: High support
+      why: Different.
+    - id: d
+      text: Causation
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C245
+    prompt: Lift of Pasta → Pasta Sauce?
+    answer: "{{ a.d8_pasta.lift }}"
+    tolerance_abs: 0.05
+    explanation: R21.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C245
+    prompt: Confidence of Pasta → Sauce is 80%, Sauce → Pasta 54%. Why different?
+    options:
+    - id: a
+      text: Confidence is asymmetric (divides by antecedent frequency)
+      correct: true
+      why: P(B|A) ≠ P(A|B).
+    - id: b
+      text: Error
+      why: No.
+    - id: c
+      text: Lift differs
+      why: Lift symmetric.
+    - id: d
+      text: Support differs
+      why: Same pair.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C245
+    prompt: A high-confidence rule with lift 1.6 to a very common item is…
+    options:
+    - id: a
+      text: Largely trivial — driven by popularity
+      correct: true
+      why: Base rate.
+    - id: b
+      text: The best rule
+      why: No.
+    - id: c
+      text: Causal
+      why: No.
+    - id: d
+      text: Wrong
+      why: Not wrong, uninformative.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C245
+    prompt: Apriori relies on…
+    options:
+    - id: a
+      text: Frequent sets having only frequent subsets
+      correct: true
+      why: Pruning.
+    - id: b
+      text: Regression
+      why: No.
+    - id: c
+      text: Random sampling
+      why: No.
+    - id: d
+      text: Clustering
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C245
+    prompt: Rank rules by…
+    options:
+    - id: a
+      text: Lift with a support floor
+      correct: true
+      why: Affinity + relevance.
+    - id: b
+      text: Confidence only
+      why: Popularity bias.
+    - id: c
+      text: Support only
+      why: Popular pairs.
+    - id: d
+      text: Alphabet
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Support of {Beer, Chips} is…
+    options:
+    - id: a
+      text: Share of all baskets containing both
+      correct: true
+      why: Joint frequency.
+    - id: b
+      text: P(Chips | Beer)
+      why: Confidence.
+    - id: c
+      text: Lift
+      why: Ratio to chance.
+    - id: d
+      text: Count of beer
+      why: No.
+    concepts: *id005
+  - id: t2
+    type: numeric
+    difficulty: 2
+    prompt: Lift of Beer → Chips?
+    answer: "{{ a.d8_beer.lift }}"
+    tolerance_abs: 0.05
+    explanation: R21.
+    concepts: *id005
+- id: L8.3-L
+  title: L8.3 Using rules (Leader)
+  lesson: L8.3
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts: &id006
+    - C245
+    prompt: 'Proposal: move sauce next to pasta in all stores. Response?'
+    options:
+    - id: a
+      text: Test in a subset of stores first
+      correct: true
+      why: Associations ≠ effects.
+    - id: b
+      text: Do it
+      why: Untested.
+    - id: c
+      text: Never
+      why: Test.
+    - id: d
+      text: Bundle at 30% off
+      why: Gives away margin.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C245
+    prompt: Bundling items already bought together…
+    options:
+    - id: a
+      text: Risks discounting purchases that would happen anyway
+      correct: true
+      why: Margin.
+    - id: b
+      text: Always pays
+      why: No.
+    - id: c
+      text: Has no effect
+      why: No.
+    - id: d
+      text: Raises lift
+      why: Irrelevant.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C245
+    prompt: Rewrite '63% of pasta buyers buy fruit' for the board.
+    model: "Fruit is in {{ a.d8_most_common_share }}% of all baskets; pasta buyers are only modestly more likely to buy it (lift {% if a.d8_trivial_rule %}{{ a.d8_trivial_rule.lift }}{% endif %}). The strong pairing is pasta with sauce (lift {{ a.d8_pasta.lift }})."
+    rubric: 'Full: base rate + lift + real finding. Partial: base rate.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C245
+    prompt: Product-holding affinities in banking are confounded by…
+    options:
+    - id: a
+      text: Life stage and income
+      correct: true
+      why: Common causes.
+    - id: b
+      text: Nothing
+      why: No.
+    - id: c
+      text: Fonts
+      why: No.
+    - id: d
+      text: Weather
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: A rule has lift 3 but support 0.05%. Action?
+    options:
+    - id: a
+      text: Low priority — too few baskets to matter commercially
+      correct: true
+      why: Lift with a support floor.
+    - id: b
+      text: Top priority
+      why: Tiny reach.
+    - id: c
+      text: Delete data
+      why: No.
+    - id: d
+      text: Bundle immediately
+      why: Untested.
+    concepts: *id006
+- id: L8.4-F
+  title: L8.4 Pricing and promotions (Basic → Advanced)
+  lesson: L8.4
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 2
+    concepts: &id007
+    - C246
+    prompt: Snacks own-price elasticity?
+    answer: "{{ a.d8_el_snacks }}"
+    tolerance_abs: 0.1
+    explanation: Planted −1.8.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C246
+    prompt: "Dairy elasticity without promo controls ≈ {{ a.d8_el_dairy_nopromo }} vs {{ a.d8_el_dairy }} with. Why?"
+    options:
+    - id: a
+      text: Promotions lower price and add display lift — confounding
+      correct: true
+      why: L4.4.
+    - id: b
+      text: Noise
+      why: Systematic.
+    - id: c
+      text: Fixed effects
+      why: Both have them.
+    - id: d
+      text: Stock-outs
+      why: Excluded.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C249
+    prompt: Gross margin change (%) for +5% Dairy price?
+    answer: "{{ a.d8_p5_margin_dairy }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: Inelastic.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C247
+    prompt: Share (%) of the promoted SKU's gain cannibalised from its sibling?
+    answer: "{{ a.d8_cannibal_share }}"
+    tolerance_abs: 3
+    unit: '%'
+    explanation: R10.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C247
+    prompt: Snacks promo ROI?
+    answer: "{{ a.d8_promo_roi }}"
+    tolerance_abs: 0.05
+    explanation: Below 1 before halo.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C248
+    prompt: Adstock in MMM captures…
+    options:
+    - id: a
+      text: Advertising effects that decay over weeks
+      correct: true
+      why: Carry-over.
+    - id: b
+      text: Saturation
+      why: Different.
+    - id: c
+      text: Seasonality
+      why: No.
+    - id: d
+      text: Price
+      why: No.
+  - id: t1
+    type: numeric
+    difficulty: 2
+    prompt: Snacks units change (%) for a +5% price rise?
+    answer: "{{ a.d8_p5_units_snacks }}"
+    tolerance_abs: 0.5
+    explanation: Elastic.
+    concepts: *id007
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: Why exclude stock-out weeks from elasticity?
+    options:
+    - id: a
+      text: Sales are capped by availability, not price (censored)
+      correct: true
+      why: R12.
+    - id: b
+      text: They're holidays
+      why: No.
+    - id: c
+      text: Too few
+      why: No.
+    - id: d
+      text: No reason
+      why: There is.
+    concepts: *id007
+- id: L8.4-L
+  title: L8.4 Price decisions (Leader)
+  lesson: L8.4
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts: &id008
+    - C249
+    prompt: "Model says Snacks optimal price is {{ a.d8_opt_vs_list_snacks }}% above list. Action?"
+    options:
+    - id: a
+      text: Treat as an upper reference; test a modest rise with traffic guardrails
+      correct: true
+      why: Constant-elasticity limits.
+    - id: b
+      text: Implement
+      why: Reckless.
+    - id: c
+      text: Ignore pricing
+      why: No.
+    - id: d
+      text: Cut prices
+      why: Opposite.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C247
+    prompt: '''Promotions drive +117% volume.'' Ask for…'
+    options:
+    - id: a
+      text: Net incremental margin after cannibalisation and pull-forward
+      correct: true
+      why: Profit.
+    - id: b
+      text: More promotions
+      why: No.
+    - id: c
+      text: Gross revenue
+      why: Misleading.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C246
+    prompt: Recommend a pricing direction for Dairy and Snacks.
+    model: "Dairy is inelastic ({{ a.d8_el_dairy }}): a modest rise (+3–5%) raises margin (~+{{ a.d8_p5_margin_dairy }}% at +5%) with little volume loss — test in a few stores. Snacks is elastic ({{ a.d8_el_snacks }}): a rise also lifts margin on paper but loses ~{{ a.d8_p5_units_snacks | abs }}% of units; test carefully with basket/traffic guardrails."
+    rubric: 'Full: both categories + numbers + test. Partial: one.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C246
+    prompt: Loan rate sensitivity from historical data is biased because…
+    options:
+    - id: a
+      text: Rates are set by risk — confounded
+      correct: true
+      why: Risk-based pricing.
+    - id: b
+      text: Too much data
+      why: No.
+    - id: c
+      text: It isn't
+      why: It is.
+    - id: d
+      text: Rates are random
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: "Promo ROI {{ a.d8_promo_roi }}. Interpretation?"
+    options:
+    - id: a
+      text: Each 1 of discount returns less than 1 of incremental margin before halo
+      correct: true
+      why: Cut or redesign deep promos.
+    - id: b
+      text: Profitable
+      why: Below 1.
+    - id: c
+      text: Break-even
+      why: No.
+    - id: d
+      text: Meaningless
+      why: No.
+    concepts: *id008
+- id: L8.5-F
+  title: L8.5 Anomaly detection (Basic → Advanced)
+  lesson: L8.5
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    concepts: &id009
+    - C252
+    prompt: Robust z uses…
+    options:
+    - id: a
+      text: Median and MAD
+      correct: true
+      why: Not masked.
+    - id: b
+      text: Mean and SD
+      why: Masked.
+    - id: c
+      text: Max and min
+      why: No.
+    - id: d
+      text: Mode
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C252
+    prompt: Why is MAD = 0 for return rates?
+    options:
+    - id: a
+      text: "Most customers never return anything ({{ a.d8_zero_return_share }}%)"
+      correct: true
+      why: Degenerate.
+    - id: b
+      text: Bug
+      why: No.
+    - id: c
+      text: Too many returns
+      why: No.
+    - id: d
+      text: Scaling
+      why: No.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C252
+    prompt: "Precision (%) of robust z in the top {{ a.d8_r17_n_true }}?"
+    answer: "{{ a.d8_prec_robustz }}"
+    tolerance_abs: 5
+    unit: '%'
+    explanation: "vs forest {{ a.d8_prec_iso }}%."
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C253
+    prompt: Isolation Forest scores anomalies by…
+    options:
+    - id: a
+      text: How few random splits isolate them
+      correct: true
+      why: Short paths.
+    - id: b
+      text: Distance to mean
+      why: No.
+    - id: c
+      text: Density only
+      why: LOF.
+    - id: d
+      text: Labels
+      why: Unsupervised.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C255
+    prompt: Contamination should be set by…
+    options:
+    - id: a
+      text: Review capacity (alert budget)
+      correct: true
+      why: Operations.
+    - id: b
+      text: Default 0.1
+      why: Arbitrary.
+    - id: c
+      text: Silhouette
+      why: No.
+    - id: d
+      text: AUC
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C252
+    prompt: Return counts rank big shoppers high because…
+    options:
+    - id: a
+      text: More purchases → more returns even at normal rates
+      correct: true
+      why: Use rates.
+    - id: b
+      text: They abuse
+      why: Not necessarily.
+    - id: c
+      text: Bug
+      why: No.
+    - id: d
+      text: Seasonality
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Isolation Forest flags 1% by default. Why change it?
+    options:
+    - id: a
+      text: Match flags to review capacity
+      correct: true
+      why: Alert budget.
+    - id: b
+      text: Default is always right
+      why: Arbitrary.
+    - id: c
+      text: More flags = better
+      why: Overloads team.
+    - id: d
+      text: Never change
+      why: No.
+    concepts: *id009
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: A customer flagged by robust z, forest and rule is…
+    options:
+    - id: a
+      text: Higher-confidence — independent methods agree
+      correct: true
+      why: Agreement raises precision.
+    - id: b
+      text: Lower confidence
+      why: No.
+    - id: c
+      text: A bug
+      why: No.
+    - id: d
+      text: Irrelevant
+      why: No.
+    concepts: *id009
+- id: L8.5-L
+  title: L8.5 Alert governance (Leader)
+  lesson: L8.5
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts: &id010
+    - C255
+    prompt: Loss prevention wants automatic bans for top-scored customers. Response?
+    options:
+    - id: a
+      text: Review first; act only on confirmed cases
+      correct: true
+      why: Due process.
+    - id: b
+      text: Ban
+      why: False positives.
+    - id: c
+      text: Ignore
+      why: No.
+    - id: d
+      text: Publish names
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C255
+    prompt: KPI for an anomaly programme?
+    options:
+    - id: a
+      text: Confirmation rate (precision) at the review budget
+      correct: true
+      why: Operational.
+    - id: b
+      text: Number flagged
+      why: Volume.
+    - id: c
+      text: Model complexity
+      why: No.
+    - id: d
+      text: AUC only
+      why: Partial.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C252
+    prompt: "Abusers concentrate in {{ a.d8_r17_stores }} stores. Implication?"
+    model: Possible local collusion or policy gaps — review returns procedures and staff overrides in those stores alongside customer cases.
+    rubric: 'Full: store-level process + customer cases. Partial: one.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C253
+    prompt: The forest didn't beat the simple rate. Lesson?
+    options:
+    - id: a
+      text: A well-chosen metric can beat generic complex methods
+      correct: true
+      why: Domain.
+    - id: b
+      text: Forests are useless
+      why: No.
+    - id: c
+      text: Bug
+      why: No.
+    - id: d
+      text: Use more trees
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Flagged customers will be contacted. Safeguard?
+    options:
+    - id: a
+      text: Human review and a respectful script before any action
+      correct: true
+      why: Due process.
+    - id: b
+      text: Automatic ban
+      why: False positives.
+    - id: c
+      text: Public list
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+    concepts: *id010
+- id: L8.6-F
+  title: L8.6 Rings and structuring (Basic → Advanced)
+  lesson: L8.6
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 1
+    concepts: &id011
+    - C256
+    prompt: Number of linked components with ≥ 6 accounts?
+    answer: "{{ a.d8_rings }}"
+    tolerance_abs: 0
+    explanation: F07.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C256
+    prompt: Why use a minimum component size of ~6?
+    options:
+    - id: a
+      text: Households share links among 2–3 accounts
+      correct: true
+      why: Genuine sharing small.
+    - id: b
+      text: Arbitrary
+      why: Informed.
+    - id: c
+      text: Regulation
+      why: No.
+    - id: d
+      text: Speed
+      why: No.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C257
+    prompt: Bunching ratio (9–10k vs 10–11k)?
+    answer: "{{ a.d8_bunch_ratio }}"
+    tolerance_abs: 0.2
+    explanation: Structuring.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C257
+    prompt: Structuring means…
+    options:
+    - id: a
+      text: Splitting/keeping amounts below a reporting threshold
+      correct: true
+      why: AML.
+    - id: b
+      text: Data modelling
+      why: No.
+    - id: c
+      text: Loan restructuring
+      why: No.
+    - id: d
+      text: Rounding
+      why: No.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C257
+    prompt: Accounts just under 10,000 in 6+ months?
+    answer: "{{ a.d8_struct_accounts }}"
+    tolerance_abs: 2
+    explanation: Refer to compliance.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C256
+    prompt: Review rings…
+    options:
+    - id: a
+      text: As whole components
+      correct: true
+      why: Coordinated.
+    - id: b
+      text: One account at a time
+      why: Misses structure.
+    - id: c
+      text: Never
+      why: No.
+    - id: d
+      text: Only the oldest account
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Most ordinary shared-address components have…
+    options:
+    - id: a
+      text: 2–3 accounts (households)
+      correct: true
+      why: Size separates rings from families.
+    - id: b
+      text: 15 accounts
+      why: That's a ring.
+    - id: c
+      text: '0'
+      why: No.
+    - id: d
+      text: '100'
+      why: No.
+    concepts: *id011
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: Bunching ratio = deposits 9–10k ÷ 10–11k. A ratio near 1 means…
+    options:
+    - id: a
+      text: No excess just below the threshold
+      correct: true
+      why: Compare with smooth decline.
+    - id: b
+      text: Structuring
+      why: Ratio ≫ 1 means that.
+    - id: c
+      text: Fraud
+      why: No.
+    - id: d
+      text: Data error
+      why: No.
+    concepts: *id011
+- id: L8.6-L
+  title: L8.6 Escalation (Leader)
+  lesson: L8.6
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts: &id012
+    - C257
+    prompt: A structuring pattern is found. Next step?
+    options:
+    - id: a
+      text: Refer to compliance with evidence; no customer contact
+      correct: true
+      why: AML; avoid tipping off.
+    - id: b
+      text: Call the customer
+      why: Tipping off.
+    - id: c
+      text: Close accounts
+      why: Compliance decides.
+    - id: d
+      text: Ignore
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C256
+    prompt: Graph data (devices, addresses) requires…
+    options:
+    - id: a
+      text: Purpose limitation and access control
+      correct: true
+      why: Sensitive.
+    - id: b
+      text: Nothing
+      why: No.
+    - id: c
+      text: Publishing
+      why: No.
+    - id: d
+      text: Deletion
+      why: Not necessarily.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C256
+    prompt: Why combine independent signals for fraud prioritisation?
+    model: Each detector has false positives; cases flagged by independent methods (model score, ring membership, structuring, velocity) are far more likely genuine, raising precision at the same review capacity.
+    rubric: 'Full: independence + precision. Partial: one.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C257
+    prompt: Once a pattern is watched, structurers…
+    options:
+    - id: a
+      text: Adapt — monitor neighbouring bands too
+      correct: true
+      why: Adversarial.
+    - id: b
+      text: Stop
+      why: Not necessarily.
+    - id: c
+      text: Report themselves
+      why: No.
+    - id: d
+      text: Don't change
+      why: They adapt.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Compliance asks for 'all evidence'. What goes in?
+    options:
+    - id: a
+      text: Pattern, dates, amounts, linked accounts and method — no conclusions about guilt
+      correct: true
+      why: Evidence, not verdicts.
+    - id: b
+      text: Your opinion
+      why: No.
+    - id: c
+      text: Customer contact notes
+      why: Tipping-off risk.
+    - id: d
+      text: Only the score
+      why: Insufficient.
+    concepts: *id012
+- id: L8.7-F
+  title: L8.7 Credit risk (Basic → Advanced)
+  lesson: L8.7
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts: &id013
+    - C258
+    prompt: WoE for a bin is…
+    options:
+    - id: a
+      text: ln(% goods ÷ % bads)
+      correct: true
+      why: Definition.
+    - id: b
+      text: Bad rate
+      why: Related.
+    - id: c
+      text: IV
+      why: Sum.
+    - id: d
+      text: Odds ratio
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C258
+    prompt: IV of acquisition channel?
+    answer: "{{ a.d8_iv.channel }}"
+    tolerance_abs: 0.02
+    explanation: Strong.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C259
+    prompt: Scorecard Gini?
+    answer: "{{ a.d8_sc_gini }}"
+    tolerance_abs: 0.02
+    explanation: Within norms.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C260
+    prompt: Expected loss =
+    options:
+    - id: a
+      text: PD × LGD × EAD
+      correct: true
+      why: Definition.
+    - id: b
+      text: PD + LGD
+      why: No.
+    - id: c
+      text: EAD ÷ PD
+      why: No.
+    - id: d
+      text: AUC × EAD
+      why: No.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C262
+    prompt: Roll rate (%) from 30–59 to 60–89?
+    answer: "{{ a.d8_roll_30_60 }}"
+    tolerance_abs: 1
+    unit: '%'
+    explanation: Most roll forward.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C261
+    prompt: Vintage analysis compares…
+    options:
+    - id: a
+      text: Cohorts at the same months on book
+      correct: true
+      why: Like with like.
+    - id: b
+      text: Calendar months
+      why: Mixes ages.
+    - id: c
+      text: Branches
+      why: No.
+    - id: d
+      text: Products only
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: IV of 0.02 means a variable is…
+    options:
+    - id: a
+      text: Not useful (< 0.02 rule of thumb)
+      correct: true
+      why: IV bands.
+    - id: b
+      text: Very strong
+      why: No.
+    - id: c
+      text: Suspicious
+      why: That's > 0.5.
+    - id: d
+      text: Medium
+      why: 0.1–0.3.
+    concepts: *id013
+  - id: t2
+    type: numeric
+    difficulty: 2
+    prompt: Roll rate (%) from 60–89 to 90+?
+    answer: "{{ a.d8_roll_60_90 }}"
+    tolerance_abs: 1
+    explanation: Most roll forward.
+    concepts: *id013
+- id: L8.7-L
+  title: L8.7 Credit decisions (Leader)
+  lesson: L8.7
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts: &id014
+    - C261
+    prompt: "2025Q2 vintage at month 9: {{ a.d8_vintage_curves['2025Q2'][9] }}% vs {{ a.d8_vintage_curves['2024Q1'][9] }}% for 2024Q1. Action?"
+    options:
+    - id: a
+      text: Review partner-channel cut-off/pricing; recalibrate PDs; increase provisions
+      correct: true
+      why: Early warning.
+    - id: b
+      text: Wait for month 12
+      why: Too late.
+    - id: c
+      text: Ignore
+      why: No.
+    - id: d
+      text: Lower the cut-off
+      why: Opposite.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C258
+    prompt: A new variable shows IV 1.2. Response?
+    options:
+    - id: a
+      text: Investigate leakage unless it's a bureau-type score
+      correct: true
+      why: '> 0.5 suspicious.'
+    - id: b
+      text: Celebrate
+      why: No.
+    - id: c
+      text: Drop all others
+      why: No.
+    - id: d
+      text: Ignore
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C259
+    prompt: Can we lower the cut-off? Answer with reject inference in mind.
+    model: "Our performance data exclude declined applicants, who are much riskier (median bureau {{ a.d8_dec_bureau_median }} vs {{ a.d8_acc_bureau_median }}). The booked model can't tell us their default rate. Run a small, controlled approval test below the cut-off before changing policy."
+    rubric: 'Full: selection + numbers + test. Partial: selection.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C262
+    prompt: Where is collections effort most valuable?
+    options:
+    - id: a
+      text: 30–59 DPD (high roll-forward, some cure)
+      correct: true
+      why: "{{ a.d8_roll_30_60 }}% roll."
+    - id: b
+      text: 90+
+      why: Mostly lost.
+    - id: c
+      text: Current
+      why: Low risk.
+    - id: d
+      text: Everywhere equally
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: PDO 20 at 600 = 50:1 means…
+    options:
+    - id: a
+      text: Every 20 points doubles the good:bad odds
+      correct: true
+      why: Scorecard scaling.
+    - id: b
+      text: 20% default
+      why: No.
+    - id: c
+      text: Score 600 is bad
+      why: No.
+    - id: d
+      text: Nothing
+      why: Scaling.
+    concepts: *id014
+- id: D8-GATE
+  title: Day 8 gate (pass 75%)
+  lesson: D8
+  track: Mixed
+  pass_mark: 75
+  questions:
+  - id: g01
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C236
+    prompt: Good segments are…
+    options:
+    - id: a
+      text: Distinct, sizeable, stable, actionable
+      correct: true
+      why: Criteria.
+    - id: b
+      text: Many
+      why: No.
+    - id: c
+      text: High silhouette only
+      why: Insufficient.
+    - id: d
+      text: Named creatively
+      why: No.
+  - id: g02
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C243
+    prompt: CLV is most sensitive to…
+    options:
+    - id: a
+      text: Retention
+      correct: true
+      why: Denominator.
+    - id: b
+      text: Customer ID
+      why: No.
+    - id: c
+      text: Basket colour
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: g03
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C245
+    prompt: Rank basket rules by…
+    options:
+    - id: a
+      text: Lift with support floor
+      correct: true
+      why: Affinity.
+    - id: b
+      text: Confidence
+      why: Popularity bias.
+    - id: c
+      text: Alphabet
+      why: No.
+    - id: d
+      text: Support only
+      why: No.
+  - id: g04
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C246
+    prompt: Elasticity estimation must control for…
+    options:
+    - id: a
+      text: Promotions/displays and stock-outs, with fixed effects
+      correct: true
+      why: Confounding, censoring.
+    - id: b
+      text: Nothing
+      why: Biased.
+    - id: c
+      text: Customer names
+      why: No.
+    - id: d
+      text: Only week
+      why: Insufficient.
+  - id: g05
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C247
+    prompt: Promo profitability requires…
+    options:
+    - id: a
+      text: Net incremental margin (minus cannibalisation, pull-forward)
+      correct: true
+      why: Profit.
+    - id: b
+      text: Gross uplift
+      why: No.
+    - id: c
+      text: Revenue
+      why: No.
+    - id: d
+      text: Units
+      why: No.
+  - id: g06
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C252
+    prompt: If MAD = 0, robust z needs…
+    options:
+    - id: a
+      text: A fallback scale (mean absolute deviation)
+      correct: true
+      why: Degenerate.
+    - id: b
+      text: Nothing
+      why: Infinite z.
+    - id: c
+      text: Deleting zeros
+      why: Biased.
+    - id: d
+      text: Mean/SD
+      why: Masked.
+  - id: g07
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C255
+    prompt: Contamination is set by…
+    options:
+    - id: a
+      text: Alert budget
+      correct: true
+      why: Capacity.
+    - id: b
+      text: Default
+      why: No.
+    - id: c
+      text: AUC
+      why: No.
+    - id: d
+      text: Seeds
+      why: No.
+  - id: g08
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C256
+    prompt: Fraud rings appear as…
+    options:
+    - id: a
+      text: Large components of accounts sharing devices/addresses
+      correct: true
+      why: Graph.
+    - id: b
+      text: High balances
+      why: No.
+    - id: c
+      text: Old accounts
+      why: No.
+    - id: d
+      text: Low IV
+      why: No.
+  - id: g09
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C257
+    prompt: Spike just below 10,000 →
+    options:
+    - id: a
+      text: Structuring — refer to compliance
+      correct: true
+      why: AML.
+    - id: b
+      text: Rounding
+      why: No.
+    - id: c
+      text: Normal
+      why: No.
+    - id: d
+      text: Data error
+      why: No.
+  - id: g10
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C258
+    prompt: Missing income in a scorecard →
+    options:
+    - id: a
+      text: Own bin (informative missingness)
+      correct: true
+      why: F02.
+    - id: b
+      text: Mean impute
+      why: Hides risk.
+    - id: c
+      text: Drop rows
+      why: Biased.
+    - id: d
+      text: Zero
+      why: Distorts.
+  - id: g11
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C261
+    prompt: Compare new business quality via…
+    options:
+    - id: a
+      text: Vintage curves at same months on book
+      correct: true
+      why: Like with like.
+    - id: b
+      text: Calendar delinquency
+      why: Mixes ages.
+    - id: c
+      text: Approval rate
+      why: Different.
+    - id: d
+      text: AUC
+      why: No.
+  - id: g12
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C259
+    prompt: Booked-only data understate risk at the cut-off because…
+    options:
+    - id: a
+      text: Declined applicants' outcomes are unobserved (reject inference)
+      correct: true
+      why: Selection.
+    - id: b
+      text: Too much data
+      why: No.
+    - id: c
+      text: Bureau errors
+      why: No.
+    - id: d
+      text: They don't
+      why: They do.

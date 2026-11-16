@@ -1,0 +1,68 @@
+{
+  "groups": [
+    "challenger",
+    "champion"
+  ],
+  "unit_of_analysis": "row",
+  "n": {
+    "challenger": 860,
+    "champion": 3335
+  },
+  "row_level_n": {
+    "champion": 3335,
+    "challenger": 860
+  },
+  "outcome_type": "binary",
+  "outcome_label": "cured_within_3m",
+  "primary_test": "two_proportion_z",
+  "tests": {
+    "two_proportion_z": {
+      "z": 3.293233,
+      "p_value": 0.00099
+    },
+    "chi_square": {
+      "p_value": 0.00099
+    },
+    "fisher_exact": {
+      "p_value": 0.001101
+    }
+  },
+  "effects": {
+    "rate": {
+      "challenger": 0.410465,
+      "champion": 0.349925
+    },
+    "risk_difference": 0.06054,
+    "risk_difference_ci": [
+      0.023894,
+      0.097186
+    ],
+    "relative_risk": 1.173009,
+    "relative_risk_ci": [
+      1.069377,
+      1.286683
+    ],
+    "odds_ratio": 1.293466,
+    "odds_ratio_ci": [
+      1.10955,
+      1.507869
+    ],
+    "pct_lift": 0.173009,
+    "nnt": 16.517983,
+    "min_expected_cell": 311.609058,
+    "mde_80pct_power_abs": 0.051102
+  },
+  "assumptions": {
+    "min_expected_cell_count": 311.609058,
+    "independent_units": "assumed \u2014 check design"
+  },
+  "icc": null,
+  "design_effect": null,
+  "alpha": 0.05,
+  "alternative": "two-sided",
+  "verdict": {
+    "statistically_significant": true,
+    "p_value": 0.00099,
+    "practical_vs_threshold": null
+  }
+}

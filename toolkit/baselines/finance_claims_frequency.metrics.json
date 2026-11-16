@@ -1,0 +1,60 @@
+{
+  "family": "negbin",
+  "formula": "n_claims ~ C(driver_age_band) + vehicle_group + C(region)",
+  "n": 5152,
+  "robust": "none",
+  "coefficients": {
+    "C(driver_age_band)[T.25-34]": {
+      "coef": -0.513383,
+      "se": 0.152967,
+      "p": 0.00079,
+      "effect": -40.153219
+    },
+    "C(driver_age_band)[T.35-49]": {
+      "coef": -0.53499,
+      "se": 0.149011,
+      "p": 0.00033,
+      "effect": -41.432499
+    },
+    "C(driver_age_band)[T.50-64]": {
+      "coef": -0.5476,
+      "se": 0.156767,
+      "p": 0.000477,
+      "effect": -42.166411
+    },
+    "C(driver_age_band)[T.65+]": {
+      "coef": -0.185758,
+      "se": 0.174677,
+      "p": 0.287585,
+      "effect": -16.952556
+    },
+    "C(region)[T.R2]": {
+      "coef": 0.187801,
+      "se": 0.130257,
+      "p": 0.149369,
+      "effect": 20.659287
+    },
+    "C(region)[T.R3]": {
+      "coef": 0.168997,
+      "se": 0.131129,
+      "p": 0.197475,
+      "effect": 18.411608
+    },
+    "C(region)[T.R4]": {
+      "coef": 0.175609,
+      "se": 0.130562,
+      "p": 0.178617,
+      "effect": 19.19725
+    },
+    "vehicle_group": {
+      "coef": 0.071766,
+      "se": 0.03223,
+      "p": 0.025968,
+      "effect": 7.440368
+    }
+  },
+  "aic": 3615.557091,
+  "deviance": 2101.860386,
+  "pearson_dispersion": 1.002077,
+  "vif": {}
+}

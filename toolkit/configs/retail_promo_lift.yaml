@@ -1,0 +1,23 @@
+# L3.4 reference: did the Hair Care in-store feature promotion lift units?
+# Stores were randomised (20 test / 20 control, stratified by format), so the STORE is the unit of analysis.
+# Outcome = each store's weekly Hair Care units in the test window divided by its own pre-period average.
+recipe: rcp_two_group_test
+dataset:
+  name: northstar_weekly_store_category
+  path: data/retail/weekly_store_category.parquet
+  grain: store-category-week
+columns:
+  group: experiment_group
+  target: units
+  cluster: store_id
+filters:
+  - "category == 'Hair Care'"
+params:
+  groups: [test, control]
+  baseline: {period_col: week, pre: [54, 69], post: [70, 77]}
+  alternative: two-sided
+  alpha: 0.05
+  practical_threshold: 0.10
+  seed: 42
+output:
+  folder: outputs/{recipe}/{date}_retail_promo_lift

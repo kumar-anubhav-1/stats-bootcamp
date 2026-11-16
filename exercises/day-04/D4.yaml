@@ -1,0 +1,333 @@
+# Day 4 exercises (15 retail + 15 finance). Values are computed from the data.
+retail:
+  - id: R4-1
+    lesson: L4.1
+    tier: Basic
+    title: Sample-ratio check
+    framing: The product team sends the e-coupon results and asks for a verdict.
+    deliverable: "Run `retail_ecoupon_ab.yaml`: planned vs observed split, χ² p, and the decision line."
+    expected: "{{ a.d4_ab_nt | n }} vs {{ a.d4_ab_nc | n }} ({{ a.d4_ab_share_t }}% treatment); p = {{ a.d4_srm_p }}; decision STOP."
+    tolerance: "exact counts"
+    model: "A 52.5/47.5 split on 11,400 users is far outside chance for a 50/50 design. The experiment is broken; no effect estimate can be trusted yet."
+    wrong: "Reading the conversion lift first."
+    leader: Who should be told, and what should they do first?
+  - id: R4-2
+    lesson: L4.1
+    tier: Applied
+    title: Localise the SRM
+    framing: Engineering asks where to look.
+    deliverable: SRM check by app version and platform; conversion by arm within the failing segment; most likely mechanism.
+    expected: "Only app 3.2 fails (p = {{ a.d4_srm_by_version['3.2'].p }}); 3.1 and 3.3 pass. In 3.2 control converts at {{ a.d4_v32_conv_c }}% vs {{ a.d4_v32_conv_t }}% treatment."
+    tolerance: "± 0.2 pp"
+    model: "Control users on 3.2 are missing, and the missing ones are non-converters (control's conversion is inflated). Likely a logging event that only fires for control users after a conversion on 3.2."
+    wrong: "Blaming platforms — both fail only because 3.2 runs on both."
+    leader: What monitoring would have caught this on day one?
+  - id: R4-3
+    lesson: L4.1
+    tier: Stretch
+    title: Sensitivity reading without 3.2
+    framing: The product owner wants a provisional answer while logging is fixed.
+    deliverable: "Run `retail_ecoupon_ab_excl_v32.yaml`; report SRM, lift with CI, p, guardrail (revenue), and caveats."
+    expected: "SRM p = {{ a.d4_clean_srm_p }}; lift {{ a.d4_clean_lift_pp }} pp (CI {{ a.d4_clean_ci[0] }} to {{ a.d4_clean_ci[1] }}), p = {{ a.d4_clean_p }}; revenue per user {{ a.d4_rev_t }} vs {{ a.d4_rev_c }}."
+    tolerance: "± 0.05 pp"
+    model: "Provisionally the coupon raises conversion by ~1.7 pp — the logged result (+0.4 pp, n.s.) was an artefact. Caveat: assumes 3.2 users behave like others; re-run after the fix."
+    wrong: "Reporting the sensitivity result as final."
+    leader: Would you allow a launch on the sensitivity result? Under what conditions?
+  - id: R4-4
+    lesson: L4.2
+    tier: Basic
+    title: CUPED on the store test
+    framing: The raw post-period comparison of the Hair Care test shows nothing.
+    deliverable: "Run `retail_store_test_cuped.yaml`; report ρ(pre, post), θ, variance reduction, raw and CUPED effects."
+    expected: "ρ = {{ a.d4_store_corr }}; θ = {{ a.d4_store_theta }}; variance reduction {{ a.d4_store_varred_pct }}%; raw +{{ a.d4_store_raw_diff }} (p = {{ a.d4_store_raw_p }}) vs CUPED +{{ a.d4_store_cuped_diff }} units/week (p = {{ a.d4_store_cuped_p }})."
+    tolerance: "± 0.1"
+    model: "Store size dominates raw variation. Adjusting each store by its own pre-period removes ~96% of variance and reveals the lift."
+    wrong: "Concluding from the raw comparison that the feature failed."
+    leader: Should CUPED be the default for all store tests? Any risks?
+  - id: R4-5
+    lesson: L4.2
+    tier: Applied
+    title: CUPED on conversion — a weak covariate
+    framing: The digital team expects CUPED to halve the e-coupon test's sample size.
+    deliverable: Correlation of log pre-period spend with conversion; variance reduction; SE before and after (clean data).
+    expected: "ρ = {{ a.d4_ec_corr }}; variance reduction {{ a.d4_ec_varred_pct }}%; SE {{ a.d4_ec_se_raw_pp }} → {{ a.d4_ec_se_cup_pp }} pp."
+    tolerance: "± 0.5 pp"
+    model: "Variance reduction ≈ ρ² ≈ 1.4%. Spend history barely predicts a 14-day conversion; look for a better covariate (previous coupon redemption, visit frequency)."
+    wrong: "Promising large savings without checking ρ."
+    leader: Which covariates would you ask the data team to log for future app tests?
+  - id: R4-6
+    lesson: L4.2
+    tier: Stretch
+    title: When could the test have stopped?
+    framing: Marketing asks why the test ran 14 days when it was "significant on day 5".
+    deliverable: Daily cumulative z and naive p; O'Brien-Fleming boundaries for the observed looks; first stopping day for each rule.
+    expected: "Naive: day {{ a.d4_seq_first_naive }} ({{ a.d4_seq_naive_days_sig }} of {{ a.d4_seq_days }} looks significant; z later dips below 1.96). OBF (c = {{ a.d4_obf_c }}): day {{ a.d4_seq_first_obf }}."
+    tolerance: "± 1 day"
+    model: "Day-5 significance came from looking every day. A planned OBF design would have stopped on day {{ a.d4_seq_first_obf }} with a valid 5% error rate."
+    wrong: "Using 1.96 at every look."
+    leader: Write the stopping rule for the next app test.
+  - id: R4-7
+    lesson: L4.3
+    tier: Basic
+    title: Bayesian readout
+    framing: The CMO wants 'the probability the coupon works'.
+    deliverable: "Beta(1,1) posteriors per arm (clean data): P(treatment better), credible interval of the lift, expected loss of each decision."
+    expected: "P(better) {{ a.d4_bayes_p_better }}%; 95% interval {{ a.d4_bayes_ci_pp[0] }} to {{ a.d4_bayes_ci_pp[1] }} pp; loss if ship {{ a.d4_bayes_loss_t_pp }} pp, if keep {{ a.d4_bayes_loss_c_pp }} pp."
+    tolerance: "± 1 pp on P(better)"
+    model: "Very likely better; shipping risks almost nothing on average, keeping control forgoes ~1.7 pp. Ship — after the logging fix confirms it."
+    wrong: "Calling P(better) a p-value."
+    leader: Write the one-sentence version for the CMO.
+  - id: R4-8
+    lesson: L4.3
+    tier: Applied
+    title: A sceptical prior
+    framing: Past coupon tests rarely moved conversion by more than 1 pp.
+    deliverable: "Normal prior on the lift (mean 0.2 pp, SD 0.4 pp) combined with the clean data: posterior mean, interval, P(better)."
+    expected: "Posterior mean {{ a.d4_bayes_skept_mean_pp }} pp ({{ a.d4_bayes_skept_ci_pp[0] }} to {{ a.d4_bayes_skept_ci_pp[1] }}), P(better) {{ a.d4_bayes_skept_p_better }}%."
+    tolerance: "± 0.1 pp"
+    model: "The sceptical prior pulls the estimate towards typical coupon effects. A strong prior is a deliberate guard against the winner's curse; show both."
+    wrong: "Picking the prior after seeing which gives the preferred answer."
+    leader: Who should own default priors for the experimentation platform?
+  - id: R4-9
+    lesson: L4.3
+    tier: Stretch
+    title: Expected loss as a stopping rule
+    framing: Product wants a Bayesian stopping rule.
+    deliverable: Explain an expected-loss rule ("stop and ship when expected loss of shipping < 0.1 pp") and its risks.
+    expected: "At the end of the clean test, expected loss of shipping = {{ a.d4_bayes_loss_t_pp }} pp < 0.1 pp → ship."
+    tolerance: "—"
+    model: "Expected-loss rules control regret, not false positives; with frequent checks they still favour early stops on noise. Pair with a minimum duration (two weekly cycles) and a minimum sample."
+    wrong: "Believing Bayesian tests are immune to peeking problems."
+    leader: What minimum conditions would you add?
+  - id: R4-10
+    lesson: L4.4
+    tier: Basic
+    title: Promotion effect under three adjustment sets
+    framing: The promotions team asks how much promotions lift units per line.
+    deliverable: Log-linear models of units per line on promotion with (a) no controls, (b) format, (c) format + display.
+    expected: "(a) {{ a.d4_promo_naive_pct }}%; (b) {{ a.d4_promo_format_pct }}%; (c) {{ a.d4_promo_format_display_pct }}% (CI {{ a.d4_promo_format_display_ci[0] }} to {{ a.d4_promo_format_display_ci[1] }})."
+    tolerance: "± 1 pp"
+    model: "Unadjusted is biased by format (promotions concentrate in small Express baskets). Adjusting for format gives the total effect (promotion + display); adding display gives the direct effect ≈ planted +15%."
+    wrong: "Reporting −12%, or adding every available variable without a DAG."
+    leader: Which number answers 'should we run more promotions?' and why?
+  - id: R4-11
+    lesson: L4.4
+    tier: Applied
+    title: Can we separate display from promotion?
+    framing: Merchandising wants separate ROI for displays.
+    deliverable: Counts of promoted lines without display and non-promoted lines with display; display effect with CI.
+    expected: "{{ a.d4_promo_no_display_n }} and {{ a.d4_nonpromo_display_n }} lines; display +{{ a.d4_display_pct }}% (CI {{ a.d4_display_ci[0] }} to {{ a.d4_display_ci[1] }})."
+    tolerance: "± 1 pp"
+    model: "Very few lines vary one lever without the other, so the display effect is imprecise (truth +10%). Recommend a factorial test: promotion × display."
+    wrong: "Quoting the display coefficient as precise ROI."
+    leader: Sketch the 2×2 test design and its unit of randomisation.
+  - id: R4-12
+    lesson: L4.4
+    tier: Stretch
+    title: Draw the loyalty DAG
+    framing: Marketing claims loyalty members spend {{ a.d2_loyal_naive_pct }}% more because of the programme.
+    deliverable: A DAG (Mermaid) with membership, spend, prior spend, household size, store format, tenure; the adjustment set; what cannot be fixed by adjustment.
+    expected: "Confounders: prior spend, household size, tenure, home-store format. Unmeasured: shopping enthusiasm → need pre/post (DiD) or matching on pre-period spend (Day 9)."
+    tolerance: "—"
+    model: "Self-selection: big spenders join. Adjust for pre-programme spend at minimum; the planted true effect (+5%) is far below the naive gap."
+    wrong: "Adjusting for post-joining visits (a mediator)."
+    leader: What evidence would convince you the programme pays for itself?
+  - id: R4-13
+    lesson: L4.5
+    tier: Basic
+    title: Hair Care guardrail — cannibalisation?
+    framing: Category directors worry the Hair Care feature stole sales from other categories.
+    deliverable: Growth index of revenue in all other categories per store (weeks 70–77 vs 54–69), test vs control.
+    expected: "{{ a.d4_guard_other_pct }}% (CI {{ a.d4_guard_other_ci[0] }} to {{ a.d4_guard_other_ci[1] }}), p = {{ a.d4_guard_other_p }}."
+    tolerance: "± 0.5 pp"
+    model: "No detectable effect on other categories; a loss larger than ~4% can be ruled out."
+    wrong: "Checking only Hair Care."
+    leader: What size of cannibalisation would change your decision?
+  - id: R4-14
+    lesson: L4.5
+    tier: Applied
+    title: The rollout decision
+    framing: The trading director asks for a go/no-go on the Hair Care feature.
+    deliverable: Primary (growth index and CUPED) with CIs, secondary (revenue), guardrail, decision vs 10% threshold.
+    expected: "Units +{{ a.d4_r09_lift }}% (CI {{ a.d4_r09_ci[0] }} – {{ a.d4_r09_ci[1] }}); CUPED +{{ a.d4_store_cuped_lift_pct }}%; revenue +{{ a.d4_hc_rev_lift }}%; other categories {{ a.d4_guard_other_pct }}% (n.s.)."
+    tolerance: "± 0.5 pp"
+    model: "Go, with a holdout of ~4 stores and a 12-week review: the effect is real; it is probably but not certainly above 10%."
+    wrong: "No-go because the CI includes values below 10%."
+    leader: Present the decision in three sentences.
+  - id: R4-15
+    lesson: L4.5
+    tier: Stretch
+    title: The decision memo
+    framing: Write the memo for the trading committee.
+    deliverable: One page following the 7-part template, with a Monte Carlo range for annual value (assume 5,000 annual Hair Care units per store before the feature, margin 2.10 per unit, feature cost 400 per store per year).
+    expected: "Effect range from the CI; annual value ≈ 40 stores × 5,000 × lift × 2.10 − 16,000; P(value < 0) from simulating the lift from its sampling distribution."
+    tolerance: "—"
+    model: "With the point estimate (~13.6%) value ≈ 40 × 5,000 × 0.136 × 2.10 − 16,000 ≈ 41,000 a year; the lower CI bound still covers the cost. Recommend rollout with a holdout."
+    wrong: "A memo with only a p-value."
+    leader: What would make you reverse the decision at the 12-week review?
+finance:
+  - id: F4-1
+    lesson: L4.1
+    tier: Basic
+    title: Design the card-offer test
+    framing: Marketing wants to test a balance-transfer offer.
+    deliverable: Unit of randomisation, primary/secondary/guardrail metrics, split, stratification, sample size for +1 pp on a 6% take-up, duration.
+    expected: "Customer-level randomisation; primary take-up within 30 days; guardrails 90-day delinquency and complaints; stratify by risk band; {{ a.d4_card_n_per_arm | n }} customers per arm."
+    tolerance: "n ± 2%"
+    model: "Randomise customers (not accounts) to avoid one customer receiving both; stratify by risk band so arms are balanced on what drives delinquency; run past one statement cycle so delinquency guardrails can be observed."
+    wrong: "Randomising accounts, or omitting risk guardrails."
+    leader: Which guardrail would you give veto power, and at what threshold?
+  - id: F4-2
+    lesson: L4.1
+    tier: Applied
+    title: SRM check for champion/challenger
+    framing: Before reading the collections results, check the split.
+    deliverable: "Run `finance_challenger_ab.yaml`: planned 80/20 vs observed; p; segment SRM table."
+    expected: "Challenger share {{ a.d4_f16_share_ch }}% vs 20% planned; p = {{ a.d4_f16_srm_p }}; no segment below p = 0.001."
+    tolerance: "± 0.1 pp"
+    model: "The split is consistent with the plan. Region R4's small p (~0.04) is one of six segment checks — not alarming (multiple testing)."
+    wrong: "Testing against 50/50."
+    leader: Which SRM threshold would you set for segment checks, and why?
+  - id: F4-3
+    lesson: L4.1
+    tier: Stretch
+    title: Interference in collections
+    framing: Collections agents handle both champion and challenger accounts.
+    deliverable: Describe how agents could contaminate the test and propose a design that avoids it.
+    expected: "Agents may carry challenger techniques into champion calls (contamination), biasing the difference toward zero; randomise agents (teams) instead, or train only a dedicated challenger team."
+    tolerance: "—"
+    model: "Cluster randomisation at team level removes contamination at the cost of fewer units — size it with a design effect (L3.6)."
+    wrong: "Ignoring contamination because accounts were randomised."
+    leader: Would a team-level test be feasible with your number of teams?
+  - id: F4-4
+    lesson: L4.2
+    tier: Basic
+    title: Planning weekly looks
+    framing: Collections wants weekly results.
+    deliverable: For 8 equally spaced looks, compute O'Brien-Fleming boundaries (z_k = c/√t_k with c calibrated to 5%).
+    expected: "Boundaries fall from about 5.6–5.9 at look 1 to about 2.0–2.1 at look 8."
+    tolerance: "± 0.1"
+    model: "Early looks need overwhelming evidence; the final look is close to 1.96, so little power is lost compared with a single analysis."
+    wrong: "Using 1.96 at every look (false positives ~15–20%)."
+    leader: What would you tell the team about early 'wins'?
+  - id: F4-5
+    lesson: L4.2
+    tier: Applied
+    title: CUPED for cure rate
+    framing: Could pre-period balance and DPD history reduce the challenger test's variance?
+    deliverable: Explain which covariates are valid for CUPED in collections and estimate the possible variance reduction from their correlation with cure.
+    expected: "Valid: covariates measured before assignment (balance at entry, previous delinquency, bureau score). Variance reduction ≈ ρ² — typically small for a binary outcome unless a covariate is strongly predictive."
+    tolerance: "—"
+    model: "Use a regression adjustment (ANCOVA) with several pre-assignment covariates; it is never worse than unadjusted in large samples and can shorten the test."
+    wrong: "Using payments made after assignment as a covariate."
+    leader: Would you approve a test that adjusts for 20 covariates? What safeguards?
+  - id: F4-6
+    lesson: L4.2
+    tier: Stretch
+    title: Winner's curse
+    framing: A test stopped early for success shows +9 pp; after rollout the gain is +5 pp.
+    deliverable: Explain why early-stopped effects are biased upward and how to correct expectations.
+    expected: "Stopping when the estimate is high selects overestimates; expect shrinkage. Use conservative (bias-adjusted) estimates or a holdout to measure the post-launch effect."
+    tolerance: "—"
+    model: "Early stopping truncates the sampling distribution at the boundary — the reported effect is conditional on having crossed it."
+    wrong: "Blaming the rollout for 'losing' 4 pp."
+    leader: How would you budget for this effect in business cases?
+  - id: F4-7
+    lesson: L4.3
+    tier: Basic
+    title: Bayesian challenger readout
+    framing: The Head of Collections asks 'how sure are we?'.
+    deliverable: P(challenger better), credible interval, expected loss of switching (flat priors).
+    expected: "P(better) ≈ 99.9%; interval close to the CI {{ a.d4_f16_ci[0] }}–{{ a.d4_f16_ci[1] }} pp; expected loss of switching ≈ 0."
+    tolerance: "± 0.2 pp"
+    model: "With flat priors and this sample the Bayesian and frequentist views agree; the Bayesian language is easier to act on."
+    wrong: "Saying 'p = 0.001 means 99.9% probability'."
+    leader: Which phrasing would you use with the board?
+  - id: F4-8
+    lesson: L4.3
+    tier: Applied
+    title: Prior for a new segment
+    framing: Pricing needs a planning default rate for students acquired via the online partner (2025Q3).
+    deliverable: Raw rate with Wilson CI; Beta prior from historical students (weight 100); posterior mean, 95% interval, P(rate > 10%).
+    expected: "Raw {{ a.d4_new_raw_pct }}% ({{ a.d4_new_k }}/{{ a.d4_new_n }}, CI {{ a.d4_new_wilson[0] }}–{{ a.d4_new_wilson[1] }}%); prior {{ a.d4_prior_rate_pct }}%; posterior {{ a.d4_post_mean_pct }}% ({{ a.d4_post_ci_pct[0] }}–{{ a.d4_post_ci_pct[1] }}%); P(>10%) {{ a.d4_post_p_gt10 }}%."
+    tolerance: "± 0.2 pp"
+    model: "Shrinkage moderates the raw rate, but the segment is clearly much riskier than history. Price on the posterior and review monthly."
+    wrong: "Using the historical rate because the sample is 'too small'."
+    leader: How would you choose the prior weight, and who signs it off?
+  - id: F4-9
+    lesson: L4.3
+    tier: Stretch
+    title: Prior sensitivity
+    framing: Model risk asks how much the prior drives the answer.
+    deliverable: Posterior mean and interval for prior weights 25, 100 and 400 accounts.
+    expected: "Heavier priors pull the estimate toward {{ a.d4_prior_rate_pct }}%; with weight 400 the posterior moves most of the way back to history."
+    tolerance: "—"
+    model: "Show the range. If decisions differ across reasonable priors, collect more data before committing."
+    wrong: "Reporting one prior only."
+    leader: What would you do if pricing decisions changed across the three priors?
+  - id: F4-10
+    lesson: L4.4
+    tier: Basic
+    title: Collider bias in booked accounts
+    framing: A junior finds delinquency history 'barely relates' to bureau score in booked accounts.
+    deliverable: Correlation of bureau score with delinquency count among all applicants vs booked; share with any delinquency at bureau ≤ 600.
+    expected: "{{ a.d4_corr_bd_all }} (all) vs {{ a.d4_corr_bd_booked }} (booked); {{ a.d4_delinq_low_all }}% vs {{ a.d4_delinq_low_booked }}% with delinquency at bureau ≤ 600."
+    tolerance: "± 0.01"
+    model: "Approval depends on both variables — a collider. Conditioning on approval removes low-score, delinquent applicants and weakens the observed relationship."
+    wrong: "Concluding delinquency history doesn't matter."
+    leader: Where else in the bank do analyses condition on a collider?
+  - id: F4-11
+    lesson: L4.4
+    tier: Applied
+    title: DAG for credit-limit increases
+    framing: Accounts that received limit increases default less. Did the increases cause it?
+    deliverable: A DAG with limit increase, default, bureau score, utilisation, payment history, income; adjustment set; what is unmeasured.
+    expected: "Increases are granted to good payers: payment history and bureau score confound. Adjust for pre-increase risk; unmeasured income shocks remain → quasi-experiment (RDD at the eligibility cut-off, Day 9)."
+    tolerance: "—"
+    model: "Naive comparison credits the policy with the selection of good customers."
+    wrong: "Adjusting for post-increase utilisation (a mediator)."
+    leader: What design would give a credible answer?
+  - id: F4-12
+    lesson: L4.4
+    tier: Stretch
+    title: Mediator trap
+    framing: An analyst adds 'months in collections' to a model of the challenger's effect on recovery.
+    deliverable: Explain why this biases the estimate and what to report instead.
+    expected: "Months in collections is affected by the script (a mediator); adjusting removes part of the effect. Report the total effect from the randomised comparison."
+    tolerance: "—"
+    model: "In a randomised test, the simple comparison is the causal effect; adjusting for post-treatment variables can only hurt."
+    wrong: "Adding all available variables 'to be safe'."
+    leader: What rule would you set for covariates in experiment readouts?
+  - id: F4-13
+    lesson: L4.5
+    tier: Basic
+    title: Balance and guardrails
+    framing: Validate the challenger test before the decision.
+    deliverable: Standardised mean differences on bureau score, utilisation, balance and DTI; complaints guardrail with CI.
+    expected: "SMDs {{ a.d4_f16_smd | kv }} (all < 0.1); complaints {{ a.d4_f16_compl_ch }} vs {{ a.d4_f16_compl_cp }} (CI {{ a.d4_f16_compl_ci[0] }} to {{ a.d4_f16_compl_ci[1] }}), p = {{ a.d4_f16_compl_p }}."
+    tolerance: "± 0.005"
+    model: "Arms are balanced; complaints do not rise (an increase above ~0.03 per account can be ruled out)."
+    wrong: "Testing balance with p-values on 4,000 accounts instead of SMDs."
+    leader: Which balance threshold would you set?
+  - id: F4-14
+    lesson: L4.5
+    tier: Applied
+    title: Primary and secondary results
+    framing: Prepare the results table for the decision memo.
+    deliverable: Cure rate difference with CI and p; recovery amount difference with CI; decision vs a 2 pp threshold.
+    expected: "Cure +{{ a.d4_f16_diff }} pp (CI {{ a.d4_f16_ci[0] }}–{{ a.d4_f16_ci[1] }}), p = {{ a.d4_f16_p }}; recovery +{{ a.d4_f16_rec_diff | n }} (CI {{ a.d4_f16_rec_ci[0] | n }} to {{ a.d4_f16_rec_ci[1] | n }}, n.s.)."
+    tolerance: "± 0.1 pp"
+    model: "The cure gain clears the 2 pp threshold; recovery is too noisy to conclude. Switch, with a holdout to keep measuring recovery."
+    wrong: "Claiming higher recovery."
+    leader: Which secondary metric would you power the next test for?
+  - id: F4-15
+    lesson: L4.5
+    tier: Stretch
+    title: The decision memo
+    framing: Write the memo for the Head of Collections.
+    deliverable: One page, 7-part template, including annualised value (assume 1,400 new 30+ DPD accounts a month and 600 saved per extra cure).
+    expected: "Extra cures per year ≈ 1,400 × 12 × 0.06 ≈ 1,000 → ≈ 600,000 a year at the point estimate; lower CI bound (2.4 pp) ≈ 240,000."
+    tolerance: "± 10%"
+    model: "Recommend switching to the challenger, keeping a 10% holdout for one quarter, with complaints as the veto guardrail."
+    wrong: "Quoting only the point estimate."
+    leader: What would trigger reverting to the champion?

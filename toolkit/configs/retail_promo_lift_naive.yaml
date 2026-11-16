@@ -1,0 +1,18 @@
+# Teaching contrast for L3.4: compare test-window store averages WITHOUT the pre-period adjustment.
+recipe: rcp_two_group_test
+dataset:
+  name: northstar_weekly_store_category
+  path: data/retail/weekly_store_category.parquet
+columns:
+  group: experiment_group
+  target: units
+  cluster: store_id
+filters:
+  - "category == 'Hair Care'"
+  - "week >= 70 and week <= 77"
+params:
+  groups: [test, control]
+  aggregate_to: cluster
+  seed: 42
+output:
+  folder: outputs/{recipe}/{date}_retail_promo_lift_naive

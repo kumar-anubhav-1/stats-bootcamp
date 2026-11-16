@@ -1,0 +1,24 @@
+# L1.2 / L1.3: data-quality rules and missing-data diagnosis for the retail transaction lines
+recipe: rcp_quality
+dataset:
+  name: northstar_transactions
+  path: data/retail/transactions.parquet
+  grain: line
+columns:
+  id: line_id
+  target: revenue
+filters: []
+params:
+  rules:
+    - {name: negative_qty_not_return, flag: "(quantity < 0) & (return_flag == False)", severity: error, why: "Sales lines cannot have negative quantity; returns are flagged separately"}
+    - {name: price_far_above_list, flag: "unit_price > 20 * list_price", severity: error, why: "Unit price 20x list suggests a decimal-shift entry error"}
+    - {name: revenue_not_qty_x_price, flag: "abs(revenue - quantity * unit_price) > 0.011", severity: warning, why: "Revenue should equal quantity x unit price"}
+    - {name: discount_as_fraction, flag: "(discount_pct > 0) & (discount_pct < 1)", severity: warning, why: "discount_pct is documented in percent (0-100); values below 1 look like fractions"}
+  missing_by: [loyalty_flag, region, channel, format]
+  missing_unit:
+    temperature_c: [region, date]
+    age_band: [customer_id]
+    household_size: [customer_id]
+  write_clean: true
+output:
+  folder: outputs/{recipe}/{date}_{dataset}

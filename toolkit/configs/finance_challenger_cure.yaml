@@ -1,0 +1,16 @@
+# L4.5 / reuse drill: collections champion vs challenger cure rate (80/20 split)
+recipe: rcp_two_group_test
+dataset:
+  name: meridian_accounts
+  path: data/finance/accounts.parquet
+columns:
+  group: strategy_group
+  target: cured_within_3m
+  id: account_id
+filters:
+  - "strategy_group != 'none'"
+params:
+  groups: [challenger, champion]
+  seed: 42
+output:
+  folder: outputs/{recipe}/{date}_finance_challenger_cure

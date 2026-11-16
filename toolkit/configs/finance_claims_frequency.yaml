@@ -1,0 +1,14 @@
+# L5.5: motor claim frequency — negative binomial GLM with log(exposure) offset. Claims counted per policy via a join.
+recipe: rcp_regression
+dataset:
+  name: meridian_policies
+  path: data/finance/policies.parquet
+  joins:
+    - {path: data/finance/claims.parquet, keys: [policy_id], count_as: n_claims}
+columns: {target: n_claims, features: [driver_age_band, vehicle_group, region], exposure: exposure_years}
+filters:
+  - "product == 'motor'"
+params:
+  family: negbin
+  formula: "n_claims ~ C(driver_age_band) + vehicle_group + C(region)"
+output: {folder: "outputs/{recipe}/{date}_finance_claims_frequency"}

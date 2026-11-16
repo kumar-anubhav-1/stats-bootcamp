@@ -1,0 +1,90 @@
+{
+  "groups": [
+    "test",
+    "control"
+  ],
+  "unit_of_analysis": "row",
+  "n": {
+    "test": 28,
+    "control": 32
+  },
+  "row_level_n": {
+    "control": 32,
+    "test": 28
+  },
+  "outcome_type": "continuous",
+  "outcome_label": "quantity",
+  "primary_test": "welch_t",
+  "tests": {
+    "welch_t": {
+      "t": -0.193558,
+      "p_value": 0.84721,
+      "df": 56.962612
+    },
+    "student_t": {
+      "t": -0.193545,
+      "p_value": 0.847208
+    },
+    "mann_whitney": {
+      "U": 435.0,
+      "p_value": 0.809934,
+      "prob_superiority": 0.485491
+    },
+    "permutation": {
+      "p_value": 1.0
+    }
+  },
+  "effects": {
+    "mean": {
+      "test": 1.285714,
+      "control": 1.3125
+    },
+    "median": {
+      "test": 1.0,
+      "control": 1.0
+    },
+    "sd": {
+      "test": 0.534522,
+      "control": 0.535061
+    },
+    "difference": -0.026786,
+    "difference_ci_welch": [
+      -0.303903,
+      0.250331
+    ],
+    "difference_ci_bootstrap": [
+      -0.294643,
+      0.241071
+    ],
+    "pct_lift": -0.020408,
+    "pct_lift_ci_bootstrap": [
+      -0.197568,
+      0.204633
+    ],
+    "cohens_d": -0.050085,
+    "hedges_g": -0.049434,
+    "median_difference": 0.0,
+    "mde_80pct_power_abs": 0.387726
+  },
+  "assumptions": {
+    "skewness": {
+      "test": 1.758899,
+      "control": 1.505686
+    },
+    "shapiro_p": {
+      "test": 0.0,
+      "control": 0.0
+    },
+    "levene_p": 0.847208,
+    "n_per_group_ge_30": false
+  },
+  "icc": 0.287422,
+  "design_effect": 1.328482,
+  "alpha": 0.05,
+  "alternative": "two-sided",
+  "verdict": {
+    "statistically_significant": false,
+    "p_value": 0.84721,
+    "practical_vs_threshold": null
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "train_end": 78,
+  "horizon": 8,
+  "season_length": 52,
+  "holdout": {
+    "naive": {
+      "wape": 0.096763,
+      "mase": 0.574237,
+      "bias": -0.079327
+    },
+    "seasonal_naive": {
+      "wape": 0.103259,
+      "mase": 0.612784,
+      "bias": 0.090181
+    },
+    "moving_avg": {
+      "wape": 0.078803,
+      "mase": 0.467656,
+      "bias": -0.036491
+    },
+    "holt_damped": {
+      "wape": 0.078291,
+      "mase": 0.464616,
+      "bias": -0.029444
+    },
+    "regression_fourier": {
+      "wape": 0.066256,
+      "mase": 0.393193,
+      "bias": 0.066256
+    },
+    "sarimax": {
+      "wape": 0.066961,
+      "mase": 0.397377,
+      "bias": 0.066961
+    }
+  },
+  "backtest_mean": {
+    "sarimax": {
+      "wape": 0.054003,
+      "mase": 0.352185,
+      "bias": 0.00934
+    },
+    "regression_fourier": {
+      "wape": 0.0544,
+      "mase": 0.355296,
+      "bias": 0.008275
+    },
+    "seasonal_naive": {
+      "wape": 0.068893,
+      "mase": 0.448504,
+      "bias": 0.01346
+    },
+    "holt_damped": {
+      "wape": 0.07001,
+      "mase": 0.463374,
+      "bias": -0.041286
+    },
+    "moving_avg": {
+      "wape": 0.072734,
+      "mase": 0.482043,
+      "bias": -0.05142
+    },
+    "naive": {
+      "wape": 0.092999,
+      "mase": 0.608511,
+      "bias": -0.077121
+    }
+  },
+  "best_by_backtest": "sarimax",
+  "_tolerance": {
+    "rtol": 0.02,
+    "atol": 0.005
+  }
+}

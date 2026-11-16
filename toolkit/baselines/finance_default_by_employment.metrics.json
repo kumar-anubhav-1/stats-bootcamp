@@ -1,0 +1,117 @@
+{
+  "kind": "binary",
+  "groups": [
+    "contract",
+    "retired",
+    "salaried",
+    "self-employed",
+    "student"
+  ],
+  "n_total": 25000,
+  "table": {
+    "False": {
+      "contract": 3882,
+      "retired": 1078,
+      "salaried": 14022,
+      "self-employed": 3733,
+      "student": 1285
+    },
+    "True": {
+      "contract": 182,
+      "retired": 45,
+      "salaried": 553,
+      "self-employed": 131,
+      "student": 89
+    }
+  },
+  "chi2": 29.732249,
+  "dof": 4,
+  "p": 6e-06,
+  "cramers_v": 0.034486,
+  "min_expected": 44.92,
+  "std_residuals": {
+    "False": {
+      "contract": -0.311,
+      "retired": -0.002,
+      "salaried": 0.254,
+      "self-employed": 0.387,
+      "student": -0.937
+    },
+    "True": {
+      "contract": 1.525,
+      "retired": 0.012,
+      "salaried": -1.242,
+      "self-employed": -1.895,
+      "student": 4.592
+    }
+  },
+  "rates": {
+    "contract": 0.044783,
+    "retired": 0.040071,
+    "salaried": 0.037942,
+    "self-employed": 0.033903,
+    "student": 0.064774
+  },
+  "pairwise": {
+    "contract vs retired": {
+      "diff_pp": 0.471223,
+      "p": 0.494431,
+      "test": "z/\u03c7\u00b2",
+      "p_holm": 0.988863
+    },
+    "contract vs salaried": {
+      "diff_pp": 0.684178,
+      "p": 0.04751,
+      "test": "z/\u03c7\u00b2",
+      "p_holm": 0.237551
+    },
+    "contract vs self-employed": {
+      "diff_pp": 1.088077,
+      "p": 0.012892,
+      "test": "z/\u03c7\u00b2",
+      "p_holm": 0.077352
+    },
+    "contract vs student": {
+      "diff_pp": -1.999092,
+      "p": 0.003241,
+      "test": "z/\u03c7\u00b2",
+      "p_holm": 0.025931
+    },
+    "retired vs salaried": {
+      "diff_pp": 0.212956,
+      "p": 0.719427,
+      "test": "z/\u03c7\u00b2",
+      "p_holm": 0.988863
+    },
+    "retired vs self-employed": {
+      "diff_pp": 0.616855,
+      "p": 0.324066,
+      "test": "z/\u03c7\u00b2",
+      "p_holm": 0.972199
+    },
+    "retired vs student": {
+      "diff_pp": -2.470314,
+      "p": 0.006431,
+      "test": "z/\u03c7\u00b2",
+      "p_holm": 0.045016
+    },
+    "salaried vs self-employed": {
+      "diff_pp": 0.403899,
+      "p": 0.237575,
+      "test": "z/\u03c7\u00b2",
+      "p_holm": 0.950299
+    },
+    "salaried vs student": {
+      "diff_pp": -2.68327,
+      "p": 1e-06,
+      "test": "z/\u03c7\u00b2",
+      "p_holm": 1.2e-05
+    },
+    "self-employed vs student": {
+      "diff_pp": -3.087169,
+      "p": 1e-06,
+      "test": "z/\u03c7\u00b2",
+      "p_holm": 1e-05
+    }
+  }
+}

@@ -1,0 +1,7 @@
+# L2.6 reuse: Benford on 3-month transaction amounts by branch
+recipe: rcp_benford
+dataset: {name: meridian_accounts, path: data/finance/accounts.parquet}
+columns: {target: txn_amount_3m, group: branch_id}
+filters: []
+params: {min_n: 300, round_to: 1}
+output: {folder: "outputs/{recipe}/{date}_finance_branches"}

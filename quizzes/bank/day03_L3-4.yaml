@@ -1,0 +1,444 @@
+quizzes:
+- id: L3.4-F
+  title: L3.4 Two-group comparison (Basic → Advanced)
+  lesson: L3.4
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C150
+    node: N-TEST-2G-MEAN
+    prompt: NorthStar randomised 40 **stores** to test or control. What is the correct unit of analysis?
+    options:
+    - id: a
+      text: The store (one number per store)
+      correct: true
+      why: The unit of analysis is the unit of randomisation.
+    - id: b
+      text: The store-week (320 rows in the window)
+      why: Weeks within a store are not independent.
+    - id: c
+      text: The transaction line
+      why: Lines are nested in stores and the panel is tiny.
+    - id: d
+      text: The customer
+      why: Customers were not randomised.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C128
+    - C129
+    prompt: Which test fits a comparison of 12-month **default rates** between verified and unverified customers?
+    options:
+    - id: a
+      text: Two-proportion z-test (Fisher's exact if counts are small)
+      correct: true
+      why: Binary outcome → compare proportions.
+    - id: b
+      text: Welch t-test on bureau scores
+      why: Different outcome.
+    - id: c
+      text: Paired t-test
+      why: Groups are independent, not paired.
+    - id: d
+      text: ANOVA
+      why: Only two groups and a binary outcome.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C141
+    node: N-TEST-2G-MEAN
+    prompt: Run `retail_promo_lift.yaml`. What is the estimated % lift in Hair Care units (store growth vs own baseline)?
+    answer: "{{ a.l34_hc_lift_pct }}"
+    tolerance_abs: 0.3
+    unit: '%'
+    explanation: "Test stores grew about {{ a.l34_hc_lift_pct }}% more than control (95% CI {{ a.l34_hc_ci_lo }}% to {{ a.l34_hc_ci_hi }}%)."
+  - id: q4
+    type: tf_reason
+    difficulty: 3
+    concepts:
+    - C126
+    prompt: "True or false: p = {{ a.l34_hc_p }} means there is a {{ a.l34_hc_p }} probability that the promotion has no effect."
+    options:
+    - id: a
+      text: False — p is the probability of data at least this extreme *if* there were no effect
+      correct: true
+      why: p is computed assuming H0; it is not P(H0 | data).
+    - id: b
+      text: True — that is the definition
+      why: Common misreading.
+    - id: c
+      text: True, because α = 0.05
+      why: α is a threshold, not a probability about H0.
+  - id: q5
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C145
+    prompt: "The lift CI is {{ a.l34_hc_ci_lo }}% to {{ a.l34_hc_ci_hi }}% and rollout needs ≥ {{ a.l34_threshold_pct }}%. Best conclusion?"
+    options:
+    - id: a
+      text: "The effect is likely positive, but we cannot be confident it reaches {{ a.l34_threshold_pct }}%"
+      correct: true
+      why: The lower bound is below the threshold.
+    - id: b
+      text: Roll out — p < 0.05
+      why: Significance does not address the threshold.
+    - id: c
+      text: The promotion failed
+      why: The CI excludes zero.
+    - id: d
+      text: "The lift is exactly {{ a.l34_hc_lift_pct }}%"
+      why: That is the point estimate; the CI shows uncertainty.
+  - id: q6
+    type: spot_error
+    difficulty: 3
+    concepts:
+    - C150
+    prompt: 'A colleague reports: *"Hair Care: test vs control, n = 72 lines, t = −0.2, p = 0.83 — the promotion had no effect."* Which is the **main** error?
+
+      '
+    options:
+    - id: a
+      text: 'Wrong unit and data source: lines from a small panel cannot measure a store-level effect; non-significant ≠ no effect'
+      correct: true
+      why: Two classic errors in one sentence.
+    - id: b
+      text: They should have used a one-sided test
+      why: Choosing sides after the fact is worse.
+    - id: c
+      text: The p-value is miscalculated
+      why: It may be correct for the wrong question.
+    - id: d
+      text: t should be positive
+      why: Sign is not the issue.
+  - id: q7
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C142
+    node: N-TEST-2G-PROP
+    prompt: What is the default-rate difference (unverified minus verified) in percentage points?
+    answer: "{{ a.l34_ver_rd_pp }}"
+    tolerance_abs: 0.05
+    unit: pp
+    explanation: "{{ a.l34_unver_rate }}% − {{ a.l34_ver_rate }}% = {{ a.l34_ver_rd_pp }} pp (95% CI {{ a.l34_ver_ci_pp[0] }} to {{ a.l34_ver_ci_pp[1] }})."
+    variants:
+    - prompt: What is the relative risk of default (unverified ÷ verified)?
+      answer: "{{ a.l34_ver_rr }}"
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C131
+    - C133
+    prompt: When should you prefer Mann-Whitney or a bootstrap CI over Welch's t-test?
+    options:
+    - id: a
+      text: When the outcome is heavily skewed **and** groups are small
+      correct: true
+      why: Then a few extremes dominate the mean and the CLT has not kicked in.
+    - id: b
+      text: Whenever Shapiro-Wilk p < 0.05
+      why: At large n normality tests reject trivially; t on means is still fine.
+    - id: c
+      text: Never
+      why: They are valuable fallbacks.
+    - id: d
+      text: Whenever variances differ
+      why: Welch already handles unequal variances.
+  - id: q9
+    type: multi
+    difficulty: 3
+    concepts:
+    - C071
+    - C070
+    node: N-DESC-STRATIFY
+    prompt: "The overall verification gap is {{ a.l34_ver_rd_pp }} pp. Which checks are needed before calling it the **effect** of verification? (Select all.)"
+    options:
+    - id: a
+      text: Compare within acquisition channel
+      correct: true
+      why: Unverified income is concentrated in the partner channel (confounding).
+    - id: b
+      text: Compare within vintage year
+      correct: true
+      why: Riskier recent vintages may differ in verification rates.
+    - id: c
+      text: Make the p-value smaller
+      why: p is already tiny; confounding is the issue.
+    - id: d
+      text: Consider an experiment or adjusted regression
+      correct: true
+      why: Needed for a causal estimate.
+  - id: q10
+    type: numeric
+    difficulty: 3
+    concepts:
+    - C145
+    prompt: With 20 stores per arm and the observed variability, what is the minimum detectable lift at 80% power (in %)?
+    answer: "{{ a.l34_mde_pct }}"
+    tolerance_abs: 0.6
+    unit: '%'
+    explanation: "MDE ≈ (1.96 + 0.84) × SD × √(2/20) with growth-index SD ≈ {{ a.l34_growth_sd }}. The test could not reliably confirm effects smaller than this."
+- id: L3.4-L
+  title: L3.4 Read the output and decide (Leader)
+  lesson: L3.4
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C126
+    - C145
+    prompt: "Output: *lift +{{ a.l34_hc_lift_pct }}% (95% CI {{ a.l34_hc_ci_lo }}% to {{ a.l34_hc_ci_hi }}%), p = {{ a.l34_hc_p }}, 20 v 20 stores.* Rollout cost requires ≥ {{ a.l34_threshold_pct }}%. Rollout is easily reversible. What do you decide?\n"
+    options:
+    - id: a
+      text: Staged rollout with a holdout group and monitoring
+      correct: true
+      why: Effect likely positive; size uncertain; reversibility makes learning-by-doing cheap.
+    - id: b
+      text: Full rollout — significant result
+      why: Ignores that the CI straddles the threshold.
+    - id: c
+      text: "Stop — not proven ≥ {{ a.l34_threshold_pct }}%"
+      why: Throws away a probably-positive effect when downside is reversible.
+    - id: d
+      text: Re-run until p < 0.01
+      why: p-hacking.
+  - id: q2
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C150
+    prompt: "A second analyst shows \"+{{ a.l34_hc_naive_lift_pct }}%, p = {{ a.l34_hc_naive_p }}\" for the same test (post-period store averages). What explains the gap?"
+    options:
+    - id: a
+      text: Store-size differences between arms add noise; comparing each store with its own baseline removes them
+      correct: true
+      why: Same data, different precision; the adjusted estimate is the better one.
+    - id: b
+      text: The second analyst made an arithmetic error
+      why: Both can be arithmetically right.
+    - id: c
+      text: The effect is really 24%
+      why: The naive estimate is too noisy to trust.
+    - id: d
+      text: The promotion stopped working
+      why: Same weeks, same stores.
+  - id: q3
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C071
+    prompt: "Credit policy wants mandatory verification because unverified customers default {{ a.l34_ver_rd_pp }} pp more. Within channels the gaps are smaller (branch {{ a.l34_ver_by_channel.branch.unverified_pct }}% vs {{ a.l34_ver_by_channel.branch.verified_pct }}%; online {{ a.l34_ver_by_channel.online.unverified_pct }}% vs {{ a.l34_ver_by_channel.online.verified_pct }}%). Your response?"
+    options:
+    - id: a
+      text: Part of the gap is channel mix; estimate the adjusted effect (regression or a verification test) before changing policy
+      correct: true
+      why: Confounding inflates the raw comparison.
+    - id: b
+      text: Approve — the gap is large and highly significant
+      why: Significance does not remove confounding.
+    - id: c
+      text: Reject — within-channel gaps are not significant
+      why: They are still positive; you need an adjusted estimate, not a dismissal.
+    - id: d
+      text: Drop the partner channel
+      why: A different decision, not supported by this analysis.
+  - id: q4
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C152
+    prompt: "A 50/50 e-coupon test shows users {{ a.l34_ab_n_t | n }} vs {{ a.l34_ab_n_c | n }}, conversion {{ a.l34_ab_conv_t }}% vs {{ a.l34_ab_conv_c }}%, p = {{ a.l34_ab_p }}. The team concludes 'no lift'. What do you say?"
+    options:
+    - id: a
+      text: Sample ratio mismatch — the test is broken; find the cause before interpreting anything
+      correct: true
+      why: An SRM means assignment or logging is biased; the conversion comparison is untrustworthy.
+    - id: b
+      text: Agree — no significant lift
+      why: The test itself is invalid.
+    - id: c
+      text: Run it longer
+      why: More data from a broken pipeline does not fix bias.
+    - id: d
+      text: Use a one-sided test
+      why: Irrelevant to the bias.
+  - id: q5
+    type: open
+    difficulty: 3
+    concepts:
+    - C294
+    prompt: Write the two-sentence result for the category director (no use of the word "significant").
+    model: "Test stores grew Hair Care units about {{ a.l34_hc_lift_pct }}% more than comparable control stores; the true lift is plausibly between {{ a.l34_hc_ci_lo }}% and {{ a.l34_hc_ci_hi }}%. Because the low end is below our {{ a.l34_threshold_pct }}% break-even, I recommend a staged rollout with a holdout to confirm the size before full commitment."
+    rubric: 'Full: effect + interval in business terms + recommendation tied to the threshold. Partial: effect and interval but no decision logic.'
+  - id: q6
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C146
+    prompt: "Format-level lifts are Hyper {{ a.l34_lift_by_format.Hyper.lift_pct }}% ({{ a.l34_lift_by_format.Hyper.n_test }} v {{ a.l34_lift_by_format.Hyper.n_control }} stores), Super {{ a.l34_lift_by_format.Super.lift_pct }}%, Express {{ a.l34_lift_by_format.Express.lift_pct }}%. The Hyper manager wants a different rollout plan for hypermarkets. Best response?"
+    options:
+    - id: a
+      text: Treat it as a hypothesis — 8 stores cannot support a separate conclusion; monitor formats separately in the staged rollout
+      correct: true
+      why: Post-hoc subgroups are noisy and invite false discoveries.
+    - id: b
+      text: Agree and change the hypermarket plan
+      why: Decision on 8 stores.
+    - id: c
+      text: Tell them the result is wrong
+      why: It is noisy, not wrong.
+    - id: d
+      text: Run a t-test on 8 stores and decide on p
+      why: Underpowered.
+  - id: q7
+    type: multi
+    difficulty: 3
+    concepts:
+    - C292
+    prompt: Which are red flags in a junior's two-group analysis? (Select all.)
+    options:
+    - id: a
+      text: n in the thousands for a store-randomised test
+      correct: true
+      why: Wrong unit.
+    - id: b
+      text: One-sided test chosen after seeing the data
+      correct: true
+      why: Inflates false positives.
+    - id: c
+      text: Effect size with CI and robustness tests shown
+      why: That is good practice.
+    - id: d
+      text: '''No difference'' stated from p = 0.3 with a wide CI'
+      correct: true
+      why: Absence of evidence ≠ evidence of absence.
+    - id: e
+      text: Outcome window differs between groups
+      correct: true
+      why: Not a like-for-like comparison.
+- id: L3.4-NAV
+  title: L3.4 Navigator drills
+  lesson: L3.4
+  track: F
+  questions:
+  - id: n1
+    type: navigator
+    difficulty: 2
+    concepts:
+    - C139
+    node: N-TEST-2G-PROP
+    prompt: Compare the share of policies with a claim between 30 new-product policies and 40 old-product policies; 3 and 2 claims respectively. Which technique, check and fallback?
+    options:
+    - id: a
+      text: Two-proportion comparison; check expected cell counts; fallback Fisher's exact (counts are tiny)
+      correct: true
+      why: Expected counts < 5 → Fisher.
+    - id: b
+      text: Welch t-test; check normality; fallback Mann-Whitney
+      why: Binary outcome.
+    - id: c
+      text: Chi-square; no checks needed
+      why: Expected-count check fails.
+    - id: d
+      text: Paired t-test
+      why: Not paired.
+  - id: n2
+    type: navigator
+    difficulty: 3
+    concepts:
+    - C130
+    node: N-TEST-PAIRED
+    prompt: The same 25 stores were measured before and after a new layout (no control group). Which node, and what is the biggest caveat?
+    options:
+    - id: a
+      text: Paired t-test (Wilcoxon if differences skewed); caveat — without a control, seasonality and other changes are confounded
+      correct: true
+      why: Before/after without control cannot isolate the effect; prefer difference-in-differences.
+    - id: b
+      text: Welch two-sample t-test; no caveat
+      why: Not independent groups.
+    - id: c
+      text: Two-proportion z-test
+      why: Outcome is continuous.
+    - id: d
+      text: ANOVA with 50 groups
+      why: No.
+  - id: n3
+    type: navigator
+    difficulty: 3
+    concepts:
+    - C131
+    node: N-TEST-2G-MEAN
+    prompt: Compare average claim cost between two small regional teams (12 and 15 claims), one with two very large claims. Technique, check, fallback?
+    options:
+    - id: a
+      text: Welch t as baseline; check skew/outliers; fallback Mann-Whitney or bootstrap CI of the difference — report both
+      correct: true
+      why: Heavy tails + small n.
+    - id: b
+      text: Delete the large claims and run Student's t
+      why: Deleting genuine extremes biases results.
+    - id: c
+      text: Two-proportion z-test
+      why: Continuous outcome.
+    - id: d
+      text: No test — n is too small for anything
+      why: Rank and resampling methods still work.
+- id: L3.4-AI
+  title: L3.4 AI-output review
+  lesson: L3.4
+  track: F
+  questions:
+  - id: a1
+    type: ai_review
+    difficulty: 3
+    concepts:
+    - C289
+    - C150
+    prompt: 'An AI assistant wrote: *"I compared Hair Care quantity per line for test vs control stores using all 2,000 Hair Care lines in the panel across 104 weeks (t = 2.1, p = 0.04). The promotion increased sales by 4%. Normality was confirmed."* How many distinct errors are there?
+
+      '
+    options:
+    - id: a
+      text: 'At least four: wrong unit (lines), wrong period (all 104 weeks, not the test window), wrong outcome (quantity per line ≠ units sold), and ''normality confirmed'' is irrelevant/unsupported'
+      correct: true
+      why: Each would invalidate the conclusion on its own.
+    - id: b
+      text: 'One: the p-value is borderline'
+      why: The design errors matter far more.
+    - id: c
+      text: None
+      why: See option a.
+    - id: d
+      text: 'Two: it should be one-sided and use the median'
+      why: Neither addresses the real errors.
+  - id: a2
+    type: ai_review
+    difficulty: 3
+    concepts:
+    - C289
+    - C202
+    prompt: "An AI summary says: *\"Defaulters have a median current balance of 0 versus {{ a.l34_bal_good_median | n }} for non-defaulters, so low balances predict default.\"* What is wrong?\n"
+    options:
+    - id: a
+      text: '`balance_current` is measured after the outcome — charged-off balances are written off to 0 (timing/leakage)'
+      correct: true
+      why: The comparison uses information from after the event.
+    - id: b
+      text: It should use the mean
+      why: Doesn't fix the timing problem.
+    - id: c
+      text: Nothing; it is a strong predictor
+      why: It is a consequence, not a predictor.
+    - id: d
+      text: It needs a p-value
+      why: A p-value would make the error look more convincing.

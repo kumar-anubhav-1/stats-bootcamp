@@ -1,0 +1,1396 @@
+quizzes:
+- id: L4.1-F
+  title: L4.1 A/B design and hygiene (Basic → Advanced)
+  lesson: L4.1
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C152
+    prompt: A sample-ratio mismatch (SRM) means…
+    options:
+    - id: a
+      text: Observed arm sizes differ from the planned split more than chance allows
+      correct: true
+      why: Assignment or logging is broken.
+    - id: b
+      text: The effect is large
+      why: Unrelated.
+    - id: c
+      text: Arms have different conversion
+      why: That's the result.
+    - id: d
+      text: The test is under-powered
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C152
+    prompt: Treatment share (%) observed in the e-coupon test (planned 50%)?
+    answer: "{{ a.d4_ab_share_t }}"
+    tolerance_abs: 0.1
+    unit: '%'
+    explanation: "χ² p = {{ a.d4_srm_p }}."
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C152
+    prompt: Where is the SRM localised?
+    options:
+    - id: a
+      text: App version 3.2
+      correct: true
+      why: 3.1 and 3.3 pass.
+    - id: b
+      text: Android only
+      why: Both platforms fail because 3.2 runs on both.
+    - id: c
+      text: Everywhere equally
+      why: No.
+    - id: d
+      text: The first day
+      why: Not shown.
+  - id: q4
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C152
+    prompt: "In app 3.2, control converts at {{ a.d4_v32_conv_c }}% vs treatment {{ a.d4_v32_conv_t }}%. Most likely mechanism?"
+    options:
+    - id: a
+      text: Non-converting control users were not logged, inflating control conversion
+      correct: true
+      why: Missing users are selective.
+    - id: b
+      text: The coupon hurts 3.2 users
+      why: Implausible with an SRM present.
+    - id: c
+      text: Random noise
+      why: p ≈ 0.
+    - id: d
+      text: 3.2 users are richer
+      why: Randomisation balances that.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C151
+    prompt: Lift (pp) excluding app 3.2?
+    answer: "{{ a.d4_clean_lift_pp }}"
+    tolerance_abs: 0.1
+    explanation: "As logged: {{ a.d4_naive_lift_pp }} pp."
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C153
+    prompt: Why run a test for at least two full weeks?
+    options:
+    - id: a
+      text: Weekly cycles and novelty/primacy effects
+      correct: true
+      why: Representative window.
+    - id: b
+      text: Regulation
+      why: No.
+    - id: c
+      text: To get p < 0.05
+      why: p-hacking.
+    - id: d
+      text: Servers need time
+      why: No.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C154
+    prompt: Interference is…
+    options:
+    - id: a
+      text: Treated units affecting control units' outcomes
+      correct: true
+      why: Shared stock, social, agents.
+    - id: b
+      text: Missing data
+      why: No.
+    - id: c
+      text: SRM
+      why: Different.
+    - id: d
+      text: Seasonality
+      why: No.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C150
+    prompt: For a card offer, randomise at the level of…
+    options:
+    - id: a
+      text: Customer
+      correct: true
+      why: One customer, one experience.
+    - id: b
+      text: Account
+      why: A customer could get both.
+    - id: c
+      text: Transaction
+      why: No.
+    - id: d
+      text: Branch only
+      why: Possible but few units.
+- id: L4.1-L
+  title: L4.1 Trusting experiments (Leader)
+  lesson: L4.1
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C152
+    prompt: "The e-coupon readout says 'no effect, p = {{ a.d4_naive_p }}' — and the split was 52.5/47.5. Decision?"
+    options:
+    - id: a
+      text: 'Stop: fix logging and re-run; treat the readout as invalid'
+      correct: true
+      why: SRM hid a real lift.
+    - id: b
+      text: Kill the coupon
+      why: Based on broken data.
+    - id: c
+      text: Ship anyway
+      why: No evidence yet.
+    - id: d
+      text: Reweight and move on
+      why: Can't fix selective loss by reweighting arms.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C151
+    prompt: Who should own guardrail metrics?
+    options:
+    - id: a
+      text: Leaders/business owners, agreed before the test
+      correct: true
+      why: They protect the business.
+    - id: b
+      text: The analyst after results
+      why: Post hoc.
+    - id: c
+      text: Nobody
+      why: No.
+    - id: d
+      text: The vendor
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C152
+    prompt: Write the five-line note to the product owner about the e-coupon test.
+    model: "1) The test is invalid as logged: 52.5% of users in treatment vs 50% planned (p ≈ 6e-08). 2) The gap is in app 3.2, where non-converting control users were not logged. 3) Excluding 3.2, the coupon raised conversion by ~{{ a.d4_clean_lift_pp }} pp (CI {{ a.d4_clean_ci[0] }}–{{ a.d4_clean_ci[1] }}). 4) That is a sensitivity analysis, not a result. 5) Fix logging and re-run for two weeks; we expect to confirm a positive effect."
+    rubric: 'Full: SRM + location + provisional effect + caveat + action. Partial: 3.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C154
+    prompt: Store staff share stock between test and control departments. Risk?
+    options:
+    - id: a
+      text: Interference/contamination — biases the effect toward zero or either way
+      correct: true
+      why: Units not independent.
+    - id: b
+      text: None
+      why: No.
+    - id: c
+      text: SRM
+      why: Different issue.
+    - id: d
+      text: Higher power
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C152
+    prompt: What platform control would have caught the bug on day one?
+    options:
+    - id: a
+      text: Automated daily SRM alerts overall and by segment
+      correct: true
+      why: Cheap and decisive.
+    - id: b
+      text: More users
+      why: Doesn't fix.
+    - id: c
+      text: Bayesian analysis
+      why: Same broken data.
+    - id: d
+      text: Longer test
+      why: No.
+- id: L4.2-F
+  title: L4.2 CUPED and sequential (Basic → Advanced)
+  lesson: L4.2
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C156
+    prompt: CUPED reduces variance by about…
+    options:
+    - id: a
+      text: ρ², the squared correlation between covariate and outcome
+      correct: true
+      why: Var × (1 − ρ²).
+    - id: b
+      text: Half, always
+      why: Depends on ρ.
+    - id: c
+      text: ρ
+      why: Squared.
+    - id: d
+      text: Nothing
+      why: Can be large.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C156
+    prompt: Variance reduction (%) from CUPED on the store test?
+    answer: "{{ a.d4_store_varred_pct }}"
+    tolerance_abs: 1
+    unit: '%'
+    explanation: "ρ = {{ a.d4_store_corr }}."
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C156
+    prompt: Variance reduction (%) from CUPED on e-coupon conversion?
+    answer: "{{ a.d4_ec_varred_pct }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: "ρ = {{ a.d4_ec_corr }}."
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C156
+    prompt: A valid CUPED covariate must be…
+    options:
+    - id: a
+      text: Measured before assignment
+      correct: true
+      why: Otherwise the treatment can affect it.
+    - id: b
+      text: Measured during the test
+      why: Biased.
+    - id: c
+      text: Binary
+      why: No.
+    - id: d
+      text: Uncorrelated with the outcome
+      why: Then it's useless.
+  - id: q5
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C156
+    prompt: "Raw post-period store comparison p = {{ a.d4_store_raw_p }}; CUPED p = {{ a.d4_store_cuped_p }}. Why?"
+    options:
+    - id: a
+      text: Store size differences swamp the raw comparison; CUPED removes them
+      correct: true
+      why: "SE {{ a.d4_store_se_ratio }}× smaller."
+    - id: b
+      text: CUPED inflates effects
+      why: Effect similar; SE smaller.
+    - id: c
+      text: Different data
+      why: Same data.
+    - id: d
+      text: p-hacking
+      why: Pre-specified covariate.
+  - id: q6
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C155
+    prompt: On which day would naive daily peeking have stopped the e-coupon test?
+    answer: "{{ a.d4_seq_first_naive }}"
+    tolerance_abs: 0
+    explanation: "OBF: day {{ a.d4_seq_first_obf }}."
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C155
+    prompt: O'Brien-Fleming boundaries are…
+    options:
+    - id: a
+      text: Very strict early, close to 1.96 at the final look
+      correct: true
+      why: c/√t.
+    - id: b
+      text: Constant
+      why: That's Pocock.
+    - id: c
+      text: Lenient early
+      why: Opposite.
+    - id: d
+      text: Only for Bayesian tests
+      why: No.
+  - id: q8
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C155
+    prompt: 'True or false: looking at a dashboard daily is itself a problem.'
+    options:
+    - id: a
+      text: False — monitoring is fine; stopping on unplanned looks is the problem
+      correct: true
+      why: Decision rule matters.
+    - id: b
+      text: 'True'
+      why: Looking ≠ deciding.
+    - id: c
+      text: True unless Bayesian
+      why: No.
+- id: L4.2-L
+  title: L4.2 Faster, safer tests (Leader)
+  lesson: L4.2
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C156
+    prompt: A store test needs 101 stores per arm without CUPED. With ρ ≈ 0.98, roughly how many?
+    options:
+    - id: a
+      text: About 4–5 per arm before t-corrections — CUPED makes it feasible
+      correct: true
+      why: n × (1 − ρ²) ≈ 101 × 0.04.
+    - id: b
+      text: Still 101
+      why: Ignores CUPED.
+    - id: c
+      text: '50'
+      why: Underestimates the gain.
+    - id: d
+      text: Impossible to say
+      why: ρ² gives it.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C155
+    prompt: The team wants to stop on day 5 because p < 0.05. You ask…
+    options:
+    - id: a
+      text: What stopping rule was pre-registered?
+      correct: true
+      why: Unplanned stops inflate errors.
+    - id: b
+      text: Is p < 0.01?
+      why: Still invalid.
+    - id: c
+      text: Nothing — ship
+      why: No.
+    - id: d
+      text: Extend to 30 days
+      why: Not the issue.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C155
+    prompt: Draft a platform policy for interim looks.
+    model: Dashboards may update daily. Decisions only at pre-registered looks using O'Brien-Fleming (or Lan-DeMets spending) boundaries; minimum duration two weekly cycles; guardrail breaches may stop a test at any time; early-stopped effects are reported with a winner's-curse caveat and confirmed by a holdout.
+    rubric: 'Full: boundaries + minimum duration + guardrail exception + caveat. Partial: 2.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C156
+    prompt: A junior adjusts for in-test store footfall. Concern?
+    options:
+    - id: a
+      text: Footfall may be affected by the feature — post-treatment adjustment biases the effect
+      correct: true
+      why: Pre-treatment only.
+    - id: b
+      text: None
+      why: No.
+    - id: c
+      text: Too few stores
+      why: Not the issue.
+    - id: d
+      text: Should use revenue
+      why: Same problem.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C155
+    prompt: Why does an early-stopped 'win' usually shrink after rollout?
+    options:
+    - id: a
+      text: Stopping when the estimate is high selects overestimates (winner's curse)
+      correct: true
+      why: Truncation.
+    - id: b
+      text: Customers get bored
+      why: Possible, but not the statistical reason.
+    - id: c
+      text: Rollout errors
+      why: No.
+    - id: d
+      text: It doesn't
+      why: It usually does.
+- id: L4.3-F
+  title: L4.3 Bayesian A/B (Basic → Advanced)
+  lesson: L4.3
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C158
+    prompt: Posterior is proportional to…
+    options:
+    - id: a
+      text: Prior × likelihood
+      correct: true
+      why: Bayes' rule.
+    - id: b
+      text: Prior + data
+      why: Not additive.
+    - id: c
+      text: Likelihood only
+      why: Ignores prior.
+    - id: d
+      text: p-value
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C159
+    prompt: Prior Beta(2, 48) plus 5 conversions in 100 trials gives…
+    options:
+    - id: a
+      text: Beta(7, 143)
+      correct: true
+      why: α + k, β + n − k.
+    - id: b
+      text: Beta(5, 95)
+      why: Ignores prior.
+    - id: c
+      text: Beta(7, 53)
+      why: Failures added wrongly.
+    - id: d
+      text: Normal(0.05, 0.02)
+      why: No.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C161
+    prompt: P(coupon better) (%) with flat priors on clean data?
+    answer: "{{ a.d4_bayes_p_better }}"
+    tolerance_abs: 1
+    unit: '%'
+    explanation: Monte Carlo from Beta posteriors.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C160
+    prompt: A 95% credible interval means…
+    options:
+    - id: a
+      text: 95% posterior probability the parameter lies in it (given model and prior)
+      correct: true
+      why: Probability statement about the parameter.
+    - id: b
+      text: Same as a CI by definition
+      why: Interpretation differs.
+    - id: c
+      text: 95% of users fall in it
+      why: No.
+    - id: d
+      text: p < 0.05
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C161
+    prompt: Expected loss of shipping is…
+    options:
+    - id: a
+      text: The average shortfall if the treatment is actually worse
+      correct: true
+      why: Regret.
+    - id: b
+      text: The total cost of the test
+      why: No.
+    - id: c
+      text: 1 − P(better)
+      why: Ignores magnitude.
+    - id: d
+      text: The CI width
+      why: No.
+  - id: q6
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C159
+    prompt: Posterior mean default rate (%) for the new student-partner segment (prior weight 100)?
+    answer: "{{ a.d4_post_mean_pct }}"
+    tolerance_abs: 0.3
+    unit: '%'
+    explanation: "Raw {{ a.d4_new_raw_pct }}%, prior {{ a.d4_prior_rate_pct }}%."
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C158
+    prompt: A sceptical prior on the coupon lift…
+    options:
+    - id: a
+      text: Shrinks surprising estimates toward typical effects
+      correct: true
+      why: "Posterior {{ a.d4_bayes_skept_mean_pp }} pp vs {{ a.d4_clean_lift_pp }}."
+    - id: b
+      text: Increases the estimate
+      why: No.
+    - id: c
+      text: Has no effect
+      why: It does with moderate data.
+    - id: d
+      text: Is cheating
+      why: Not if pre-specified.
+  - id: q8
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C161
+    prompt: 'True or false: a Bayesian analysis fixes an SRM.'
+    options:
+    - id: a
+      text: False — biased data give a biased posterior
+      correct: true
+      why: Garbage in, garbage out.
+    - id: b
+      text: 'True'
+      why: No.
+    - id: c
+      text: True with a strong prior
+      why: No.
+- id: L4.3-L
+  title: L4.3 Probability for decisions (Leader)
+  lesson: L4.3
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C161
+    prompt: Which sentence would you put in the CMO memo?
+    options:
+    - id: a
+      text: "'{{ a.d4_bayes_p_better }}% likely the coupon is better; shipping risks ~0 on average'"
+      correct: true
+      why: Probability + regret.
+    - id: b
+      text: "'p = {{ a.d4_clean_p }}'"
+      why: Hard to act on.
+    - id: c
+      text: '''Significant'''
+      why: Uninformative.
+    - id: d
+      text: '''z = 2.33'''
+      why: Opaque.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C158
+    prompt: Who should set default priors?
+    options:
+    - id: a
+      text: The experimentation governance group, before tests, based on past results
+      correct: true
+      why: Prevents prior-shopping.
+    - id: b
+      text: Each analyst after results
+      why: Bias.
+    - id: c
+      text: Nobody — always flat
+      why: Possible but wasteful.
+    - id: d
+      text: The vendor
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C159
+    prompt: "Pricing wants to use the raw {{ a.d4_new_raw_pct }}% default rate for the new segment. Advise."
+    model: "{{ a.d4_new_n }} accounts is a small sample: the raw rate is noisy (Wilson {{ a.d4_new_wilson[0] }}–{{ a.d4_new_wilson[1] }}%). Shrinking toward history gives {{ a.d4_post_mean_pct }}% ({{ a.d4_post_ci_pct[0] }}–{{ a.d4_post_ci_pct[1] }}%), still clearly above past students (P(>10%) = {{ a.d4_post_p_gt10 }}%). Price on the posterior, show sensitivity to prior weight, and update monthly."
+    rubric: 'Full: noise + shrinkage + still risky + update plan. Partial: 2.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C160
+    prompt: With lots of data and flat priors, Bayesian and frequentist intervals…
+    options:
+    - id: a
+      text: Nearly coincide; interpretations differ
+      correct: true
+      why: Likelihood dominates.
+    - id: b
+      text: Differ wildly
+      why: No.
+    - id: c
+      text: Bayesian always narrower
+      why: Not with flat priors.
+    - id: d
+      text: Cannot be compared
+      why: They can.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C162
+    prompt: When is PyMC/Stan worth it?
+    options:
+    - id: a
+      text: Hierarchical or multi-parameter models without closed forms
+      correct: true
+      why: MCMC.
+    - id: b
+      text: Every A/B test
+      why: Overkill.
+    - id: c
+      text: Never
+      why: Useful.
+    - id: d
+      text: To get smaller p-values
+      why: No.
+- id: L4.4-F
+  title: L4.4 DAGs (Basic → Advanced)
+  lesson: L4.4
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C164
+    prompt: A confounder…
+    options:
+    - id: a
+      text: Causes both the treatment and the outcome
+      correct: true
+      why: Opens a backdoor path.
+    - id: b
+      text: Is caused by the treatment
+      why: Mediator.
+    - id: c
+      text: Is caused by treatment and outcome
+      why: Collider.
+    - id: d
+      text: Is unrelated
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C164
+    prompt: Unadjusted promotion effect on units per line (%)?
+    answer: "{{ a.d4_promo_naive_pct }}"
+    tolerance_abs: 1
+    unit: '%'
+    explanation: Biased by format.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C164
+    prompt: Promotion effect adjusted for format and display (%)?
+    answer: "{{ a.d4_promo_format_display_pct }}"
+    tolerance_abs: 1
+    unit: '%'
+    explanation: Truth +15%.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C164
+    prompt: In promotion → display → units, display is a…
+    options:
+    - id: a
+      text: Mediator
+      correct: true
+      why: On the causal path.
+    - id: b
+      text: Confounder
+      why: Caused by promotion here.
+    - id: c
+      text: Collider
+      why: No.
+    - id: d
+      text: Instrument
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C164
+    prompt: Approval depends on bureau score and delinquency history. Approval is a…
+    options:
+    - id: a
+      text: Collider
+      correct: true
+      why: Caused by both.
+    - id: b
+      text: Confounder
+      why: No.
+    - id: c
+      text: Mediator
+      why: No.
+    - id: d
+      text: Outcome
+      why: No.
+  - id: q6
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C164
+    prompt: Correlation of bureau score with delinquency count in booked accounts (3 decimals)?
+    answer: "{{ a.d4_corr_bd_booked }}"
+    tolerance_abs: 0.01
+    explanation: "All applicants: {{ a.d4_corr_bd_all }}."
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C163
+    prompt: Adjusting for a collider…
+    options:
+    - id: a
+      text: Opens a spurious path and creates bias
+      correct: true
+      why: Never adjust.
+    - id: b
+      text: Removes bias
+      why: Opposite.
+    - id: c
+      text: Has no effect
+      why: It does.
+    - id: d
+      text: Increases power safely
+      why: No.
+  - id: q8
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C164
+    prompt: Why is the display effect estimate imprecise?
+    options:
+    - id: a
+      text: "Few lines vary display without promotion ({{ a.d4_promo_no_display_n }} and {{ a.d4_nonpromo_display_n }})"
+      correct: true
+      why: Little independent variation.
+    - id: b
+      text: Displays don't work
+      why: Effect positive.
+    - id: c
+      text: Wrong model
+      why: No.
+    - id: d
+      text: Data error
+      why: No.
+- id: L4.4-L
+  title: L4.4 Causal judgement (Leader)
+  lesson: L4.4
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C164
+    prompt: Which estimate answers 'should we run more promotions (which come with displays)?'
+    options:
+    - id: a
+      text: "Format-adjusted total effect ({{ a.d4_promo_format_pct }}%)"
+      correct: true
+      why: Includes the display the promotion brings.
+    - id: b
+      text: "Unadjusted ({{ a.d4_promo_naive_pct }}%)"
+      why: Confounded.
+    - id: c
+      text: Direct effect only
+      why: Excludes the display that comes with it.
+    - id: d
+      text: None
+      why: One fits.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C164
+    prompt: '''We controlled for 40 variables'' — your response?'
+    options:
+    - id: a
+      text: 'Show me the DAG: which are confounders, mediators, colliders?'
+      correct: true
+      why: More controls can add bias.
+    - id: b
+      text: Great
+      why: Not necessarily.
+    - id: c
+      text: Add 40 more
+      why: No.
+    - id: d
+      text: Use none
+      why: Confounding.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C163
+    prompt: Explain to the credit committee why delinquency 'barely matters' in booked-account analysis.
+    model: "We only see applicants we approved, and approval already screened out people with low scores and delinquencies. Among approved accounts the two look nearly unrelated (r = {{ a.d4_corr_bd_booked }}), but among all applicants the relationship is three times stronger (r = {{ a.d4_corr_bd_all }}). Conclusions about who to approve must account for that selection (reject inference)."
+    rubric: 'Full: selection + numbers + implication. Partial: selection only.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C164
+    prompt: An important confounder is unmeasured. Best response?
+    options:
+    - id: a
+      text: Design a test or use a quasi-experiment; report sensitivity
+      correct: true
+      why: Adjustment cannot fix it.
+    - id: b
+      text: Ignore it
+      why: Bias.
+    - id: c
+      text: Add more measured controls
+      why: Doesn't fix.
+    - id: d
+      text: Use a bigger sample
+      why: Bias remains.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C164
+    prompt: Separate display ROI is needed. Recommendation?
+    options:
+    - id: a
+      text: A factorial test (promotion × display)
+      correct: true
+      why: Varies them independently.
+    - id: b
+      text: Use the regression coefficient
+      why: Imprecise.
+    - id: c
+      text: Assume 50/50 split
+      why: Arbitrary.
+    - id: d
+      text: Ask suppliers
+      why: No.
+- id: L4.5-F
+  title: L4.5 End-to-end tests (Basic → Advanced)
+  lesson: L4.5
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C154
+    prompt: Unit of analysis for the Hair Care store test?
+    options:
+    - id: a
+      text: Store
+      correct: true
+      why: Unit of randomisation.
+    - id: b
+      text: Line
+      why: Pseudo-replication.
+    - id: c
+      text: Week
+      why: No.
+    - id: d
+      text: Customer
+      why: Not randomised.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C151
+    prompt: Other categories' revenue effect in test stores (%)?
+    answer: "{{ a.d4_guard_other_pct }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: "p = {{ a.d4_guard_other_p }} — no cannibalisation detected."
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C157
+    prompt: Challenger cure-rate gain (pp)?
+    answer: "{{ a.d4_f16_diff }}"
+    tolerance_abs: 0.2
+    explanation: "CI {{ a.d4_f16_ci[0] }}–{{ a.d4_f16_ci[1] }}."
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C157
+    prompt: Balance on pre-treatment covariates is best summarised with…
+    options:
+    - id: a
+      text: Standardised mean differences (< 0.1 is good)
+      correct: true
+      why: "Max {{ a.d4_f16_max_smd }}."
+    - id: b
+      text: p-values
+      why: Depend on n.
+    - id: c
+      text: Means only
+      why: Scale-dependent.
+    - id: d
+      text: Nothing
+      why: Check it.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C151
+    prompt: A guardrail 'breach' means…
+    options:
+    - id: a
+      text: Its CI lies entirely on the bad side
+      correct: true
+      why: Evidence of harm.
+    - id: b
+      text: Point estimate slightly worse
+      why: Not enough.
+    - id: c
+      text: Any change
+      why: No.
+    - id: d
+      text: p > 0.05
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C157
+    prompt: "R09 rollout threshold is 10%; CI {{ a.d4_r09_ci[0] }}–{{ a.d4_r09_ci[1] }}%. Recommendation?"
+    options:
+    - id: a
+      text: Roll out with a holdout and review
+      correct: true
+      why: Real effect; threshold inside CI.
+    - id: b
+      text: Don't roll out
+      why: Effect is real and likely above threshold.
+    - id: c
+      text: Re-run identical test
+      why: Little to gain.
+    - id: d
+      text: Roll out without monitoring
+      why: Misses learning.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C157
+    prompt: "Recovery amount difference is +{{ a.d4_f16_rec_diff | n }} (CI {{ a.d4_f16_rec_ci[0] | n }} to {{ a.d4_f16_rec_ci[1] | n }}). Conclusion?"
+    options:
+    - id: a
+      text: Inconclusive — too noisy
+      correct: true
+      why: CI includes 0.
+    - id: b
+      text: Recovery improves
+      why: Not established.
+    - id: c
+      text: Recovery falls
+      why: No.
+    - id: d
+      text: Test failed
+      why: Primary succeeded.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C157
+    prompt: Why keep a holdout after rollout?
+    options:
+    - id: a
+      text: To measure the real post-launch effect and catch decay
+      correct: true
+      why: Learning continues.
+    - id: b
+      text: Regulation
+      why: No.
+    - id: c
+      text: To reduce costs
+      why: No.
+    - id: d
+      text: Not needed
+      why: Valuable.
+- id: L4.5-L
+  title: L4.5 Decision memos (Leader)
+  lesson: L4.5
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C157
+    prompt: Complaints rose significantly in the challenger arm while cure rate improved. Decision?
+    options:
+    - id: a
+      text: Don't switch yet; investigate with conduct risk — guardrail breach
+      correct: true
+      why: Guardrails can veto.
+    - id: b
+      text: Switch — cure rate matters most
+      why: Ignores pre-agreed guardrail.
+    - id: c
+      text: Ignore complaints
+      why: No.
+    - id: d
+      text: Average the two
+      why: Not comparable.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C157
+    prompt: First line of a decision memo?
+    options:
+    - id: a
+      text: The recommendation
+      correct: true
+      why: Bottom line up front.
+    - id: b
+      text: The method
+      why: Later.
+    - id: c
+      text: The p-value
+      why: No.
+    - id: d
+      text: Thanks
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C157
+    prompt: Write the three-sentence recommendation for the Hair Care rollout.
+    model: "Roll out the Hair Care feature to all stores with a 4-store holdout. The randomised test showed a {{ a.d4_r09_lift }}% lift in units (95% CI {{ a.d4_r09_ci[0] }}–{{ a.d4_r09_ci[1] }}%; CUPED {{ a.d4_store_cuped_lift_pct }}%), with no detectable effect on other categories. The effect is probably but not certainly above our 10% threshold, so we will review the holdout comparison after 12 weeks."
+    rubric: 'Full: action + evidence with CI + guardrail + uncertainty/review. Partial: 2–3.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C157
+    prompt: The challenger test was under-powered but significant. How should this affect the next test?
+    options:
+    - id: a
+      text: Size the next test properly; don't rely on luck
+      correct: true
+      why: "Power {{ a.d3_power_actual_3pp }}% for target."
+    - id: b
+      text: Use the same size
+      why: Still under-powered.
+    - id: c
+      text: Skip testing
+      why: No.
+    - id: d
+      text: Halve it
+      why: Worse.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C151
+    prompt: Which check is the leader's responsibility rather than the analyst's?
+    options:
+    - id: a
+      text: Whether the effect, guardrails and risks justify the decision
+      correct: true
+      why: Judgement.
+    - id: b
+      text: Running the chi-square
+      why: Analyst.
+    - id: c
+      text: Writing SQL
+      why: Analyst.
+    - id: d
+      text: Choosing plot colours
+      why: No.
+- id: D4-GATE
+  title: Day 4 gate (pass 75%)
+  lesson: D4
+  track: Mixed
+  pass_mark: 75
+  questions:
+  - id: g01
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C152
+    prompt: SRM detected. First action?
+    options:
+    - id: a
+      text: Stop reading results; diagnose
+      correct: true
+      why: Hygiene gate.
+    - id: b
+      text: Report the effect with a caveat
+      why: Possibly biased.
+    - id: c
+      text: Bayesian analysis
+      why: Same data.
+    - id: d
+      text: Extend the test
+      why: Doesn't fix.
+  - id: g02
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C152
+    prompt: e-coupon SRM p-value is about 6e-08. Is the test valid as logged? (1 = yes, 0 = no)
+    answer: '0'
+    tolerance_abs: 0
+    explanation: Broken.
+  - id: g03
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C151
+    prompt: Guardrails are…
+    options:
+    - id: a
+      text: Metrics that must not get worse
+      correct: true
+      why: Protect the business.
+    - id: b
+      text: Secondary success metrics
+      why: Different.
+    - id: c
+      text: Optional
+      why: No.
+    - id: d
+      text: The primary metric
+      why: No.
+  - id: g04
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C156
+    prompt: CUPED gain is large when…
+    options:
+    - id: a
+      text: The pre-period covariate is highly correlated with the outcome
+      correct: true
+      why: ρ².
+    - id: b
+      text: n is large
+      why: Not the driver.
+    - id: c
+      text: The outcome is binary
+      why: No.
+    - id: d
+      text: Always
+      why: No.
+  - id: g05
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C155
+    prompt: Stopping at the first daily p < 0.05…
+    options:
+    - id: a
+      text: Inflates false positives
+      correct: true
+      why: Peeking.
+    - id: b
+      text: Is fine
+      why: No.
+    - id: c
+      text: Reduces bias
+      why: No.
+    - id: d
+      text: Is required
+      why: No.
+  - id: g06
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C161
+    prompt: Bayesian A/B gives…
+    options:
+    - id: a
+      text: P(B > A) and expected loss
+      correct: true
+      why: Decision quantities.
+    - id: b
+      text: Only p-values
+      why: No.
+    - id: c
+      text: Causal effects without randomisation
+      why: No.
+    - id: d
+      text: Immunity to SRM
+      why: No.
+  - id: g07
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C159
+    prompt: Beta(1,1) + 3 successes in 10 →
+    options:
+    - id: a
+      text: Beta(4, 8)
+      correct: true
+      why: 1+3, 1+7.
+    - id: b
+      text: Beta(3, 7)
+      why: Missing prior.
+    - id: c
+      text: Beta(4, 11)
+      why: No.
+    - id: d
+      text: Beta(1, 1)
+      why: No update.
+  - id: g08
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C164
+    prompt: Never adjust for a…
+    options:
+    - id: a
+      text: Collider
+      correct: true
+      why: Creates bias.
+    - id: b
+      text: Confounder
+      why: Should adjust.
+    - id: c
+      text: Pre-treatment covariate
+      why: Usually fine.
+    - id: d
+      text: Stratification variable
+      why: Fine.
+  - id: g09
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C164
+    prompt: Unadjusted promotion effect is negative, adjusted positive. Cause?
+    options:
+    - id: a
+      text: Confounding by store format
+      correct: true
+      why: Simpson.
+    - id: b
+      text: Random error
+      why: No.
+    - id: c
+      text: Collider
+      why: No.
+    - id: d
+      text: Measurement error
+      why: No.
+  - id: g10
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C154
+    prompt: Store-randomised test — analyse at…
+    options:
+    - id: a
+      text: Store level
+      correct: true
+      why: Unit of randomisation.
+    - id: b
+      text: Line level
+      why: No.
+    - id: c
+      text: Customer level
+      why: No.
+    - id: d
+      text: Any level
+      why: No.
+  - id: g11
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C157
+    prompt: 'Champion/challenger with planned 80/20 split: SRM test against…'
+    options:
+    - id: a
+      text: 80/20
+      correct: true
+      why: The plan.
+    - id: b
+      text: 50/50
+      why: Not the plan.
+    - id: c
+      text: No test needed
+      why: Always check.
+    - id: d
+      text: 70/30
+      why: No.
+  - id: g12
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C157
+    prompt: Effect real, threshold inside CI. Best decision?
+    options:
+    - id: a
+      text: Ship with a holdout and review
+      correct: true
+      why: Balance learning and value.
+    - id: b
+      text: Reject
+      why: Too cautious.
+    - id: c
+      text: Ship without monitoring
+      why: Misses learning.
+    - id: d
+      text: Re-run forever
+      why: Costly.

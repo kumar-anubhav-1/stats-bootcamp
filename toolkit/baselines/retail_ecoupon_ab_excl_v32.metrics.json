@@ -1,0 +1,91 @@
+{
+  "arms": [
+    "treatment",
+    "control"
+  ],
+  "unit": "row",
+  "binary": true,
+  "counts": {
+    "treatment": 3612,
+    "control": 3601
+  },
+  "planned_split": {
+    "treatment": 0.5,
+    "control": 0.5
+  },
+  "srm_p": 0.896947,
+  "srm_fail": false,
+  "srm_by_segment": {
+    "app_version=3.1": {
+      "n_t": 1742,
+      "n_c": 1781,
+      "share_t": 0.494465,
+      "p": 0.511139
+    },
+    "app_version=3.3": {
+      "n_t": 1870,
+      "n_c": 1820,
+      "share_t": 0.506775,
+      "p": 0.410447
+    },
+    "platform=android": {
+      "n_t": 2022,
+      "n_c": 2008,
+      "share_t": 0.501737,
+      "p": 0.825455
+    },
+    "platform=ios": {
+      "n_t": 1590,
+      "n_c": 1593,
+      "share_t": 0.499529,
+      "p": 0.957593
+    }
+  },
+  "primary": {
+    "t_mean": 0.11794,
+    "c_mean": 0.100805,
+    "diff": 0.017135,
+    "se": 0.007348,
+    "ci_low": 0.002734,
+    "ci_high": 0.031536,
+    "p": 0.019742,
+    "rel_lift": 0.16998,
+    "n_t": 3612,
+    "n_c": 3601
+  },
+  "cuped": {
+    "t_mean": 0.1182,
+    "c_mean": 0.100545,
+    "diff": 0.017655,
+    "se": 0.007296,
+    "ci_low": 0.003353,
+    "ci_high": 0.031958,
+    "p": 0.01555,
+    "rel_lift": 0.175144,
+    "n_t": 3612,
+    "n_c": 3601,
+    "theta": 0.045693,
+    "variance_reduction": 0.013958
+  },
+  "bayes": {
+    "p_treatment_better": 0.98987,
+    "ci_low": 0.002686,
+    "ci_high": 0.031518,
+    "expected_loss_if_ship": 2.6e-05,
+    "expected_loss_if_keep": 0.017126
+  },
+  "guardrails": {
+    "revenue_14d": {
+      "t": 4.67588,
+      "c": 3.853202,
+      "diff": 0.822679,
+      "ci_low": 0.126864,
+      "ci_high": 1.518493,
+      "p": 0.020493,
+      "direction": "lower_is_worse",
+      "breach": false
+    }
+  },
+  "decision": "SHIP WITH CAUTION \u2014 positive effect, but the CI includes values below the practical threshold.",
+  "looks_naive_significant": 9
+}

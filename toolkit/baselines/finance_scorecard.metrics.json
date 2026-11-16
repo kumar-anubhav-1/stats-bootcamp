@@ -1,0 +1,44 @@
+{
+  "iv": {
+    "bureau_score": 1.346155,
+    "acquisition_channel": 0.44842,
+    "income_annual": 0.202668,
+    "inquiries_6m": 0.191868,
+    "utilisation": 0.133272,
+    "age": 0.082875,
+    "dti": 0.042571,
+    "tenure_months_with_bank": 0.008318
+  },
+  "features_in_scorecard": [
+    "bureau_score",
+    "utilisation",
+    "income_annual",
+    "acquisition_channel",
+    "dti",
+    "inquiries_6m",
+    "age"
+  ],
+  "gini": 0.65386,
+  "ks": 0.51,
+  "score_mean": 602.80048,
+  "pdo": 20.0,
+  "base_score": 600.0,
+  "base_odds": 50.0,
+  "vintage_bad_rate": {
+    "2023Q1": 0.023935,
+    "2023Q2": 0.02897,
+    "2023Q3": 0.029457,
+    "2023Q4": 0.027752,
+    "2024Q1": 0.021286,
+    "2024Q2": 0.019288,
+    "2024Q3": 0.024535,
+    "2024Q4": 0.029963,
+    "2025Q1": 0.028818,
+    "2025Q2": 0.088171,
+    "2025Q3": 0.109451
+  },
+  "_tolerance": {
+    "rtol": 0.02,
+    "atol": 0.01
+  }
+}

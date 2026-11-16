@@ -1,0 +1,12 @@
+# L7.2/L7.3: weekly chain Beverages units — baselines vs ETS vs regression with Fourier seasonality + holiday + temperature.
+recipe: rcp_forecast
+dataset:
+  name: northstar_weekly_store_category
+  path: data/retail/weekly_store_category.parquet
+  joins:
+    - {path: data/retail/weekly_store.parquet, keys: [store_id, week], columns: [avg_temperature_c, holiday_flag]}
+columns: {time: week, target: units, exog: [holiday_flag, avg_temperature_c]}
+filters:
+  - "category == 'Beverages'"
+params: {season_length: 52, horizon: 8, train_end: 78, origins: [78, 86, 94], models: [naive, seasonal_naive, moving_avg, holt_damped, regression_fourier, sarimax], fourier_k: 3, log: true}
+output: {folder: "outputs/{recipe}/{date}_retail_forecast_beverages"}

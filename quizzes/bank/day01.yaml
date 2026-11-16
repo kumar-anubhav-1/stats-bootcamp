@@ -1,0 +1,1839 @@
+quizzes:
+- id: L1.1-F
+  title: L1.1 Types, grain, tidy data (Basic → Advanced)
+  lesson: L1.1
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C002
+    prompt: '`city_tier` takes values 1, 2, 3. What is its scale?'
+    options:
+    - id: a
+      text: Ordinal (ordered categories)
+      correct: true
+      why: Tiers are ordered labels; differences between them are not measured quantities.
+    - id: b
+      text: Ratio
+      why: There is no true zero or meaningful ratio.
+    - id: c
+      text: Interval
+      why: Gaps between tiers are not equal measured amounts.
+    - id: d
+      text: Continuous
+      why: Only three values.
+  - id: q2
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C002
+    prompt: Which summary is *not* meaningful for `region`?
+    options:
+    - id: a
+      text: Mean
+      correct: true
+      why: Nominal categories have no numeric meaning.
+    - id: b
+      text: Mode
+      why: Valid for nominal data.
+    - id: c
+      text: Count per category
+      why: Valid.
+    - id: d
+      text: Percentage share
+      why: Valid.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C003
+    prompt: Average number of sales lines per basket (clean sales lines)?
+    answer: "{{ a.d1_lines_per_basket }}"
+    tolerance_abs: 0.05
+    explanation: Lines ÷ distinct baskets. Basket metrics need aggregation from line grain.
+  - id: q4
+    type: spot_error
+    difficulty: 2
+    concepts:
+    - C003
+    prompt: "A dashboard shows 'average basket value = {{ a.d1_mean_line_rev }}'. The panel's median basket is {{ a.d1_b_median }}. Most likely error?"
+    options:
+    - id: a
+      text: It averaged line revenue, not basket revenue (wrong grain)
+      correct: true
+      why: "Mean line revenue is about {{ a.d1_mean_line_rev }}."
+    - id: b
+      text: It used the median
+      why: The median basket is much higher.
+    - id: c
+      text: Returns were included
+      why: Would not make it this small.
+    - id: d
+      text: Nothing — dashboards are correct
+      why: Grain mismatch.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C005
+    prompt: How many rows result from joining `transactions` to `weekly_store_category` on store_id and category only (forgetting week)?
+    answer: "{{ a.d1_join_rows_bad }}"
+    tolerance_abs: 0
+    explanation: 'Each line matches all 104 weeks: a join explosion.'
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C005
+    prompt: Best protection against join explosions?
+    options:
+    - id: a
+      text: State both grains and the key, predict the row count, check it after the join
+      correct: true
+      why: Makes the error visible immediately.
+    - id: b
+      text: Use an inner join
+      why: Inner joins explode too.
+    - id: c
+      text: Drop duplicates after joining
+      why: Hides the symptom; sums may still be wrong.
+    - id: d
+      text: Join on more columns at random
+      why: No.
+  - id: q7
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C004
+    prompt: 'True or false: a table with columns `sales_jan`, `sales_feb`, … `sales_dec` is tidy.'
+    options:
+    - id: a
+      text: False — month is a variable stored in column names; tidy form has month and sales columns
+      correct: true
+      why: One column per variable.
+    - id: b
+      text: True — one row per store
+      why: Variables are spread across columns.
+    - id: c
+      text: True, if there are no nulls
+      why: Tidiness is about structure, not completeness.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C006
+    prompt: What comes **first** in the EDA workflow?
+    options:
+    - id: a
+      text: The business question, metric and grain
+      correct: true
+      why: Everything else depends on it.
+    - id: b
+      text: A correlation matrix
+      why: Exploring without a question invites spurious findings.
+    - id: c
+      text: Hypothesis tests
+      why: Tests come last.
+    - id: d
+      text: Removing outliers
+      why: Only after profiling and validation.
+- id: L1.1-L
+  title: L1.1 Metric definitions and joins (Leader)
+  lesson: L1.1
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C003
+    prompt: "Two teams report average balance {{ a.d1_bal_mean_account | n }} and {{ a.d1_bal_mean_panel | n }}. Best response?"
+    options:
+    - id: a
+      text: Publish one definition (grain, window, filters) and an owner; both may be correct for their grain
+      correct: true
+      why: Account snapshot vs account-month average.
+    - id: b
+      text: Pick the larger one
+      why: Arbitrary.
+    - id: c
+      text: Average the two
+      why: Meaningless.
+    - id: d
+      text: Ask both to redo the work
+      why: The definition is missing, not the work.
+  - id: q2
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C005
+    prompt: After a pipeline change, revenue rose 104-fold overnight in one report. First question?
+    options:
+    - id: a
+      text: Row counts before and after each join in the new pipeline
+      correct: true
+      why: A non-unique key multiplies rows.
+    - id: b
+      text: Which marketing campaign ran
+      why: No campaign does that.
+    - id: c
+      text: Is the chart axis correct?
+      why: The data are wrong, not the chart.
+    - id: d
+      text: Can we publish it?
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C003
+    prompt: Write the coaching question you use to check that a junior understands a table's grain, and what a good answer sounds like.
+    model: '"Read me the first row in business words." Good answer: "Customer C00170 bought three 750 g packs of FarmFresh fruit at store S013 on 6 Nov 2025, as one line of basket B001548" — names the entity, not just column values.'
+    rubric: 'Full: question forces a business description of one row, with an example. Partial: asks about keys only.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C006
+    prompt: A junior explores 200 cross-tabs and reports the five most 'interesting'. Main risk?
+    options:
+    - id: a
+      text: False discoveries from undirected exploration (forking paths)
+      correct: true
+      why: Without a prior question, some patterns are chance.
+    - id: b
+      text: Too few charts
+      why: No.
+    - id: c
+      text: Wrong colours
+      why: No.
+    - id: d
+      text: None
+      why: See a.
+  - id: q5
+    type: multi
+    difficulty: 2
+    concepts:
+    - C003
+    - C005
+    prompt: Which belong in every review of a pipeline output? (Select all.)
+    options:
+    - id: a
+      text: Grain of each table
+      correct: true
+      why: Prevents wrong aggregations.
+    - id: b
+      text: Row counts around joins
+      correct: true
+      why: Catches explosions and losses.
+    - id: c
+      text: KPI definitions with an owner
+      correct: true
+      why: Prevents dueling numbers.
+    - id: d
+      text: The analyst's favourite chart type
+      why: Not a control.
+- id: L1.2-F
+  title: L1.2 Data-quality checks (Basic → Advanced)
+  lesson: L1.2
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C008
+    prompt: '`revenue` should equal quantity × unit price. Which quality dimension does that rule test?'
+    options:
+    - id: a
+      text: Accuracy / consistency
+      correct: true
+      why: Related fields must agree.
+    - id: b
+      text: Timeliness
+      why: About dates.
+    - id: c
+      text: Uniqueness
+      why: About duplicates.
+    - id: d
+      text: Completeness
+      why: About nulls.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C010
+    prompt: How many sales lines have negative quantity but are not flagged as returns?
+    answer: "{{ a.d1_neg_nonreturn }}"
+    tolerance_abs: 0
+    explanation: Rule `negative_qty_not_return` — an error to quarantine.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C011
+    prompt: How many lines have a unit price more than 20× the list price?
+    answer: "{{ a.d1_price100 }}"
+    tolerance_abs: 0
+    explanation: Decimal-shift entry errors (R02).
+  - id: q4
+    type: numeric
+    difficulty: 3
+    concepts:
+    - C012
+    prompt: By what percentage does raw sales revenue overstate clean revenue (duplicates, sign errors, decimal shifts removed)?
+    answer: "{{ a.d1_rev_inflation_pct }}"
+    tolerance_abs: 0.3
+    unit: '%'
+    explanation: Small row counts, large impact — always express issues in business units.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C008
+    prompt: A rule flags 35% of all lines. Most likely?
+    options:
+    - id: a
+      text: The rule misunderstands the field and needs review with the business
+      correct: true
+      why: Genuine errors are rarely that common; e.g. regional prices above list are legitimate.
+    - id: b
+      text: 35% of the data are errors — delete them
+      why: Check the rule first.
+    - id: c
+      text: The rule is fine; ignore it
+      why: Investigate.
+    - id: d
+      text: Use a different tool
+      why: Not the issue.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C011
+    prompt: From week 80, some online discounts appear as 0.22 instead of 22. Best description?
+    options:
+    - id: a
+      text: A scale/unit change starting at a point in time (pipeline change)
+      correct: true
+      why: Time-bounded and channel-specific → process change (R19).
+    - id: b
+      text: Customers got smaller discounts
+      why: The pattern is a unit change.
+    - id: c
+      text: Random noise
+      why: It starts on a date in one channel.
+    - id: d
+      text: A duplicate problem
+      why: No.
+  - id: q7
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C009
+    prompt: 'True or false: when two rows share a key but differ in other columns, keep the first and move on.'
+    options:
+    - id: a
+      text: False — conflicting records need investigation; 'first' is arbitrary
+      correct: true
+      why: You may keep the wrong version.
+    - id: b
+      text: True — order means recency
+      why: Not guaranteed.
+    - id: c
+      text: True, if it is fewer than 1% of rows
+      why: Small share does not make an arbitrary choice correct.
+  - id: q8
+    type: multi
+    difficulty: 2
+    concepts:
+    - C008
+    prompt: What should a data-quality log contain for each issue? (Select all.)
+    options:
+    - id: a
+      text: Rule and severity
+      correct: true
+      why: What and how serious.
+    - id: b
+      text: Rows affected and examples
+      correct: true
+      why: Size and traceability.
+    - id: c
+      text: Treatment and who was informed
+      correct: true
+      why: Accountability; fix at source.
+    - id: d
+      text: Nothing — fix silently
+      why: Unreviewable.
+- id: L1.2-L
+  title: L1.2 Data-quality decisions (Leader)
+  lesson: L1.2
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C012
+    prompt: "{{ a.d1_rev_mismatch_s033 }} of {{ a.d1_rev_mismatch }} revenue/price mismatches occur in one store. Best next step?"
+    options:
+    - id: a
+      text: Escalate to audit with evidence and run further integrity tests (e.g. Benford) before contacting the store
+      correct: true
+      why: Concentration suggests a local process or integrity problem.
+    - id: b
+      text: Recompute revenue and continue
+      why: Hides a possible control failure.
+    - id: c
+      text: Ask the store manager to explain
+      why: May compromise an investigation.
+    - id: d
+      text: Ignore — under 1% of rows
+      why: Concentration matters more than share.
+  - id: q2
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C011
+    prompt: A KPI using discount depth shifts sharply from week 80 in online channels only. Decision?
+    options:
+    - id: a
+      text: Freeze the affected KPI and raise a source fix; don't patch it silently in one report
+      correct: true
+      why: Every consumer of the field is affected.
+    - id: b
+      text: Divide by 100 in your report only
+      why: Other reports stay wrong; undocumented.
+    - id: c
+      text: Publish — it's a real change
+      why: Not without verification.
+    - id: d
+      text: Delete online data
+      why: Destroys information.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C008
+    prompt: A junior says 'I cleaned the data'. What do you ask for, and what would make you accept the analysis?
+    model: 'The issue log: each rule, severity, rows affected, treatment, who was informed — plus the impact of each issue on the key number and confirmation nothing was deleted without quarantine. Accept when the log exists, impacts are quantified, and treatments are defensible.'
+    rubric: 'Full: log + impact + treatment/escalation. Partial: asks for counts only.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C008
+    prompt: Who should define validity rules for business fields?
+    options:
+    - id: a
+      text: Data team and business owner together
+      correct: true
+      why: Rules encode business reality; analysts encode them correctly.
+    - id: b
+      text: The analyst alone
+      why: Risks rules like 'price above list = error'.
+    - id: c
+      text: The software vendor
+      why: Lacks business context.
+    - id: d
+      text: Nobody — let the data speak
+      why: Data cannot validate themselves.
+  - id: q5
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C010
+    prompt: "{{ a.d1_util_over_1 }} cards have utilisation > 100%; their default rate is {{ a.d1_def_over1_pct }}% vs {{ a.d1_def_notover1_pct }}%. A junior capped utilisation at 1. Response?"
+    options:
+    - id: a
+      text: 'Undo: over-limit is genuine and highly informative; treat as a warning, not an error'
+      correct: true
+      why: Capping destroys a strong risk signal.
+    - id: b
+      text: Approve — values above 1 are impossible
+      why: They are possible (interest, fees).
+    - id: c
+      text: Delete those accounts
+      why: Removes the riskiest customers.
+    - id: d
+      text: Cap at 0.9 instead
+      why: Same problem.
+- id: L1.3-F
+  title: L1.3 Missing data (Basic → Advanced)
+  lesson: L1.3
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C014
+    prompt: "Age is missing for {{ a.d1_age_miss_nonmember_pct }}% of non-members but {{ a.d1_age_miss_member_pct }}% of members. Mechanism?"
+    options:
+    - id: a
+      text: MAR — explained by an observed field (loyalty)
+      correct: true
+      why: Missingness depends on loyalty status, which we observe.
+    - id: b
+      text: MCAR
+      why: Rates differ by group.
+    - id: c
+      text: MNAR — proven
+      why: MNAR cannot be proven from data; this pattern is explained by an observed field.
+    - id: d
+      text: Not a missing-data issue
+      why: It is.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C015
+    prompt: 12-month default rate (%) for accounts with income missing?
+    answer: "{{ a.d1_def_inc_missing_pct }}"
+    tolerance_abs: 0.1
+    unit: '%'
+    explanation: "Versus {{ a.d1_def_inc_known_pct }}% when known — missingness is a risk signal."
+  - id: q3
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C016
+    prompt: "Missing temperature vs region: line-level p ≈ {{ a.d1_temp_miss_region_p_line }}, region-day p = {{ a.d1_temp_miss_region_p }}. Which to trust and why?"
+    options:
+    - id: a
+      text: Region-day — values go missing per region-day, so lines are not independent
+      correct: true
+      why: Clustered rows make line-level tests falsely precise.
+    - id: b
+      text: Line level — more data is better
+      why: More rows, not more independent information.
+    - id: c
+      text: Neither — tests are useless
+      why: The right unit gives a valid test.
+    - id: d
+      text: Average them
+      why: No.
+  - id: q4
+    type: tf_reason
+    difficulty: 3
+    concepts:
+    - C016
+    prompt: 'True or false: household-size missingness passed every MCAR test, so it is MCAR.'
+    options:
+    - id: a
+      text: False — tests can only rule MCAR out; baskets are bigger when it's missing (MNAR signature)
+      correct: true
+      why: "Lines per basket {{ a.d1_hh_lines_ratio }}× higher."
+    - id: b
+      text: True — tests passed
+      why: Absence of evidence.
+    - id: c
+      text: True, because the rate is under 20%
+      why: Rate says nothing about mechanism.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C017
+    prompt: A model uses income and utilisation and drops incomplete rows. What % of accounts are dropped?
+    answer: "{{ a.d1_listwise_drop_pct }}"
+    tolerance_abs: 0.2
+    unit: '%'
+    explanation: Utilisation is structurally missing for all loans — silent row loss.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C018
+    prompt: Best treatment for informative (MNAR-like) missing income in a scorecard?
+    options:
+    - id: a
+      text: Keep 'missing' as its own category / bin
+      correct: true
+      why: Preserves the risk signal.
+    - id: b
+      text: Mean imputation
+      why: Hides the signal and shrinks variance.
+    - id: c
+      text: Delete the rows
+      why: Removes the riskiest customers.
+    - id: d
+      text: Impute zero
+      why: Creates a fake value.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C018
+    prompt: What does mean imputation do to a variable's distribution?
+    options:
+    - id: a
+      text: Shrinks its variance and weakens its correlations
+      correct: true
+      why: Many identical values at the mean.
+    - id: b
+      text: Nothing
+      why: It changes spread.
+    - id: c
+      text: Increases variance
+      why: Opposite.
+    - id: d
+      text: Makes it normal
+      why: No.
+  - id: q8
+    type: multi
+    difficulty: 2
+    concepts:
+    - C013
+    - C014
+    - C015
+    prompt: Which are part of diagnosing missingness? (Select all.)
+    options:
+    - id: a
+      text: Missing rate by segment
+      correct: true
+      why: Detects MAR patterns.
+    - id: b
+      text: Testing at the unit where values go missing
+      correct: true
+      why: Avoids clustered false precision.
+    - id: c
+      text: Comparing outcomes for missing vs present
+      correct: true
+      why: Reveals MNAR signatures.
+    - id: d
+      text: Imputing first, then looking
+      why: Destroys the evidence.
+- id: L1.3-L
+  title: L1.3 Missing data decisions (Leader)
+  lesson: L1.3
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C017
+    prompt: "Card default is {{ a.d1_cards_default_pct }}%, but {{ a.d1_cards_listwise_default_pct }}% in the junior's model sample after dropping missing income. Implication?"
+    options:
+    - id: a
+      text: The model under-states risk because risky customers were dropped — reject the sample
+      correct: true
+      why: Deletion under MNAR biases estimates.
+    - id: b
+      text: Fine — it's only half a point
+      why: Large relative to a ~4% base.
+    - id: c
+      text: The model will over-state risk
+      why: Opposite.
+    - id: d
+      text: No effect on provisioning
+      why: PD feeds provisions.
+  - id: q2
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C017
+    prompt: "A modelling sample has {{ a.d1_listwise_rows | n }} of {{ a.fi_rows | n }} accounts. What do you ask?"
+    options:
+    - id: a
+      text: Which fields caused the loss and which segments disappeared
+      correct: true
+      why: All personal loans vanished because utilisation is not applicable to them.
+    - id: b
+      text: Can you add more features?
+      why: More features usually mean more row loss.
+    - id: c
+      text: Is the AUC high?
+      why: Irrelevant if the population is wrong.
+    - id: d
+      text: Nothing
+      why: "A {{ a.d1_listwise_drop_pct }}% drop needs explanation."
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C015
+    prompt: Marketing wants to impute household size with the mean to build a family segment. What do you advise?
+    model: "Don't: missingness is concentrated among large households (baskets {{ a.d1_hh_lines_ratio }}× bigger when missing), so mean imputation would push likely-large households to the middle and under-size the family segment. Keep 'not stated', use behavioural proxies (basket size, category mix), and show results with and without the missing group."
+    rubric: 'Full: identifies MNAR evidence + alternative + sensitivity. Partial: rejects imputation without evidence or alternative.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C013
+    prompt: What can a missingness test (e.g. Little's MCAR) prove?
+    options:
+    - id: a
+      text: Only that data are NOT MCAR
+      correct: true
+      why: It can reject MCAR; it cannot establish MCAR or rule out MNAR.
+    - id: b
+      text: That data are MCAR
+      why: Failing to reject ≠ proof.
+    - id: c
+      text: That data are MNAR
+      why: Never from data alone.
+    - id: d
+      text: The best imputation method
+      why: No.
+  - id: q5
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C017
+    prompt: Utilisation is blank for every personal loan. How should the team treat it?
+    options:
+    - id: a
+      text: 'As ''not applicable'': model products separately or encode explicitly'
+      correct: true
+      why: Structural, not random, missingness.
+    - id: b
+      text: Impute the card average
+      why: Invents data for products where the concept doesn't exist.
+    - id: c
+      text: Drop loans
+      why: Loses a product line.
+    - id: d
+      text: Set to zero
+      why: Implies zero usage.
+- id: L1.4-F
+  title: L1.4 Centre, spread, shape (Basic → Advanced)
+  lesson: L1.4
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C022
+    prompt: Median basket revenue (clean sales baskets)?
+    answer: "{{ a.d1_b_median }}"
+    tolerance_abs: 0.2
+    explanation: "Mean {{ a.d1_b_mean }} — pulled up by the tail."
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C020
+    prompt: What % of baskets are below the mean basket value?
+    answer: "{{ a.d1_b_share_below_mean }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: The mean is not 'typical' for skewed data.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C027
+    prompt: "Basket SD ({{ a.d1_b_sd }}) exceeds the mean ({{ a.d1_b_mean }}). What does that tell you?"
+    options:
+    - id: a
+      text: The distribution is heavily right-skewed; mean ± SD language is misleading
+      correct: true
+      why: mean − 2 SD would be negative.
+    - id: b
+      text: The data contain errors
+      why: Not necessarily.
+    - id: c
+      text: The data are normal
+      why: Opposite.
+    - id: d
+      text: Nothing
+      why: It is informative.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C031
+    prompt: To compare income variability between students and salaried customers, use…
+    options:
+    - id: a
+      text: Coefficient of variation (SD ÷ mean)
+      correct: true
+      why: Scale-free.
+    - id: b
+      text: Standard deviation
+      why: Depends on the income level.
+    - id: c
+      text: Range
+      why: Driven by extremes.
+    - id: d
+      text: Mode
+      why: Not spread.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C034
+    prompt: Share (%) of panel revenue produced by the top 25 customers?
+    answer: "{{ a.d1_top25_share_pct }}"
+    tolerance_abs: 0.3
+    unit: '%'
+    explanation: Concentration — these are bulk buyers (R07).
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C033
+    prompt: "Excess kurtosis of basket value is {{ a.d1_b_kurt }}. Meaning?"
+    options:
+    - id: a
+      text: Extreme values are far more common than under a normal distribution
+      correct: true
+      why: Heavy tails.
+    - id: b
+      text: The distribution is flat
+      why: That is negative kurtosis.
+    - id: c
+      text: The data are symmetric
+      why: Kurtosis is about tails, not symmetry.
+    - id: d
+      text: There are no outliers
+      why: Opposite.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C024
+    prompt: Which centre measure is robust but uses more of the data than the median?
+    options:
+    - id: a
+      text: Trimmed mean
+      correct: true
+      why: Drops only a fixed share of extremes.
+    - id: b
+      text: Mean
+      why: Not robust.
+    - id: c
+      text: Maximum
+      why: No.
+    - id: d
+      text: Mode
+      why: Not for continuous amounts.
+  - id: q8
+    type: numeric
+    difficulty: 3
+    concepts:
+    - C034
+    prompt: Gini coefficient of customer revenue (3 decimals)?
+    answer: "{{ a.d1_cust_gini }}"
+    tolerance_abs: 0.01
+    explanation: 0 = equal, 1 = one customer has everything.
+- id: L1.4-L
+  title: L1.4 Summaries for decisions (Leader)
+  lesson: L1.4
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C022
+    prompt: '''Average basket up 8% this month'' — the median is flat. Your read?'
+    options:
+    - id: a
+      text: A few large baskets moved the mean; the typical basket did not change
+      correct: true
+      why: Tail-driven change.
+    - id: b
+      text: Customers are spending more
+      why: The median says otherwise.
+    - id: c
+      text: The median is wrong
+      why: No.
+    - id: d
+      text: Prices rose
+      why: Would move the median too.
+  - id: q2
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C034
+    prompt: "Top 1% of accounts hold {{ a.d1_bal_top1_pct }}% of balances. Where does this belong?"
+    options:
+    - id: a
+      text: Risk appetite / concentration limits and key-account oversight
+      correct: true
+      why: Concentration is a management decision.
+    - id: b
+      text: Delete as outliers
+      why: They are your biggest exposures.
+    - id: c
+      text: Ignore — averages cover it
+      why: Averages hide it.
+    - id: d
+      text: Only in the appendix
+      why: It is headline material for risk.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C022
+    - C020
+    prompt: Which basket number goes on the commercial director's slide, and which in the footnote? Justify.
+    model: "Slide: median basket ({{ a.d1_b_median }}) with IQR ({{ a.d1_b_q1 }}–{{ a.d1_b_q3 }}) as 'typical'. Footnote: mean ({{ a.d1_b_mean }}) for revenue planning (mean × baskets = total), the share below the mean ({{ a.d1_b_share_below_mean }}%) and the treatment of bulk buyers."
+    rubric: 'Full: median+IQR for typical, mean for totals, notes treatment. Partial: picks one without justification.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C027
+    prompt: "A junior writes 'basket value = {{ a.d1_b_mean }} ± {{ a.d1_b_sd }} (mean ± SD)'. Coaching point?"
+    options:
+    - id: a
+      text: For skewed amounts use median and percentiles; mean − SD is negative here
+      correct: true
+      why: SD language assumes symmetry.
+    - id: b
+      text: Use two SDs
+      why: Worse.
+    - id: c
+      text: Round the numbers
+      why: Doesn't fix the issue.
+    - id: d
+      text: Fine as is
+      why: Misleading.
+  - id: q5
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C031
+    prompt: Self-employed income has a higher SD than students'. A junior concludes self-employed income is 'more volatile'. Response?
+    options:
+    - id: a
+      text: Compare CV or IQR/median — raw SDs scale with income level
+      correct: true
+      why: Relative spread is the right comparison.
+    - id: b
+      text: Agree
+      why: Not established.
+    - id: c
+      text: Compare maximums
+      why: Driven by single cases.
+    - id: d
+      text: Compare means
+      why: Not spread.
+- id: L1.5-F
+  title: L1.5 Visualising distributions (Basic → Advanced)
+  lesson: L1.5
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C039
+    prompt: An ECDF at x = 650 reads 0.335. Meaning?
+    options:
+    - id: a
+      text: 33.5% of values are at or below 650
+      correct: true
+      why: Definition of the ECDF.
+    - id: b
+      text: 650 is the mean
+      why: No.
+    - id: c
+      text: 33.5% of values equal 650
+      why: Cumulative, not point mass.
+    - id: d
+      text: The density at 650
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C039
+    prompt: Share (%) of 2025Q2–Q3 vintage accounts with bureau score below 650?
+    answer: "{{ a.d1_share_below_650_late }}"
+    tolerance_abs: 0.3
+    unit: '%'
+    explanation: "Versus {{ a.d1_share_below_650_early }}% for earlier vintages."
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C040
+    prompt: On a normal Q-Q plot, points curve upward at the right end. Meaning?
+    options:
+    - id: a
+      text: Heavy right tail / right skew
+      correct: true
+      why: Large values exceed what a normal predicts.
+    - id: b
+      text: Perfect normality
+      why: That is a straight line.
+    - id: c
+      text: Left skew
+      why: Opposite end.
+    - id: d
+      text: Discrete data
+      why: That shows steps.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C035
+    prompt: The default histogram of basket value has one giant bar and a long flat tail. Best fix?
+    options:
+    - id: a
+      text: Plot on a log scale (label it) and add an ECDF
+      correct: true
+      why: Shows the shape honestly.
+    - id: b
+      text: Delete the tail
+      why: Hides real data.
+    - id: c
+      text: Use 3 bins
+      why: Hides even more.
+    - id: d
+      text: Use a pie chart
+      why: No.
+  - id: q5
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C035
+    prompt: 'True or false: a log-scale histogram shows all bank balances.'
+    options:
+    - id: a
+      text: "False — zeros cannot be logged; {{ a.d1_bal_zero_pct }}% of balances are zero and must be reported separately"
+      correct: true
+      why: Silently dropped otherwise.
+    - id: b
+      text: 'True'
+      why: log(0) is undefined.
+    - id: c
+      text: True, if you add 1
+      why: log(x+1) distorts and still needs stating.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C037
+    - C038
+    prompt: To compare basket value across 40 stores at a glance, use…
+    options:
+    - id: a
+      text: Box plots sorted by median
+      correct: true
+      why: Many groups, compact.
+    - id: b
+      text: 40 overlapping density curves
+      why: Unreadable.
+    - id: c
+      text: A pie chart
+      why: No.
+    - id: d
+      text: One histogram
+      why: Loses groups.
+  - id: q7
+    type: spot_error
+    difficulty: 2
+    concepts:
+    - C042
+    prompt: A bar chart shows default rates 3.1% and 3.4% with a y-axis starting at 3.0%. Problem?
+    options:
+    - id: a
+      text: Truncated axis exaggerates a small difference
+      correct: true
+      why: Bars should start at zero.
+    - id: b
+      text: Wrong colours
+      why: Cosmetic.
+    - id: c
+      text: Too few bars
+      why: Not the issue.
+    - id: d
+      text: None
+      why: See a.
+  - id: q8
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C035
+    prompt: "Freedman-Diaconis suggests {{ a.d1_fd_bins }} bins for raw basket values, Sturges {{ a.d1_sturges_bins }}. Why so different?"
+    options:
+    - id: a
+      text: The long tail stretches the range; FD's narrow width creates many empty bins
+      correct: true
+      why: Heavy tails break both rules on the raw scale.
+    - id: b
+      text: One rule is wrong
+      why: Both are reasonable on well-behaved data.
+    - id: c
+      text: Too few baskets
+      why: No.
+    - id: d
+      text: Ties
+      why: No.
+- id: L1.5-L
+  title: L1.5 Reading charts critically (Leader)
+  lesson: L1.5
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C039
+    prompt: ECDFs show recent applicants' bureau scores shifted left across the whole range. First action?
+    options:
+    - id: a
+      text: Investigate the cause (channel mix, marketing) and check model stability (PSI) before performance drops
+      correct: true
+      why: Population drift precedes model degradation.
+    - id: b
+      text: Wait for defaults to confirm
+      why: Too late.
+    - id: c
+      text: Lower the cut-off
+      why: Wrong direction without analysis.
+    - id: d
+      text: Nothing — scores vary
+      why: A whole-curve shift is systematic.
+  - id: q2
+    type: multi
+    difficulty: 2
+    concepts:
+    - C042
+    prompt: Which are misleading-chart red flags? (Select all.)
+    options:
+    - id: a
+      text: Truncated bar axis
+      correct: true
+      why: Exaggerates.
+    - id: b
+      text: Dual axes with arbitrary scaling
+      correct: true
+      why: Manufactures correlation.
+    - id: c
+      text: Percentages without base n
+      correct: true
+      why: Hides uncertainty.
+    - id: d
+      text: Labelled log axis
+      why: Fine when labelled.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C039
+    - C035
+    prompt: Which two charts do you require for any spend or balance distribution, and what three numbers should the junior read off them?
+    model: 'Log-scale histogram (with zeros reported separately) and an ECDF. Read off: median, P90 (or P99) and the share below/above a business threshold.'
+    rubric: 'Full: both charts + three readings + zeros. Partial: one chart.'
+  - id: q4
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C035
+    prompt: A spike appears at exactly 10,000 in an income histogram. Most useful hypothesis?
+    options:
+    - id: a
+      text: Default/rounded entry or manual override — check the source and other round numbers
+      correct: true
+      why: Spikes at round values signal data-entry patterns.
+    - id: b
+      text: Many people earn exactly 10,000
+      why: Possible but less likely than entry patterns.
+    - id: c
+      text: Chart bug
+      why: Check the data first.
+    - id: d
+      text: Remove the spike
+      why: Investigate first.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C040
+    prompt: A junior relies on a normality-test p-value instead of a Q-Q plot with n = 25,000. Coaching point?
+    options:
+    - id: a
+      text: At large n tests reject trivial deviations; the Q-Q plot shows whether deviations matter
+      correct: true
+      why: Visual + context beats a p-value here.
+    - id: b
+      text: Use a smaller sample
+      why: Throws away data.
+    - id: c
+      text: Use a stricter alpha
+      why: Doesn't address the issue.
+    - id: d
+      text: Fine
+      why: See a.
+- id: L1.6-F
+  title: L1.6 Outliers and transformations (Basic → Advanced)
+  lesson: L1.6
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C044
+    prompt: Upper Tukey fence (Q3 + 1.5 × IQR) for clean basket value?
+    answer: "{{ a.d1_tukey_upper }}"
+    tolerance_abs: 0.2
+    explanation: "Q3 {{ a.d1_b_q3 }} + 1.5 × {{ a.d1_b_iqr }}."
+  - id: q2
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C045
+    - C046
+    prompt: "On raw data, plain z > 3 caught {{ a.d1_err_caught_z3 }} of {{ a.d1_err_baskets }} decimal-shift baskets; robust z caught {{ a.d1_err_caught_mz }}. Why?"
+    options:
+    - id: a
+      text: The errors inflate the mean and SD, masking themselves; median and MAD are unaffected
+      correct: true
+      why: Masking.
+    - id: b
+      text: The robust score is stricter
+      why: It is less distorted, not stricter.
+    - id: c
+      text: Chance
+      why: Systematic.
+    - id: d
+      text: z-scores only work on counts
+      why: No.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C043
+    prompt: A bulk buyer's basket is 30× the median. Classification?
+    options:
+    - id: a
+      text: Genuine extreme — keep, consider a separate segment
+      correct: true
+      why: Real behaviour.
+    - id: b
+      text: Error — delete
+      why: It is real.
+    - id: c
+      text: Fraud — report
+      why: No evidence.
+    - id: d
+      text: Missing value
+      why: No.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C048
+    prompt: Skewness of income after a log transform?
+    answer: "{{ a.d1_loginc_skew }}"
+    tolerance_abs: 0.05
+    explanation: "From {{ a.d1_inc_skew }} raw."
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C049
+    prompt: "Box-Cox gives λ = {{ a.d1_boxcox_lambda }} for income. What should you use?"
+    options:
+    - id: a
+      text: A log transform (λ ≈ 0 is the log case) — simpler to explain
+      correct: true
+      why: Coefficients become % effects.
+    - id: b
+      text: The exact Box-Cox λ always
+      why: Little gain, less interpretability.
+    - id: c
+      text: No transform
+      why: Income is very skewed.
+    - id: d
+      text: Square it
+      why: Increases skew.
+  - id: q6
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C051
+    prompt: "A target-encoded noise feature has AUC {{ a.d1_te_auc_leaky }} in-sample and {{ a.d1_te_auc_oof }} out-of-fold. Explanation?"
+    options:
+    - id: a
+      text: Each row's encoding included its own label — leakage
+      correct: true
+      why: Fit encoders inside CV folds.
+    - id: b
+      text: The feature is genuinely predictive
+      why: It is random noise.
+    - id: c
+      text: Out-of-fold is broken
+      why: No.
+    - id: d
+      text: Class imbalance
+      why: No.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C050
+    prompt: Which methods need standardised inputs?
+    options:
+    - id: a
+      text: K-means, KNN and regularised regression
+      correct: true
+      why: Distance- and penalty-based methods depend on scale.
+    - id: b
+      text: Medians
+      why: No.
+    - id: c
+      text: Decision trees
+      why: Scale-invariant.
+    - id: d
+      text: Counting categories
+      why: No.
+  - id: q8
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C047
+    prompt: 'True or false: if removing outliers changes the conclusion, you should report the version without them.'
+    options:
+    - id: a
+      text: False — report both; the sensitivity is itself a key finding
+      correct: true
+      why: Fragile conclusions must be flagged.
+    - id: b
+      text: True — outliers are noise
+      why: They may be signal or genuine.
+    - id: c
+      text: True, if p < 0.05 without them
+      why: That is p-hacking.
+- id: L1.6-L
+  title: L1.6 Outlier policy (Leader)
+  lesson: L1.6
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C047
+    prompt: "Mean basket is {{ a.d1_b_mean }} (keep), {{ a.d1_mean_capped99 }} (cap P99), {{ a.d1_mean_excl_outliers }} (exclude). Pricing results differ by analyst. Best policy?"
+    options:
+    - id: a
+      text: 'Team standard: errors quarantined, genuine extremes kept and reported, bulk buyers modelled as a segment'
+      correct: true
+      why: Removes the analyst effect and preserves information.
+    - id: b
+      text: Always cap at P99
+      why: Arbitrary; hides segments.
+    - id: c
+      text: Let each analyst choose
+      why: Causes the inconsistency.
+    - id: d
+      text: Always exclude outliers
+      why: Deletes signal.
+  - id: q2
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C043
+    prompt: An analyst removed 'outlier' customers with very high return rates before a churn analysis. Concern?
+    options:
+    - id: a
+      text: They may be a returns-abuse signal — investigate rather than delete
+      correct: true
+      why: Signals look like outliers.
+    - id: b
+      text: None
+      why: See a.
+    - id: c
+      text: Should have removed more
+      why: No.
+    - id: d
+      text: Should have capped
+      why: Still hides the signal.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C047
+    prompt: Write the methods note you require whenever outliers are treated.
+    model: Rule used (e.g. robust z > 3.5 on basket value), number and share of units flagged, classification (errors / genuine / signals), treatment for each class, and the key result with and without treatment.
+    rubric: 'Full: rule + counts + classification + treatment + sensitivity. Partial: rule and counts only.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C051
+    prompt: What do you ask about any engineered or encoded feature in a model review?
+    options:
+    - id: a
+      text: How and on which rows it was fitted (inside CV / training only?)
+      correct: true
+      why: Catches leakage.
+    - id: b
+      text: Its colour in the chart
+      why: No.
+    - id: c
+      text: Its name
+      why: No.
+    - id: d
+      text: Its correlation with other features only
+      why: Doesn't detect leakage.
+  - id: q5
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C045
+    prompt: The monitoring team flags baskets with 'mean ± 3 SD'. Recommendation?
+    options:
+    - id: a
+      text: Switch to a robust rule (median/MAD) or percentiles; plain z masks extremes in skewed data
+      correct: true
+      why: Demonstrated on the decimal-shift errors.
+    - id: b
+      text: Use ± 2 SD
+      why: Same masking, more false alarms.
+    - id: c
+      text: Keep it
+      why: Misses errors.
+    - id: d
+      text: Stop monitoring
+      why: No.
+- id: L1.7-F
+  title: L1.7 Relationships (Basic → Advanced)
+  lesson: L1.7
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C058
+    prompt: Before computing a correlation you should…
+    options:
+    - id: a
+      text: Plot a scatter
+      correct: true
+      why: Coefficients hide curves, clusters and single influential points.
+    - id: b
+      text: Remove outliers
+      why: Look first.
+    - id: c
+      text: Run a regression
+      why: Later.
+    - id: d
+      text: Standardise
+      why: Correlation is already scale-free.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C054
+    prompt: Pearson correlation between income and limit/loan amount (3 decimals)?
+    answer: "{{ a.d1_il_pearson }}"
+    tolerance_abs: 0.01
+    explanation: Limits are set from income — expect collinearity in models.
+  - id: q3
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C054
+    prompt: "Utilisation's correlation with default is {{ a.d1_util_def_pearson }}, yet >90% utilisation defaults {{ a.d1_util_def_ratio }}× as often as ≤50%. Why?"
+    options:
+    - id: a
+      text: A rare binary outcome with a threshold-shaped effect keeps r small
+      correct: true
+      why: Look at binned rates.
+    - id: b
+      text: The ratio is wrong
+      why: Both are correct.
+    - id: c
+      text: Utilisation is irrelevant
+      why: No.
+    - id: d
+      text: Correlation is always small
+      why: No.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C062
+    prompt: "Temperature correlates with Hair Care units (r = {{ a.d1_temp_hair_r }}) though no weather effect exists. Most likely cause?"
+    options:
+    - id: a
+      text: Shared drivers — seasonality, holidays, region size
+      correct: true
+      why: Spurious correlation.
+    - id: b
+      text: People wash hair more when warm
+      why: Not in the data-generating process.
+    - id: c
+      text: Rounding
+      why: No.
+    - id: d
+      text: Duplicates
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C055
+    prompt: A relationship is curved but always increasing, with a few extreme points. Which coefficient?
+    options:
+    - id: a
+      text: Spearman
+      correct: true
+      why: Rank-based, monotone.
+    - id: b
+      text: Pearson
+      why: Linear; sensitive to extremes.
+    - id: c
+      text: Covariance
+      why: Not standardised.
+    - id: d
+      text: Cramér's V
+      why: Categorical.
+  - id: q6
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C060
+    prompt: Cramér's V between loyalty segment and 'basket contains a promo item' (3 decimals)?
+    answer: "{{ a.d1_promo_seg_v }}"
+    tolerance_abs: 0.01
+    explanation: "Weak association even though p ≈ {{ a.d1_promo_seg_p }}."
+  - id: q7
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C062
+    prompt: "True or false: price and quantity correlate at {{ a.d1_pq_pearson }} across products, so price barely affects demand."
+    options:
+    - id: a
+      text: False — product type confounds it; elasticity needs within-product price variation
+      correct: true
+      why: Expensive items are bought singly, cheap ones in multiples.
+    - id: b
+      text: 'True'
+      why: Cross-product correlation is not elasticity.
+    - id: c
+      text: True, if p < 0.05
+      why: Significance doesn't remove confounding.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C059
+    prompt: In a crosstab of loyalty segment × promo basket, which percentage answers 'Do gold members buy more promotions?'
+    options:
+    - id: a
+      text: Row % within each segment (share of each segment's baskets with a promo item)
+      correct: true
+      why: Compares segments on the outcome.
+    - id: b
+      text: Column % within promo/non-promo
+      why: Answers a different question.
+    - id: c
+      text: Total %
+      why: Mixes segment size and behaviour.
+    - id: d
+      text: Raw counts
+      why: Segments differ in size.
+- id: L1.7-L
+  title: L1.7 Correlation judgement (Leader)
+  lesson: L1.7
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C054
+    prompt: "A junior proposes dropping utilisation from the risk model because |r| with default is only {{ a.d1_util_def_pearson }}. Decision?"
+    options:
+    - id: a
+      text: "Reject — binned default rates show a {{ a.d1_util_def_ratio }}× risk gradient; never screen on r alone"
+      correct: true
+      why: Non-linear, rare-outcome relationships.
+    - id: b
+      text: Approve — simpler model
+      why: Loses a key driver.
+    - id: c
+      text: Approve if AUC unchanged
+      why: Check properly first.
+    - id: d
+      text: Replace with income
+      why: Different information.
+  - id: q2
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C062
+    prompt: "Marketing: 'Warm weeks drive beverage sales (r = {{ a.d1_temp_bev_r }}) — let's buy weather-triggered ads.' Your request?"
+    options:
+    - id: a
+      text: A control category and de-seasonalised analysis (or a test) before spending
+      correct: true
+      why: "Hair Care shows r = {{ a.d1_temp_hair_r }} without any weather effect."
+    - id: b
+      text: Approve — r is high
+      why: Seasonality confounds.
+    - id: c
+      text: Ask for a higher r
+      why: Not the issue.
+    - id: d
+      text: Reject weather entirely
+      why: There may be a real effect; test it.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C062
+    prompt: Write your two-question coaching routine for any correlation a junior presents.
+    model: '"Name one confounder that could create this correlation." and "Name the mechanism by which X would change Y." Without a credible mechanism and with an obvious confounder, the correlation is a hypothesis, not a finding.'
+    rubric: 'Full: confounder + mechanism + conclusion. Partial: one question.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C054
+    prompt: "Income–limit correlation is {{ a.d1_il_pearson }}. Implication for modelling?"
+    options:
+    - id: a
+      text: Expect multicollinearity — choose or combine the variables before modelling
+      correct: true
+      why: Unstable coefficients otherwise (Day 5).
+    - id: b
+      text: Use both for extra accuracy
+      why: Little gain, unstable coefficients.
+    - id: c
+      text: Drop both
+      why: Loses information.
+    - id: d
+      text: No implication
+      why: There is one.
+  - id: q5
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C060
+    prompt: "A segment difference has p < 0.001 but Cramér's V = {{ a.d1_promo_seg_v }}. How do you report it?"
+    options:
+    - id: a
+      text: As a weak association that is statistically detectable because n is large
+      correct: true
+      why: Significance ≠ strength.
+    - id: b
+      text: As a strong effect
+      why: V is small.
+    - id: c
+      text: As no effect
+      why: There is a weak one.
+    - id: d
+      text: Only the p-value
+      why: Report strength.
+- id: D1-GATE
+  title: Day 1 gate (pass 75%)
+  lesson: D1
+  track: Mixed
+  pass_mark: 75
+  questions:
+  - id: g01
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C003
+    prompt: Which table answers 'how many distinct customers defaulted' without risk of double counting?
+    options:
+    - id: a
+      text: '`accounts` (one row per account/customer)'
+      correct: true
+      why: Account grain.
+    - id: b
+      text: '`performance_monthly`'
+      why: Account-month grain; counting rows double counts.
+    - id: c
+      text: '`devices_addresses`'
+      why: Link grain.
+    - id: d
+      text: '`claims`'
+      why: Insurance.
+  - id: g02
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C009
+    prompt: Fully duplicated rows in `transactions`?
+    answer: "{{ a.d1_dup_rows_full }}"
+    tolerance_abs: 0
+    explanation: R03.
+  - id: g03
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C008
+    prompt: Best treatment for rows failing an *error* rule?
+    options:
+    - id: a
+      text: Quarantine, log, inform the data owner; exclude from analysis with a note
+      correct: true
+      why: Traceable and reversible.
+    - id: b
+      text: Delete permanently
+      why: Irreversible, untraceable.
+    - id: c
+      text: Fix by guessing
+      why: Invents data.
+    - id: d
+      text: Ignore
+      why: Biases results.
+  - id: g04
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C015
+    prompt: Missingness tests pass, but customers with the field missing have much bigger baskets. Mechanism?
+    options:
+    - id: a
+      text: Possibly MNAR
+      correct: true
+      why: Outcome differs — missingness relates to the unobserved value.
+    - id: b
+      text: MCAR
+      why: Outcome differs.
+    - id: c
+      text: MAR
+      why: No observed field explains it.
+    - id: d
+      text: Structural
+      why: The field applies to everyone.
+  - id: g05
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C017
+    prompt: Share (%) of accounts lost by listwise deletion on income and utilisation?
+    answer: "{{ a.d1_listwise_drop_pct }}"
+    tolerance_abs: 0.2
+    unit: '%'
+    explanation: Loans have no utilisation.
+  - id: g06
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C022
+    prompt: The best 'typical' value for a heavily skewed amount is…
+    options:
+    - id: a
+      text: Median
+      correct: true
+      why: Robust.
+    - id: b
+      text: Mean
+      why: Tail-driven.
+    - id: c
+      text: Max
+      why: No.
+    - id: d
+      text: Mean + SD
+      why: No.
+  - id: g07
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C034
+    prompt: Share (%) of balances held by the top 1% of accounts?
+    answer: "{{ a.d1_bal_top1_pct }}"
+    tolerance_abs: 0.3
+    unit: '%'
+    explanation: F14.
+  - id: g08
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C039
+    prompt: To compare two groups' full distributions precisely, use…
+    options:
+    - id: a
+      text: ECDFs on one axis
+      correct: true
+      why: Shows every percentile.
+    - id: b
+      text: Two pie charts
+      why: No.
+    - id: c
+      text: Means only
+      why: Hides shape.
+    - id: d
+      text: Stacked bars
+      why: Imprecise.
+  - id: g09
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C046
+    prompt: Which rule found all decimal-shift error baskets on raw data?
+    options:
+    - id: a
+      text: Robust z-score > 3.5
+      correct: true
+      why: "{{ a.d1_err_caught_mz }}/{{ a.d1_err_baskets }}."
+    - id: b
+      text: Plain z > 3
+      why: "{{ a.d1_err_caught_z3 }}/{{ a.d1_err_baskets }} — masking."
+    - id: c
+      text: None
+      why: The robust rule did.
+    - id: d
+      text: Mean ± 1 SD
+      why: Flags far too much.
+  - id: g10
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C051
+    prompt: Why must target encoding be fitted out-of-fold?
+    options:
+    - id: a
+      text: Otherwise each row's own label leaks into its feature
+      correct: true
+      why: "Noise reached AUC {{ a.d1_te_auc_leaky }}."
+    - id: b
+      text: To save time
+      why: No.
+    - id: c
+      text: To reduce categories
+      why: No.
+    - id: d
+      text: It need not be
+      why: It must.
+  - id: g11
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C054
+    - C062
+    prompt: A control variable with no expected relationship also correlates with your outcome. Conclusion?
+    options:
+    - id: a
+      text: Shared drivers are likely producing spurious correlation
+      correct: true
+      why: Placebo check failed.
+    - id: b
+      text: Both are causal
+      why: No.
+    - id: c
+      text: Correlation is broken
+      why: No.
+    - id: d
+      text: Ignore the control
+      why: It is the evidence.
+  - id: g12
+    type: open
+    difficulty: 3
+    concepts:
+    - C008
+    - C294
+    prompt: Write a three-bullet quality memo for the retail panel for the finance team (issue, impact, action).
+    model: "- Duplicates ({{ a.d1_dup_ids }} lines), sign errors ({{ a.d1_neg_nonreturn }}) and decimal-shift prices ({{ a.d1_price100 }}) overstate raw revenue by {{ a.d1_rev_inflation_pct }}% — quarantined; source tickets raised.\n- Revenue ≠ qty × price on {{ a.d1_rev_mismatch }} lines, almost all in store S033 — escalated for integrity review.\n- Online discounts are stored as fractions from week 80 — affected KPIs frozen until the feed is fixed."
+    rubric: 'Full (2 pts): three issues with quantified impact and a concrete action each. Partial (1 pt): issues listed without impact or actions.'

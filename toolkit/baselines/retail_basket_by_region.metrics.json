@@ -1,0 +1,100 @@
+{
+  "kind": "numeric",
+  "groups": [
+    "East",
+    "North",
+    "South",
+    "West"
+  ],
+  "n_total": 3163,
+  "summary": {
+    "East": {
+      "n": 657.0,
+      "mean": 48.37653,
+      "sd": 44.575701,
+      "median": 39.23,
+      "skew": 4.449159
+    },
+    "North": {
+      "n": 492.0,
+      "mean": 40.936707,
+      "sd": 39.453775,
+      "median": 32.78,
+      "skew": 5.136195
+    },
+    "South": {
+      "n": 1030.0,
+      "mean": 52.142311,
+      "sd": 84.418717,
+      "median": 40.5,
+      "skew": 12.284006
+    },
+    "West": {
+      "n": 984.0,
+      "mean": 55.030152,
+      "sd": 71.089074,
+      "median": 41.6,
+      "skew": 6.265247
+    }
+  },
+  "anova_f": 5.198087,
+  "anova_p": 0.001397,
+  "welch_f": 9.292273,
+  "welch_df2": 1679.811442,
+  "welch_p": 4e-06,
+  "kruskal_h": 28.68556,
+  "kruskal_p": 3e-06,
+  "levene_p": 0.049793,
+  "eta_squared": 0.004912,
+  "primary": "Kruskal-Wallis",
+  "pairwise": {
+    "East vs North": {
+      "diff_mean": 7.439822,
+      "diff_median": 6.45,
+      "welch_p": 0.002844,
+      "mw_p": 0.000242,
+      "welch_p_holm": 0.011376,
+      "mw_p_holm": 0.000968
+    },
+    "East vs South": {
+      "diff_mean": -3.765781,
+      "diff_median": -1.27,
+      "welch_p": 0.232559,
+      "mw_p": 0.862159,
+      "welch_p_holm": 0.465118,
+      "mw_p_holm": 0.862159
+    },
+    "East vs West": {
+      "diff_mean": -6.653623,
+      "diff_median": -2.37,
+      "welch_p": 0.019969,
+      "mw_p": 0.129078,
+      "welch_p_holm": 0.059908,
+      "mw_p_holm": 0.387233
+    },
+    "North vs South": {
+      "diff_mean": -11.205603,
+      "diff_median": -7.72,
+      "welch_p": 0.00043,
+      "mw_p": 4.4e-05,
+      "welch_p_holm": 0.002148,
+      "mw_p_holm": 0.000219
+    },
+    "North vs West": {
+      "diff_mean": -14.093445,
+      "diff_median": -8.82,
+      "welch_p": 1e-06,
+      "mw_p": 0.0,
+      "welch_p_holm": 7e-06,
+      "mw_p_holm": 1e-06
+    },
+    "South vs West": {
+      "diff_mean": -2.887842,
+      "diff_median": -1.1,
+      "welch_p": 0.405649,
+      "mw_p": 0.151897,
+      "welch_p_holm": 0.465118,
+      "mw_p_holm": 0.387233
+    }
+  }
+}

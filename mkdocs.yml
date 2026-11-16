@@ -1,0 +1,207 @@
+site_name: Statistics for Data Science Bootcamp
+site_description: Learn statistics, machine learning and AI by solving real retail and banking problems — two learning paths, no coding taught.
+site_author: Softsensor AI
+repo_name: stats-bootcamp
+copyright: '© 2026 Kumar Anubhav · <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a> — free to share and adapt with credit, not for commercial use'
+# repo_url: https://github.com/<org>/stats-bootcamp   # set when you push
+docs_dir: docs
+theme:
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle: {icon: material/weather-night, name: Dark mode}
+    - scheme: slate
+      primary: custom
+      accent: custom
+      toggle: {icon: material/weather-sunny, name: Light mode}
+  font:
+    text: Inter
+    code: JetBrains Mono
+  features:
+    - content.tabs.link        # Basic → Advanced / Leader tabs stay in sync across all pages
+    - content.code.copy
+    - navigation.tabs
+    - navigation.sections
+    - navigation.footer
+    - navigation.top
+    - navigation.indexes
+    - search.highlight
+    - search.suggest
+    - toc.follow
+  icon:
+    logo: material/chart-bell-curve
+plugins:
+  - search
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+  - def_list
+  - toc: {permalink: true}
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: sbm
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed: {alternate_style: true}
+  - pymdownx.arithmatex: {generic: true}
+  - pymdownx.tasklist: {custom_checkbox: true}
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+extra_css:
+  - assets/css/extra.css
+  - assets/css/theme.css
+extra_javascript:
+  - assets/vendor/mermaid.min.js
+  - assets/js/common.js
+  - assets/js/diagrams.js
+  - assets/js/path.js
+  - assets/js/charts.js
+  - assets/js/ui.js
+  - assets/js/quiz.js
+  - assets/js/navigator.js
+  - assets/js/hunt.js
+  - assets/js/progress.js
+  - assets/js/mathjax-config.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+nav:
+  - Home: index.md
+  - Start here:
+      - How this course works: start/how-it-works.md
+      - Choose your path: start/tracks.md
+      - Basic → Advanced route: start/route-basic.md
+      - Leader route: start/route-leader.md
+      - Pre-bootcamp diagnostic: start/diagnostic.md
+  - Mental maps:
+      - The big picture: maps/index.md
+      - Which statistical test?: maps/tests.md
+      - Probability distributions: maps/distributions.md
+      - Regression family: maps/regression.md
+      - Machine-learning ladder: maps/ml.md
+      - Deep learning and GenAI: maps/deep-learning.md
+      - Causal, forecasting, detection, metrics, monitoring: maps/more-maps.md
+  - Day 0 · Data & playbook:
+      - day-00/index.md
+      - L0.1 Your workbench: day-00/L0-1.md
+      - L0.2 The vibe-coding playbook: day-00/L0-2.md
+      - L0.3 Build and validate the datasets: day-00/L0-3.md
+      - L0.4 The toolkit and reuse: day-00/L0-4.md
+      - L0.5 Data safety and anonymisation: day-00/L0-5.md
+  - Day 1 · Data & descriptives:
+      - day-01/index.md
+      - L1.1 Types, grain, tidy data: day-01/L1-1.md
+      - L1.2 Data-quality checks: day-01/L1-2.md
+      - L1.3 Missing data: day-01/L1-3.md
+      - L1.4 Centre, spread, shape: day-01/L1-4.md
+      - L1.5 Visualising distributions: day-01/L1-5.md
+      - L1.6 Outliers and transformations: day-01/L1-6.md
+      - L1.7 Relationships: day-01/L1-7.md
+  - Day 2 · Probability & sampling:
+      - day-02/index.md
+      - L2.1 Probability and Bayes: day-02/L2-1.md
+      - L2.2 Discrete distributions: day-02/L2-2.md
+      - L2.3 Continuous distributions: day-02/L2-3.md
+      - L2.4 Sampling and bias: day-02/L2-4.md
+      - L2.5 LLN, CLT, Monte Carlo: day-02/L2-5.md
+      - L2.6 Benford and digit tests: day-02/L2-6.md
+      - L2.7 Linear algebra essentials: day-02/L2-7.md
+  - Day 3 · Estimation & testing:
+      - day-03/index.md
+      - L3.1 Estimation and CIs: day-03/L3-1.md
+      - L3.2 Bootstrap and permutation: day-03/L3-2.md
+      - L3.3 Testing logic and p-values: day-03/L3-3.md
+      - L3.4 Two-group comparison: day-03/L3-4.md
+      - L3.5 k groups and categorical tests: day-03/L3-5.md
+      - L3.6 Effect sizes and power: day-03/L3-6.md
+      - L3.7 Multiple testing: day-03/L3-7.md
+  - Day 4 · Experiments & causality:
+      - day-04/index.md
+      - L4.1 A/B design and hygiene: day-04/L4-1.md
+      - L4.2 CUPED and sequential: day-04/L4-2.md
+      - L4.3 Bayesian A/B: day-04/L4-3.md
+      - L4.4 DAGs and causal basics: day-04/L4-4.md
+      - L4.5 End-to-end tests: day-04/L4-5.md
+  - Day 5 · Regression & GLMs:
+      - day-05/index.md
+      - L5.1 Linear regression: day-05/L5-1.md
+      - L5.2 Diagnostics: day-05/L5-2.md
+      - L5.3 Logistic regression: day-05/L5-3.md
+      - L5.4 Regularisation: day-05/L5-4.md
+      - L5.5 GLMs: day-05/L5-5.md
+      - L5.6 Non-linearity and mixed models: day-05/L5-6.md
+      - L5.7 Capstone: day-05/L5-7.md
+  - Day 6 · Machine learning:
+      - day-06/index.md
+      - L6.1 Feature engineering: day-06/L6-1.md
+      - L6.2 Trees and boosting: day-06/L6-2.md
+      - L6.3 Other learners: day-06/L6-3.md
+      - L6.4 Validation and leakage: day-06/L6-4.md
+      - L6.5 Class imbalance: day-06/L6-5.md
+      - L6.6 Metrics and thresholds: day-06/L6-6.md
+      - L6.7 Explainability: day-06/L6-7.md
+      - L6.8 The ML ladder (13 algorithms): day-06/L6-8.md
+  - Day 7 · Time series & inventory:
+      - day-07/index.md
+      - L7.1 Decomposition: day-07/L7-1.md
+      - L7.2 Forecasting models: day-07/L7-2.md
+      - L7.3 Backtesting and metrics: day-07/L7-3.md
+      - L7.4 Intermittent and hierarchical: day-07/L7-4.md
+      - L7.5 Change-points and censoring: day-07/L7-5.md
+      - L7.6 Inventory: day-07/L7-6.md
+  - Day 8 · Segmentation, pricing & risk:
+      - day-08/index.md
+      - L8.1 Clustering and PCA: day-08/L8-1.md
+      - L8.2 RFM and CLV: day-08/L8-2.md
+      - L8.3 Market basket: day-08/L8-3.md
+      - L8.4 Pricing and promotions: day-08/L8-4.md
+      - L8.5 Anomaly detection: day-08/L8-5.md
+      - L8.6 Fraud rings and structuring: day-08/L8-6.md
+      - L8.7 Credit risk: day-08/L8-7.md
+  - Day 9 · Advanced methods:
+      - day-09/index.md
+      - L9.1 Causal methods: day-09/L9-1.md
+      - L9.2 Survival analysis: day-09/L9-2.md
+      - L9.3 Deep learning and AI: day-09/L9-3.md
+      - L9.4 Insurance and portfolio risk: day-09/L9-4.md
+      - L9.5 Fairness and model risk: day-09/L9-5.md
+      - L9.6 Monitoring and drift: day-09/L9-6.md
+      - L9.7 Storytelling: day-09/L9-7.md
+      - L9.8 Inside networks, transformers, diffusion: day-09/L9-8.md
+  - Day 10 · Transfer, capstone & exams:
+      - day-10/index.md
+      - L10.1 Transfer test: day-10/L10-1.md
+      - L10.2 Capstone: day-10/L10-2.md
+      - L10.3 Navigator sprint: day-10/L10-3.md
+      - L10.4 Final exams: day-10/L10-4.md
+  - Day 11 · Computer vision (optional):
+      - day-11/index.md
+      - L11.1 Images as data: day-11/L11-1.md
+      - L11.2 Classification and augmentation: day-11/L11-2.md
+      - L11.3 Detection, IoU and on-shelf availability: day-11/L11-3.md
+      - L11.4 Document AI and cheque reading: day-11/L11-4.md
+      - L11.5 Vision in production: day-11/L11-5.md
+  - Navigator:
+      - Interactive map: navigator/index.md
+      - All decision trees: navigator/trees.md
+      - Scenario atlas: navigator/scenarios.md
+  - Practice:
+      - Anomaly Hunt: practice/anomaly-hunt.md
+      - My progress: practice/progress.md
+      - Confidence scorecard: practice/scorecard.md
+  - Reference:
+      - Glossary: glossary.md
+      - Ten-day module map: curriculum/module-map.md
+      - Concept inventory: curriculum/concepts.md
+      - Instructor view: practice/instructor.md
+validation:
+  anchors: ignore      # Navigator node anchors (#N-...) are resolved by navigator.js

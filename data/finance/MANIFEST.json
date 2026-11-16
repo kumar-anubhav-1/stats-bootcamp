@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "domain": "finance",
+    "seed": 20261115
+  },
+  "tables": [
+    {
+      "table": "accounts",
+      "rows": 25000,
+      "columns": 39,
+      "hash": "bbda6c697ffad22e"
+    },
+    {
+      "table": "performance_monthly",
+      "rows": 454364,
+      "columns": 14,
+      "hash": "a5b4681c5f6bdfb3"
+    },
+    {
+      "table": "applications_declined",
+      "rows": 5240,
+      "columns": 16,
+      "hash": "76145670a353bbf5"
+    },
+    {
+      "table": "devices_addresses",
+      "rows": 57615,
+      "columns": 3,
+      "hash": "bba9d1dcad78b6f6"
+    },
+    {
+      "table": "policies",
+      "rows": 8000,
+      "columns": 10,
+      "hash": "78f5cb8d99865865"
+    },
+    {
+      "table": "claims",
+      "rows": 692,
+      "columns": 5,
+      "hash": "3f0e025e70f583c8"
+    }
+  ]
+}

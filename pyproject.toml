@@ -1,0 +1,13 @@
+[project]
+name = "stats-bootcamp"
+version = "0.2.0"
+description = "Statistics for Data Science Bootcamp: data generators, toolkit recipes, validator and course site"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.26", "pandas>=2.2", "scipy>=1.11", "statsmodels>=0.14", "scikit-learn>=1.4",
+  "pyarrow>=14", "pyyaml>=6", "matplotlib>=3.8", "networkx>=3.2", "jinja2>=3.1", "markdown>=3.5",
+  "mkdocs>=1.6,<2", "mkdocs-material>=9.5", "pytest>=8",
+]
+[tool.pytest.ini_options]
+testpaths = ["datagen/tests"]
+filterwarnings = ["ignore::DeprecationWarning", "ignore::FutureWarning"]

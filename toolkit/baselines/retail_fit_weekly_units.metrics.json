@@ -1,0 +1,21 @@
+{
+  "n": 104,
+  "kind": "count",
+  "mean": 71.038462,
+  "var": 310.153846,
+  "skew": 1.126921,
+  "dispersion": 4.365999,
+  "dispersion_z": 24.155586,
+  "zeros_obs": 0.0,
+  "zeros_poisson": 0.0,
+  "fits": {
+    "negative binomial": {
+      "aic": 881.80722,
+      "delta_aic": 0.0
+    },
+    "poisson": {
+      "aic": 1056.70698,
+      "delta_aic": 174.89976
+    }
+  }
+}

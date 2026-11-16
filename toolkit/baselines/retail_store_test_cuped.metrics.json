@@ -1,0 +1,54 @@
+{
+  "arms": [
+    "test",
+    "control"
+  ],
+  "unit": "store_id",
+  "binary": false,
+  "counts": {
+    "test": 20,
+    "control": 20
+  },
+  "planned_split": {
+    "test": 0.5,
+    "control": 0.5
+  },
+  "srm_p": 1.0,
+  "srm_fail": false,
+  "srm_by_segment": {},
+  "primary": {
+    "t_mean": 44.53125,
+    "c_mean": 37.3625,
+    "diff": 7.16875,
+    "se": 9.176893,
+    "ci_low": -11.434568,
+    "ci_high": 25.772068,
+    "p": 0.439742,
+    "rel_lift": 0.19187,
+    "n_t": 20,
+    "n_c": 20
+  },
+  "cuped": {
+    "t_mean": 44.188014,
+    "c_mean": 37.705736,
+    "diff": 6.482278,
+    "se": 1.5101,
+    "ci_low": 3.424009,
+    "ci_high": 9.540547,
+    "p": 0.00012,
+    "rel_lift": 0.173497,
+    "n_t": 20,
+    "n_c": 20,
+    "theta": 1.051058,
+    "variance_reduction": 0.960427
+  },
+  "bayes": {
+    "p_treatment_better": 0.99999,
+    "ci_low": 3.510593,
+    "ci_high": 9.456523,
+    "expected_loss_if_ship": 1e-06,
+    "expected_loss_if_keep": 6.475887
+  },
+  "guardrails": {},
+  "decision": "SHIP \u2014 the whole CI is above zero."
+}

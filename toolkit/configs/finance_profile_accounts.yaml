@@ -1,0 +1,15 @@
+# Profile the bank accounts table (Day 0 reuse drill: config change only)
+recipe: rcp_profile
+dataset:
+  name: meridian_accounts
+  path: data/finance/accounts.parquet
+  grain: account
+columns:
+  id: account_id
+  date: origination_date
+  target: balance_current
+filters: []
+params:
+  max_categories: 15
+output:
+  folder: outputs/{recipe}/{date}_{dataset}

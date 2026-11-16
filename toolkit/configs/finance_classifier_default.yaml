@@ -1,0 +1,7 @@
+# L6.2/L6.6: default within 12 months — logistic baseline vs gradient boosting, application-time features only.
+recipe: rcp_classifier
+dataset: {name: meridian_accounts, path: data/finance/accounts.parquet}
+columns: {target: default_12m, features: [age, income_annual, income_verified_flag, bureau_score, dti, inquiries_6m, delinq_2y, utilisation, product_type, limit_or_loan_amount, acquisition_channel, tenure_months_with_bank, employment_type]}
+filters: []
+params: {split: random, test_size: 0.3, models: [logistic, gbm], capacity_k: [100, 750], cost_fn: 7000, cost_fp: 1000, seed: 42}
+output: {folder: "outputs/{recipe}/{date}_finance_classifier_default"}

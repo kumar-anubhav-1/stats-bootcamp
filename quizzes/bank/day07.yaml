@@ -1,0 +1,1618 @@
+quizzes:
+- id: L7.1-F
+  title: L7.1 Decomposition (Basic → Advanced)
+  lesson: L7.1
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C222
+    prompt: STL decomposes a series into…
+    options:
+    - id: a
+      text: Trend, seasonal and remainder
+      correct: true
+      why: Definition.
+    - id: b
+      text: Mean and variance
+      why: No.
+    - id: c
+      text: AR and MA terms
+      why: ARIMA.
+    - id: d
+      text: Clusters
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C224
+    prompt: ACF at lag 52 of chain weekly units?
+    answer: "{{ a.d7_acf52 }}"
+    tolerance_abs: 0.05
+    explanation: Annual seasonality.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C222
+    prompt: Holiday weeks vs other weeks (ratio)?
+    answer: "{{ a.d7_hol_ratio }}"
+    tolerance_abs: 0.03
+    explanation: Planted +40%.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C222
+    prompt: Seasonal swings grow with the level. Use…
+    options:
+    - id: a
+      text: A multiplicative model (or log the series)
+      correct: true
+      why: Proportional seasonality.
+    - id: b
+      text: Additive only
+      why: Misfits.
+    - id: c
+      text: Differencing
+      why: Trend, not this.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C223
+    prompt: "ADF p = {{ a.d7_dq_adf_p }} for the delinquency rate means…"
+    options:
+    - id: a
+      text: Cannot reject non-stationarity
+      correct: true
+      why: H0 = unit root.
+    - id: b
+      text: Stationary
+      why: No.
+    - id: c
+      text: Seasonal
+      why: No.
+    - id: d
+      text: Random
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C223
+    prompt: KPSS tests the null of…
+    options:
+    - id: a
+      text: Stationarity
+      correct: true
+      why: Opposite of ADF.
+    - id: b
+      text: A unit root
+      why: ADF.
+    - id: c
+      text: Normality
+      why: No.
+    - id: d
+      text: Independence
+      why: No.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C224
+    prompt: A sharp PACF cut-off after lag 2 suggests…
+    options:
+    - id: a
+      text: AR(2)
+      correct: true
+      why: PACF identifies AR order.
+    - id: b
+      text: MA(2)
+      why: ACF cut-off.
+    - id: c
+      text: No model
+      why: No.
+    - id: d
+      text: Seasonality 2
+      why: No.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C223
+    prompt: The delinquency rate's rise is best treated as…
+    options:
+    - id: a
+      text: A regime shift from portfolio mix (partner vintages)
+      correct: true
+      why: "Change-point {{ a.d7_dq_break_month }}."
+    - id: b
+      text: Noise
+      why: Large and sustained.
+    - id: c
+      text: Seasonality
+      why: No.
+    - id: d
+      text: Data error
+      why: No.
+- id: L7.1-L
+  title: L7.1 Reading patterns (Leader)
+  lesson: L7.1
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C222
+    prompt: '''Sales up 25% vs last week.'' Last week was normal; this week is a holiday. Response?'
+    options:
+    - id: a
+      text: Compare with last year's holiday week
+      correct: true
+      why: Calendar.
+    - id: b
+      text: Celebrate
+      why: Calendar effect.
+    - id: c
+      text: Investigate a promotion
+      why: Possibly, after calendar.
+    - id: d
+      text: Ignore
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C223
+    prompt: 'Rising delinquency: first question?'
+    options:
+    - id: a
+      text: Has the portfolio mix (vintage, channel) changed?
+      correct: true
+      why: Mix vs rate.
+    - id: b
+      text: Is the economy bad?
+      why: Later.
+    - id: c
+      text: Is the model wrong?
+      why: Later.
+    - id: d
+      text: None
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C222
+    prompt: How should year-on-year KPIs handle the calendar?
+    model: 'Compare like periods: align holiday weeks, number of Fridays/Saturdays, and Q4 weeks; report calendar-adjusted growth alongside raw.'
+    rubric: 'Full: holidays + weekdays + adjusted figure. Partial: one.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C222
+    prompt: Two years of weekly data give how many seasonal cycles?
+    options:
+    - id: a
+      text: Two — enough to see seasonality, not to model it precisely
+      correct: true
+      why: Short history.
+    - id: b
+      text: '104'
+      why: Weeks.
+    - id: c
+      text: One
+      why: Two.
+    - id: d
+      text: Plenty
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C224
+    prompt: High lag-52 autocorrelation implies…
+    options:
+    - id: a
+      text: Same-week-last-year is a strong baseline
+      correct: true
+      why: Seasonal naive.
+    - id: b
+      text: Trend
+      why: No.
+    - id: c
+      text: Randomness
+      why: No.
+    - id: d
+      text: Leakage
+      why: No.
+- id: L7.2-F
+  title: L7.2 Forecasting models (Basic → Advanced)
+  lesson: L7.2
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C225
+    prompt: Seasonal naive forecasts…
+    options:
+    - id: a
+      text: The value from the same period last season
+      correct: true
+      why: Definition.
+    - id: b
+      text: The last value
+      why: Naive.
+    - id: c
+      text: The mean
+      why: No.
+    - id: d
+      text: Zero
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C225
+    prompt: Seasonal naive WAPE (%) for Beverages weeks 79–104?
+    answer: "{{ a.d7_fc.seasonal_naive.wape }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: "Naive {{ a.d7_fc.naive.wape }}%."
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C228
+    prompt: WAPE (%) of the regression with Fourier terms + holiday + temperature?
+    answer: "{{ a.d7_fc.regression_fourier.wape }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: Best.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C226
+    prompt: Why couldn't Holt-Winters (period 52) be fitted on 78 weeks?
+    options:
+    - id: a
+      text: It needs at least two full seasonal cycles
+      correct: true
+      why: History length.
+    - id: b
+      text: Too many zeros
+      why: No.
+    - id: c
+      text: Non-normal data
+      why: No.
+    - id: d
+      text: It can
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C227
+    prompt: SARIMAX adds to ARIMA…
+    options:
+    - id: a
+      text: Seasonal terms and external regressors
+      correct: true
+      why: S + X.
+    - id: b
+      text: Neural networks
+      why: No.
+    - id: c
+      text: Clustering
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C228
+    prompt: Using actual temperature in a live forecast is…
+    options:
+    - id: a
+      text: Look-ahead leakage — use a temperature forecast
+      correct: true
+      why: Unknown at forecast time.
+    - id: b
+      text: Fine
+      why: No.
+    - id: c
+      text: Better
+      why: Leaky.
+    - id: d
+      text: Required
+      why: No.
+  - id: q7
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C226
+    prompt: Bias (%) of damped Holt on Beverages?
+    answer: "{{ a.d7_fc.holt_damped.bias }}"
+    tolerance_abs: 1
+    unit: '%'
+    explanation: No seasonality.
+  - id: q8
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C226
+    prompt: Damped Holt WAPE (%) for total balances (6-month hold-out)?
+    answer: "{{ a.d7_bal_wape_holt }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: "Naive {{ a.d7_bal_wape_naive }}%."
+- id: L7.2-L
+  title: L7.2 Forecast governance (Leader)
+  lesson: L7.2
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C225
+    prompt: '''Our AI forecast is great.'' First question?'
+    options:
+    - id: a
+      text: How much better than seasonal naive over a rolling backtest?
+      correct: true
+      why: Baseline.
+    - id: b
+      text: Which AI?
+      why: Secondary.
+    - id: c
+      text: Cost?
+      why: Later.
+    - id: d
+      text: None
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C228
+    prompt: Which drivers are legitimate in a forecast?
+    options:
+    - id: a
+      text: Those known or forecast at forecast time (planned promos, holidays, weather forecasts)
+      correct: true
+      why: No look-ahead.
+    - id: b
+      text: Actual future sales
+      why: Leakage.
+    - id: c
+      text: Any correlated variable
+      why: No.
+    - id: d
+      text: None
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C225
+    prompt: Explain to the CFO why seasonal naive is the benchmark.
+    model: "Copying the same week last year already captures most of the pattern ({{ a.d7_fc.seasonal_naive.wape }}% error vs {{ a.d7_fc.naive.wape }}% for 'same as last week'). Any model must beat it consistently to justify its cost."
+    rubric: 'Full: numbers + rationale. Partial: rationale.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C229
+    prompt: 'Under-forecasting perishables vs over-forecasting: costs are…'
+    options:
+    - id: a
+      text: Asymmetric — lost sales vs waste; set bias targets accordingly
+      correct: true
+      why: Cost-aware.
+    - id: b
+      text: Equal
+      why: Rarely.
+    - id: c
+      text: Irrelevant
+      why: No.
+    - id: d
+      text: Only over-forecasting matters
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C226
+    prompt: A growing loan book should be forecast with…
+    options:
+    - id: a
+      text: A trend-aware method (damped Holt) at least
+      correct: true
+      why: "Naive bias {{ a.d7_bal_bias_naive }}%."
+    - id: b
+      text: Naive
+      why: Biased.
+    - id: c
+      text: Seasonal naive
+      why: No seasonality.
+    - id: d
+      text: Random walk
+      why: Same as naive.
+- id: L7.3-F
+  title: L7.3 Backtesting and metrics (Basic → Advanced)
+  lesson: L7.3
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C229
+    prompt: A rolling-origin backtest…
+    options:
+    - id: a
+      text: Re-fits at several origins and forecasts ahead from each
+      correct: true
+      why: Mimics use.
+    - id: b
+      text: Uses random folds
+      why: Leaks time.
+    - id: c
+      text: Uses one window
+      why: Fragile.
+    - id: d
+      text: Uses training error
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C229
+    prompt: Mean backtest WAPE (%) of the regression?
+    answer: "{{ a.d7_bt_mean_reg }}"
+    tolerance_abs: 0.3
+    unit: '%'
+    explanation: "Seasonal naive {{ a.d7_bt_mean_snaive }}%."
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C212
+    prompt: WAPE is…
+    options:
+    - id: a
+      text: Σ|error| ÷ Σ actual
+      correct: true
+      why: Volume-weighted.
+    - id: b
+      text: Mean of |error|/actual
+      why: MAPE.
+    - id: c
+      text: √mean error²
+      why: RMSE.
+    - id: d
+      text: Σ error ÷ Σ actual
+      why: Bias.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C212
+    prompt: MAPE fails for…
+    options:
+    - id: a
+      text: Zero or near-zero actuals
+      correct: true
+      why: Division by zero.
+    - id: b
+      text: Large values
+      why: No.
+    - id: c
+      text: Seasonal data
+      why: No.
+    - id: d
+      text: Weekly data
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C212
+    prompt: MASE < 1 means…
+    options:
+    - id: a
+      text: Better than the in-sample naive one-step forecast
+      correct: true
+      why: Scaled.
+    - id: b
+      text: Worse than naive
+      why: '> 1.'
+    - id: c
+      text: Perfect
+      why: No.
+    - id: d
+      text: Biased
+      why: No.
+  - id: q6
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C212
+    prompt: Store-level WAPE (%) of the split chain forecast?
+    answer: "{{ a.d7_wape_store }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: "Chain {{ a.d7_wape_chain }}%."
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C229
+    prompt: At origin 86 seasonal naive beat the regression. Conclusion?
+    options:
+    - id: a
+      text: Judge on the average over origins
+      correct: true
+      why: One window misleads.
+    - id: b
+      text: Switch to seasonal naive
+      why: Average says otherwise.
+    - id: c
+      text: Bug
+      why: No.
+    - id: d
+      text: Drop that origin
+      why: Cherry-picking.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C212
+    prompt: Bias measures…
+    options:
+    - id: a
+      text: Systematic over- or under-forecasting
+      correct: true
+      why: Direction.
+    - id: b
+      text: Spread
+      why: No.
+    - id: c
+      text: Accuracy
+      why: Partly.
+    - id: d
+      text: Variance
+      why: No.
+- id: L7.3-L
+  title: L7.3 Accuracy KPIs (Leader)
+  lesson: L7.3
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C212
+    prompt: A KPI says 'forecast accuracy 93.5%'. Ask…
+    options:
+    - id: a
+      text: Which metric, level, horizon and how many origins?
+      correct: true
+      why: Definition.
+    - id: b
+      text: Can it reach 95%?
+      why: Meaningless without definition.
+    - id: c
+      text: Nothing
+      why: No.
+    - id: d
+      text: Which tool?
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C229
+    prompt: Persistent positive bias usually signals…
+    options:
+    - id: a
+      text: Process issues (overrides, stale drivers)
+      correct: true
+      why: Systematic.
+    - id: b
+      text: Randomness
+      why: No.
+    - id: c
+      text: Good forecasting
+      why: No.
+    - id: d
+      text: Low volume
+      why: Not necessarily.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C212
+    prompt: Write a forecast-accuracy KPI definition for store replenishment.
+    model: Store-SKU-week WAPE and bias at the 2-week replenishment horizon, computed over a rolling 13-week window on in-stock-adjusted demand, reported by ABC segment.
+    rubric: 'Full: level + horizon + window + bias + segment. Partial: 3.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C212
+    prompt: Why is MAPE risky in board packs?
+    options:
+    - id: a
+      text: Explodes on small items and rewards under-forecasting
+      correct: true
+      why: Known flaws.
+    - id: b
+      text: Hard to compute
+      why: No.
+    - id: c
+      text: Too favourable to big items
+      why: No.
+    - id: d
+      text: It isn't
+      why: It is.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C212
+    prompt: "Chain WAPE {{ a.d7_wape_chain }}%, store {{ a.d7_wape_store }}%. Which drives store stock?"
+    options:
+    - id: a
+      text: Store-level WAPE
+      correct: true
+      why: Decision level.
+    - id: b
+      text: Chain WAPE
+      why: Too smooth.
+    - id: c
+      text: Average of both
+      why: No.
+    - id: d
+      text: Neither
+      why: No.
+- id: L7.4-F
+  title: L7.4 Intermittent and hierarchical (Basic → Advanced)
+  lesson: L7.4
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C230
+    prompt: ADI > 1.32 and CV² ≤ 0.49 is…
+    options:
+    - id: a
+      text: Intermittent
+      correct: true
+      why: SBC.
+    - id: b
+      text: Smooth
+      why: ADI ≤ 1.32.
+    - id: c
+      text: Lumpy
+      why: CV² > 0.49.
+    - id: d
+      text: Erratic
+      why: ADI ≤ 1.32.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C230
+    prompt: Share (%) of SKUs with ADI > 1.32?
+    answer: "{{ a.d7_adi_share }}"
+    tolerance_abs: 1
+    unit: '%'
+    explanation: R22.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C230
+    prompt: Croston forecasts…
+    options:
+    - id: a
+      text: Demand size and interval separately, then divides
+      correct: true
+      why: Two smoothers.
+    - id: b
+      text: Only zeros
+      why: No.
+    - id: c
+      text: Seasonality
+      why: No.
+    - id: d
+      text: Trend
+      why: No.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C230
+    prompt: SBA corrects Croston's…
+    options:
+    - id: a
+      text: Upward bias
+      correct: true
+      why: × (1 − α/2).
+    - id: b
+      text: Seasonality
+      why: No.
+    - id: c
+      text: Variance
+      why: No.
+    - id: d
+      text: Zeros
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C230
+    prompt: Why does a zero forecast have the best MASE on sparse items?
+    options:
+    - id: a
+      text: MAE is minimised by the median, which is zero for sparse demand
+      correct: true
+      why: Metric artefact.
+    - id: b
+      text: Zero is the best forecast
+      why: Empties shelves.
+    - id: c
+      text: Bug
+      why: No.
+    - id: d
+      text: Seasonality
+      why: No.
+  - id: q6
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C230
+    prompt: Total bias (%) of Croston on intermittent SKUs?
+    answer: "{{ a.d7_int_bias.croston }}"
+    tolerance_abs: 1
+    unit: '%'
+    explanation: "SBA {{ a.d7_int_bias.sba }}%."
+  - id: q7
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C231
+    prompt: Average region WAPE (%) with top-down?
+    answer: "{{ a.d7_h_reg_wape_td }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: "Bottom-up {{ a.d7_h_reg_wape_bu }}%."
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C231
+    prompt: Coherent forecasts means…
+    options:
+    - id: a
+      text: Lower levels add up to higher levels
+      correct: true
+      why: Reconciliation.
+    - id: b
+      text: Same accuracy everywhere
+      why: No.
+    - id: c
+      text: Same model everywhere
+      why: No.
+    - id: d
+      text: Rounded
+      why: No.
+- id: L7.4-L
+  title: L7.4 Long tail and hierarchy (Leader)
+  lesson: L7.4
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C230
+    prompt: A vendor's slow-mover forecasts score MASE 0.68. Accept?
+    options:
+    - id: a
+      text: Check whether they forecast zeros; judge by bias and service level
+      correct: true
+      why: Zero trap.
+    - id: b
+      text: Accept
+      why: Possibly zeros.
+    - id: c
+      text: Reject outright
+      why: Test properly.
+    - id: d
+      text: Ask for MAPE
+      why: Worse.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C230
+    prompt: The CZ / lumpy tail is partly a…
+    options:
+    - id: a
+      text: Range decision (delist or order to demand)
+      correct: true
+      why: Not only forecasting.
+    - id: b
+      text: Forecasting failure only
+      why: No.
+    - id: c
+      text: Data error
+      why: No.
+    - id: d
+      text: Seasonal effect
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C231
+    prompt: Regional and chain plans disagree. Proposal?
+    model: 'Produce one reconciled forecast: test bottom-up, top-down and MinT on backtests; adopt the most accurate at the levels that matter (here top-down wins at region level); publish one number all teams use.'
+    rubric: 'Full: test + choose + single number. Partial: 2.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C231
+    prompt: Top-down works well when…
+    options:
+    - id: a
+      text: Shares are stable and low-level series are noisy
+      correct: true
+      why: Here.
+    - id: b
+      text: Regions diverge
+      why: Bottom-up/MinT.
+    - id: c
+      text: Always
+      why: No.
+    - id: d
+      text: Never
+      why: Can.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C230
+    prompt: Accuracy for slow movers should be judged by…
+    options:
+    - id: a
+      text: Bias and achieved service level
+      correct: true
+      why: Outcome.
+    - id: b
+      text: MAPE
+      why: Undefined.
+    - id: c
+      text: MAE only
+      why: Zero trap.
+    - id: d
+      text: R²
+      why: No.
+- id: L7.5-F
+  title: L7.5 Change-points and censoring (Basic → Advanced)
+  lesson: L7.5
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C232
+    prompt: Break week for store S017?
+    answer: "{{ a.d7_cp_week }}"
+    tolerance_abs: 1
+    explanation: R08.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C232
+    prompt: Why analyse S017 as a share of other stores?
+    options:
+    - id: a
+      text: Removes chain seasonality and shocks, isolating store-specific change
+      correct: true
+      why: Normalisation.
+    - id: b
+      text: Bigger numbers
+      why: No.
+    - id: c
+      text: Required by CUSUM
+      why: No.
+    - id: d
+      text: No reason
+      why: No.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C232
+    prompt: Lowering CUSUM's h from 8 to 5…
+    options:
+    - id: a
+      text: "Detects faster but raises false alarms (alarm at week {{ a.d7_cusum_alarm_h5 }})"
+      correct: true
+      why: Trade-off.
+    - id: b
+      text: Reduces false alarms
+      why: Opposite.
+    - id: c
+      text: No effect
+      why: No.
+    - id: d
+      text: Breaks it
+      why: No.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C233
+    prompt: Observed sales vs true demand (%)?
+    answer: "{{ a.d7_naive_vs_true_pct }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: Censoring.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C233
+    prompt: Stock-outs make observed demand…
+    options:
+    - id: a
+      text: Too low
+      correct: true
+      why: Sales capped.
+    - id: b
+      text: Too high
+      why: No.
+    - id: c
+      text: Unaffected
+      why: No.
+    - id: d
+      text: More seasonal
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C233
+    prompt: Why does simple uncensoring over-correct slightly?
+    options:
+    - id: a
+      text: Out-of-stock stores still sold until the shelf emptied
+      correct: true
+      why: Partial week.
+    - id: b
+      text: Bug
+      why: No.
+    - id: c
+      text: Seasonality
+      why: No.
+    - id: d
+      text: It under-corrects
+      why: Over.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C232
+    prompt: Fitting one model across a level shift…
+    options:
+    - id: a
+      text: Averages two regimes and fits neither
+      correct: true
+      why: Break.
+    - id: b
+      text: Is fine
+      why: No.
+    - id: c
+      text: Improves accuracy
+      why: No.
+    - id: d
+      text: Removes the break
+      why: No.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C233
+    prompt: The censoring feedback loop is…
+    options:
+    - id: a
+      text: Less stock → more stock-outs → lower recorded demand → less stock
+      correct: true
+      why: Self-reinforcing.
+    - id: b
+      text: Random
+      why: No.
+    - id: c
+      text: Seasonal
+      why: No.
+    - id: d
+      text: Imaginary
+      why: Real.
+- id: L7.5-L
+  title: L7.5 Breaks and lost sales (Leader)
+  lesson: L7.5
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C232
+    prompt: S017's share fell 36% from week 61. Next step?
+    options:
+    - id: a
+      text: Find the cause (competitor, refit, data feed) before re-forecasting
+      correct: true
+      why: Business cause.
+    - id: b
+      text: Close the store
+      why: Premature.
+    - id: c
+      text: Ignore
+      why: No.
+    - id: d
+      text: Average it out
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C232
+    prompt: CUSUM threshold choice is…
+    options:
+    - id: a
+      text: A policy on tolerable false alarms vs detection delay
+      correct: true
+      why: Trade-off.
+    - id: b
+      text: A statistical constant
+      why: No.
+    - id: c
+      text: Irrelevant
+      why: No.
+    - id: d
+      text: Always 5
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C233
+    prompt: Why might forecast 'accuracy' look good while customers find empty shelves?
+    model: Accuracy is measured against sales, which are capped by stock. If stock is short, forecasts of low sales look accurate while true demand goes unmet. Measure against in-stock-adjusted demand and track lost-sales estimates.
+    rubric: 'Full: censoring + measurement fix. Partial: censoring only.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C232
+    prompt: "Delinquency regime shift at {{ a.d7_dq_break_month }}. Forecast from…"
+    options:
+    - id: a
+      text: 'The new regime (or model the driver: vintage mix)'
+      correct: true
+      why: Relevant data.
+    - id: b
+      text: The full history
+      why: Mixes regimes.
+    - id: c
+      text: The old regime
+      why: Outdated.
+    - id: d
+      text: A coin
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C233
+    prompt: Which data should supply chain provide to fix censoring?
+    options:
+    - id: a
+      text: In-stock indicators by store-SKU-day
+      correct: true
+      why: Identify censored periods.
+    - id: b
+      text: Prices only
+      why: No.
+    - id: c
+      text: Nothing
+      why: No.
+    - id: d
+      text: Weather
+      why: No.
+- id: L7.6-F
+  title: L7.6 Inventory (Basic → Advanced)
+  lesson: L7.6
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C234
+    prompt: Safety stock (normal approximation) =
+    options:
+    - id: a
+      text: z × σ × √L
+      correct: true
+      why: Formula.
+    - id: b
+      text: μ × L
+      why: Cycle demand.
+    - id: c
+      text: z × μ
+      why: No.
+    - id: d
+      text: σ / L
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C234
+    prompt: Safety stock at 95% for the top SKU?
+    answer: "{{ a.d7_ss['95'] }}"
+    tolerance_abs: 3
+    explanation: "σ {{ a.d7_ss_sd }}, L = 2."
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C234
+    prompt: How much more safety stock (×) at 99% vs 95%?
+    answer: "{{ a.d7_ss_ratio_99_vs_95 }}"
+    tolerance_abs: 0.03
+    explanation: z 2.33 vs 1.645.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C234
+    prompt: "Poisson-based SS (95%) is {{ a.d7_ss_poisson_95 }} vs {{ a.d7_ss['95'] }}. Why?"
+    options:
+    - id: a
+      text: Demand is over-dispersed; Poisson assumes variance = mean
+      correct: true
+      why: Real σ larger.
+    - id: b
+      text: Poisson is more accurate
+      why: No.
+    - id: c
+      text: Rounding
+      why: No.
+    - id: d
+      text: Lead time
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C235
+    prompt: AX items are…
+    options:
+    - id: a
+      text: High value, low variability
+      correct: true
+      why: Tight automation.
+    - id: b
+      text: Low value, erratic
+      why: CZ.
+    - id: c
+      text: High value, erratic
+      why: AZ.
+    - id: d
+      text: Discontinued
+      why: No.
+  - id: q6
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C251
+    prompt: Newsvendor critical ratio for price 3.00, cost 1.20, salvage 0.30?
+    answer: "{{ a.d7_nv_crit }}"
+    tolerance_abs: 0.005
+    explanation: (p − c)/(p − s).
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C234
+    prompt: 'Cycle service level vs fill rate:'
+    options:
+    - id: a
+      text: Fill rate (share of demand served) is usually higher for the same stock
+      correct: true
+      why: Different definitions.
+    - id: b
+      text: Identical
+      why: No.
+    - id: c
+      text: Fill rate always lower
+      why: No.
+    - id: d
+      text: Unrelated
+      why: Related.
+  - id: q8
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C234
+    prompt: 95% capacity for monthly 30+ DPD entries (cases)?
+    answer: "{{ a.d7_coll_cap95 }}"
+    tolerance_abs: 5
+    explanation: Mean + 1.645 SD.
+- id: L7.6-L
+  title: L7.6 Service-level policy (Leader)
+  lesson: L7.6
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C234
+    prompt: Supply chain proposes 99% service on all SKUs. Response?
+    options:
+    - id: a
+      text: Differentiate by ABC/XYZ; show the stock cost of the last points
+      correct: true
+      why: +41% SS for 95→99.
+    - id: b
+      text: Approve
+      why: Costly.
+    - id: c
+      text: Reduce to 80% everywhere
+      why: Too blunt.
+    - id: d
+      text: Ignore
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C235
+    prompt: CZ items should usually be…
+    options:
+    - id: a
+      text: Ordered to demand or reviewed for delisting
+      correct: true
+      why: Low value, erratic.
+    - id: b
+      text: Held at 99%
+      why: Costly.
+    - id: c
+      text: Promoted
+      why: No.
+    - id: d
+      text: Forecast with ETS
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C234
+    prompt: Explain the 95% vs 99% decision for the top SKU to the COO.
+    model: "Going from 95% to 99% cycle service needs {{ a.d7_ss['99'] }} instead of {{ a.d7_ss['95'] }} units of safety stock (+{{ ((a.d7_ss_ratio_99_vs_95 - 1) * 100) | round(0) | int }}%). Worth it for a top-selling staple if a stock-out loses margin and customers; for slower lines a lower target frees working capital."
+    rubric: 'Full: numbers + trade-off + segmentation. Partial: numbers.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C234
+    prompt: Safety stock based on censored history will be…
+    options:
+    - id: a
+      text: Too low
+      correct: true
+      why: Variance and mean understated.
+    - id: b
+      text: Too high
+      why: No.
+    - id: c
+      text: Correct
+      why: No.
+    - id: d
+      text: Random
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C234
+    prompt: Inventory logic also applies to…
+    options:
+    - id: a
+      text: Agent capacity, branch cash, liquidity buffers
+      correct: true
+      why: Quantile buffers.
+    - id: b
+      text: Only stores
+      why: No.
+    - id: c
+      text: Nothing else
+      why: No.
+    - id: d
+      text: Marketing copy
+      why: No.
+- id: D7-GATE
+  title: Day 7 gate (pass 75%)
+  lesson: D7
+  track: Mixed
+  pass_mark: 75
+  questions:
+  - id: g01
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C222
+    prompt: Before forecasting, first…
+    options:
+    - id: a
+      text: Decompose and identify calendar effects
+      correct: true
+      why: Understand patterns.
+    - id: b
+      text: Fit a neural net
+      why: No.
+    - id: c
+      text: Compute MAPE
+      why: No.
+    - id: d
+      text: Remove seasonality blindly
+      why: No.
+  - id: g02
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C225
+    prompt: 'Benchmark for a seasonal series:'
+    options:
+    - id: a
+      text: Seasonal naive
+      correct: true
+      why: Strong baseline.
+    - id: b
+      text: Mean
+      why: Weak.
+    - id: c
+      text: Zero
+      why: No.
+    - id: d
+      text: Last value
+      why: Weaker.
+  - id: g03
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C228
+    prompt: Forecast drivers must be…
+    options:
+    - id: a
+      text: Known or forecast at forecast time
+      correct: true
+      why: No look-ahead.
+    - id: b
+      text: Highly correlated
+      why: Not enough.
+    - id: c
+      text: Actual values
+      why: Leakage.
+    - id: d
+      text: Ignored
+      why: No.
+  - id: g04
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C229
+    prompt: Choose models by…
+    options:
+    - id: a
+      text: Rolling-origin backtests
+      correct: true
+      why: Robust.
+    - id: b
+      text: One window
+      why: Fragile.
+    - id: c
+      text: Training fit
+      why: No.
+    - id: d
+      text: R²
+      why: No.
+  - id: g05
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C212
+    prompt: Zeros in actuals → avoid…
+    options:
+    - id: a
+      text: MAPE
+      correct: true
+      why: Division by zero.
+    - id: b
+      text: WAPE
+      why: Fine.
+    - id: c
+      text: MASE
+      why: Fine.
+    - id: d
+      text: Bias
+      why: Fine.
+  - id: g06
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C230
+    prompt: Intermittent demand → …
+    options:
+    - id: a
+      text: SBA / low-α SES; judge by bias and service
+      correct: true
+      why: Sparse methods.
+    - id: b
+      text: Holt-Winters
+      why: No.
+    - id: c
+      text: Zero forecast
+      why: Empties shelves.
+    - id: d
+      text: MAPE
+      why: No.
+  - id: g07
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C231
+    prompt: Forecasts at different levels must…
+    options:
+    - id: a
+      text: Add up (coherent)
+      correct: true
+      why: Reconciliation.
+    - id: b
+      text: Use the same model
+      why: No.
+    - id: c
+      text: Be independent
+      why: No.
+    - id: d
+      text: Be rounded
+      why: No.
+  - id: g08
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C232
+    prompt: Unit-specific level shifts are best found on…
+    options:
+    - id: a
+      text: The unit's share of the total
+      correct: true
+      why: Removes common patterns.
+    - id: b
+      text: Raw values
+      why: Seasonality masks.
+    - id: c
+      text: Differences
+      why: Not ideal.
+    - id: d
+      text: Logs only
+      why: Not enough.
+  - id: g09
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C233
+    prompt: Stock-outs bias recorded demand…
+    options:
+    - id: a
+      text: Downward
+      correct: true
+      why: Censoring.
+    - id: b
+      text: Upward
+      why: No.
+    - id: c
+      text: Not at all
+      why: No.
+    - id: d
+      text: Randomly
+      why: No.
+  - id: g10
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C234
+    prompt: 95% → 99% service on normal demand raises safety stock by about…
+    options:
+    - id: a
+      text: 40%
+      correct: true
+      why: 2.33/1.645.
+    - id: b
+      text: 4%
+      why: No.
+    - id: c
+      text: 100%
+      why: No.
+    - id: d
+      text: 0%
+      why: No.
+  - id: g11
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C235
+    prompt: ABC classifies by…
+    options:
+    - id: a
+      text: Value (revenue)
+      correct: true
+      why: Pareto.
+    - id: b
+      text: Variability
+      why: XYZ.
+    - id: c
+      text: Alphabet
+      why: No.
+    - id: d
+      text: Supplier
+      why: No.
+  - id: g12
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C251
+    prompt: Newsvendor orders the demand quantile at…
+    options:
+    - id: a
+      text: (p − c) ÷ (p − s)
+      correct: true
+      why: Critical ratio.
+    - id: b
+      text: 50%
+      why: Only if costs balance.
+    - id: c
+      text: Mean demand
+      why: No.
+    - id: d
+      text: Max demand
+      why: No.

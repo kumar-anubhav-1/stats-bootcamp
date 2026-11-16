@@ -1,0 +1,24 @@
+{
+  "retail": {
+    "transactions": "19e47ee6a6f8f834",
+    "products": "48f795c8cca0272d",
+    "products_archive": "837e93c3e9cfc5b6",
+    "stores": "0eac0da91519f3ca",
+    "customers": "6925ca3e851ed91b",
+    "calendar": "ca0cd24e14b99ac1",
+    "weekly_store": "c1f2fe706e489d62",
+    "weekly_store_category": "2086633c8f5da915",
+    "weekly_region_category": "511335cd8b621da6",
+    "weekly_sku_chain": "a1f832a26ea8f3e4",
+    "price_elasticity_extract": "389f4098e3671e7d",
+    "ecoupon_ab": "fc9ab7e8f26edbe4"
+  },
+  "finance": {
+    "accounts": "bbda6c697ffad22e",
+    "performance_monthly": "a5b4681c5f6bdfb3",
+    "applications_declined": "76145670a353bbf5",
+    "devices_addresses": "bba9d1dcad78b6f6",
+    "policies": "78f5cb8d99865865",
+    "claims": "3f0e025e70f583c8"
+  }
+}

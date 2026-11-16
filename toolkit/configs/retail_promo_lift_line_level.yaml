@@ -1,0 +1,20 @@
+# Teaching contrast for L3.4: the WRONG unit. Panel lines analysed individually although stores were randomised.
+recipe: rcp_two_group_test
+dataset:
+  name: northstar_transactions
+  path: data/retail/transactions.parquet
+columns:
+  group: experiment_group
+  target: quantity
+  cluster: store_id
+  id: line_id
+filters:
+  - "category == 'Hair Care'"
+  - "week >= 70 and week <= 77"
+  - "return_flag == False and quantity > 0"
+params:
+  groups: [test, control]
+  aggregate_to: none
+  seed: 42
+output:
+  folder: outputs/{recipe}/{date}_retail_promo_lift_line_level

@@ -1,0 +1,17 @@
+# L1.6 reuse: income outliers on the bank accounts
+recipe: rcp_outliers
+dataset:
+  name: meridian_accounts
+  path: data/finance/accounts.parquet
+columns:
+  target: income_annual
+  id: account_id
+filters:
+  - "income_annual > 0"
+params:
+  iqr_k: [1.5, 3]
+  z: 3
+  robust_z: 3.5
+  isolation_forest: {columns: [income_annual, limit_or_loan_amount, balance_current, dti], contamination: 0.01}
+output:
+  folder: outputs/{recipe}/{date}_finance_income

@@ -1,0 +1,333 @@
+# Day 5 exercises (15 retail + 15 finance). Values are computed from the data.
+retail:
+  - id: R5-1
+    lesson: L5.1
+    tier: Basic
+    title: Drivers of Beverages sales
+    framing: The Beverages buyer wants to know what moves weekly sales per store.
+    deliverable: "Run `retail_regression_beverages.yaml`; give every coefficient as a business sentence with its CI."
+    expected: "Temperature +{{ a.d5_bev_temp_pct }}% per °C; holiday +{{ a.d5_bev_hol_pct }}%; +10 pp promo share +{{ a.d5_bev_promo10_pct }}%; +10 pp stock-out share {{ a.d5_bev_stock10_pct }}%; R² {{ a.d5_bev_r2 }}."
+    tolerance: "± 0.2 pp"
+    model: "Each effect is a % change holding the others and the store fixed. Temperature and holiday effects match the planted truths closely."
+    wrong: "Reading the promo coefficient (~0.89) as '+89%'."
+    leader: Which of these effects can the buyer control, and which only forecast?
+  - id: R5-2
+    lesson: L5.1
+    tier: Applied
+    title: Raw units vs log units
+    framing: A junior fitted the same drivers on raw units with format dummies.
+    deliverable: Temperature and holiday coefficients from the raw-units model; explain why they differ from the log model.
+    expected: "Raw: +{{ a.d5_raw_temp_b }} units per °C and +{{ a.d5_raw_hol_b }} units in holiday weeks (mean {{ a.d5_bev_mean_units }} units/store-week)."
+    tolerance: "± 0.2"
+    model: "Raw effects are averages over stores of very different size; a Hyper store gains far more units than an Express store. Log effects are proportional and comparable."
+    wrong: "Applying +57 units to every store."
+    leader: Which model would you use to plan stock for an Express store in a heatwave?
+  - id: R5-3
+    lesson: L5.2
+    tier: Basic
+    title: Heteroscedasticity check
+    framing: Can we trust the raw-units model's standard errors?
+    deliverable: Breusch-Pagan p and residual skew for raw vs log models; HC3 SE for temperature.
+    expected: "BP p {{ a.d5_bp_raw_p }} (raw) vs {{ a.d5_bp_log_p }} (log); skew {{ a.d5_raw_resid_skew }} vs {{ a.d5_log_resid_skew }}; temperature SE {{ a.d5_raw_temp_se }} → {{ a.d5_raw_temp_se_hc3 }} with HC3."
+    tolerance: "orders of magnitude for p"
+    model: "Big stores vary more in units — a fan of residuals. Log the outcome and use robust SEs."
+    wrong: "Ignoring the fan because coefficients look sensible."
+    leader: Make HC3 the team default? Any downside?
+  - id: R5-4
+    lesson: L5.2
+    tier: Applied
+    title: Influential store-weeks
+    framing: The model has 4,160 rows — are any distorting it?
+    deliverable: Max Cook's distance, count above 4/n, and an explanation of the top five.
+    expected: "Max Cook's D {{ a.d5_cook_max }}; {{ a.d5_cook_n_4n }} rows above 4/n."
+    tolerance: "± 10%"
+    model: "No single row dominates (max D is tiny); rows above 4/n are expected in large samples. Inspect the top ones (holiday weeks, store-specific shocks) — don't delete."
+    wrong: "Dropping all rows above 4/n."
+    leader: When would you remove an influential row?
+  - id: R5-5
+    lesson: L5.3
+    tier: Basic
+    title: Who returns what?
+    framing: The returns team wants to know which lines are likelier to be returned.
+    deliverable: Logistic model of return_flag on Electronics, log unit price, non-store channel and loyalty; odds ratios and AUC.
+    expected: "Electronics OR {{ a.d5_ret_or_elec }} (CI {{ a.d5_ret_or_elec_ci[0] }}–{{ a.d5_ret_or_elec_ci[1] }}); price OR {{ a.d5_ret_or_lp }} per log unit; channel OR {{ a.d5_ret_or_online }} (p = {{ a.d5_ret_or_online_p }}); AUC {{ a.d5_ret_auc }}."
+    tolerance: "± 0.05"
+    model: "Electronics and pricier items are returned more, but the model barely ranks lines (AUC near 0.5) — returns are mostly unpredictable from line attributes."
+    wrong: "Calling it a good predictive model because drivers are significant."
+    leader: What data would improve return prediction?
+  - id: R5-6
+    lesson: L5.4
+    tier: Basic
+    title: Overfitting with few rows
+    framing: A junior fits a 59-feature model on two weeks of data.
+    deliverable: Train and test R² for OLS on weeks 77–78 vs LassoCV; features and noise columns kept.
+    expected: "OLS train {{ a.d5_r2_ols8_tr }}, test {{ a.d5_r2_ols8_te }}; lasso test {{ a.d5_r2_las8_te }} ({{ a.d5_las8_kept }} kept, {{ a.d5_las8_noise_kept }} noise)."
+    tolerance: "± 0.05"
+    model: "With 80 rows and 59 features OLS memorises noise. The penalty generalises better, though it still keeps some noise."
+    wrong: "Trusting the training R²."
+    leader: What minimum rows-per-feature rule would you set?
+  - id: R5-7
+    lesson: L5.4
+    tier: Applied
+    title: When regularisation doesn't matter
+    framing: Same model trained on 78 weeks.
+    deliverable: Test R² for OLS, ridge and lasso.
+    expected: "OLS {{ a.d5_r2_ols_te }}, ridge {{ a.d5_r2_ridge_te }}, lasso {{ a.d5_r2_lasso_te }}."
+    tolerance: "± 0.01"
+    model: "With thousands of rows per feature the penalty chosen by CV is tiny; all three agree."
+    wrong: "Expecting lasso to always win."
+    leader: How would you explain to a stakeholder why the 'advanced' method didn't help?
+  - id: R5-8
+    lesson: L5.4
+    tier: Stretch
+    title: AIC/BIC for nested models
+    framing: Should the model include promotions and a region × temperature interaction?
+    deliverable: AIC and BIC for the three nested models.
+    expected: "{% for k, v in a.d5_ic.items() %}{{ k }}: AIC {{ v.aic | n }}, BIC {{ v.bic | n }}; {% endfor %}"
+    tolerance: "± 5"
+    model: "Both criteria favour promotions/stock-outs. The interaction also improves AIC/BIC — check whether it holds out of sample, since the planted temperature effect is the same in all regions."
+    wrong: "Adding the interaction because AIC fell."
+    leader: What would convince you a regional temperature effect is real?
+  - id: R5-9
+    lesson: L5.5
+    tier: Basic
+    title: Poisson or negative binomial for units?
+    framing: Model weekly Beverages units as counts.
+    deliverable: Poisson dispersion, AIC of Poisson vs NB, temperature effect and SE in each.
+    expected: "Dispersion {{ a.d5_pois_disp }}; AIC {{ a.d5_pois_aic | n }} vs {{ a.d5_nb_aic | n }}; temperature +{{ a.d5_pois_temp_pct }}% (SE {{ a.d5_pois_temp_se }}) vs +{{ a.d5_nb_temp_pct }}% (SE {{ a.d5_nb_temp_se }})."
+    tolerance: "± 0.1"
+    model: "Over-dispersed: Poisson SEs are too small. NB fits much better with similar effects and honest SEs."
+    wrong: "Reporting Poisson p-values."
+    leader: Where else in your reporting might Poisson SEs be overconfident?
+  - id: R5-10
+    lesson: L5.5
+    tier: Applied
+    title: Quantile thinking for staffing
+    framing: Store operations staff for busy hours, not average hours.
+    deliverable: Explain how quantile regression of basket value (P90) on format and day of week would differ from OLS, and when you'd use it.
+    expected: "Quantile regression models a percentile directly; effects on P90 can differ from effects on the mean (bulk buyers)."
+    tolerance: "—"
+    model: "Use when the decision depends on the tail (staffing, stock buffers); robust to extreme baskets."
+    wrong: "Using the mean basket to staff peak hours."
+    leader: Which of your KPIs should be a percentile?
+  - id: R5-11
+    lesson: L5.6
+    tier: Basic
+    title: Store random effects
+    framing: How much of basket value is the store?
+    deliverable: Mixed model of log basket value (format fixed, store random); ICC; shrinkage factor for the smallest and median store.
+    expected: "ICC {{ a.d5_mix_icc }}; shrinkage {{ a.d5_mix_shrink }} for {{ a.d5_mix_small_store }} ({{ a.d5_mix_small_n }} baskets) and {{ a.d5_mix_shrink_median }} for the median store ({{ a.d5_mix_n_median }})."
+    tolerance: "± 0.02"
+    model: "Most variation is between baskets. Small stores' raw averages are pulled strongly toward their format mean."
+    wrong: "Ranking stores on raw average basket."
+    leader: How would you use shrunk store effects in a store league table?
+  - id: R5-12
+    lesson: L5.6
+    tier: Applied
+    title: Is the temperature effect linear?
+    framing: The buyer suspects sales respond more on very hot days.
+    deliverable: Add a spline in temperature (3 df); compare AIC and plot the partial effect.
+    expected: "The spline adds little: the planted effect is linear (+2% per °C), so AIC changes only slightly."
+    tolerance: "—"
+    model: "Check non-linearity with a spline and a plot; keep the linear term when the gain is negligible."
+    wrong: "Keeping a spline because one knot is 'significant'."
+    leader: When is extra flexibility worth the complexity?
+  - id: R5-13
+    lesson: L5.7
+    tier: Basic
+    title: Mix vs rate decomposition
+    framing: Margin fell from 2025Q1 to 2025Q2.
+    deliverable: Margin rates by quarter; mix and rate effects over category × promotion segments; top three segment contributions.
+    expected: "{{ a.d5_cap_m_q1 }}% → {{ a.d5_cap_m_q2 }}%; mix {{ a.d5_cap_mix_pp }} pp, rate {{ a.d5_cap_rate_pp }} pp; top: {{ a.d5_cap_top_rate | kv(' pp') }}."
+    tolerance: "± 0.05 pp"
+    model: "Almost all of the fall is within segments, led by regular-price lines — not a shift toward promotions."
+    wrong: "Blaming more promotions."
+    leader: Who owns the follow-up?
+  - id: R5-14
+    lesson: L5.7
+    tier: Applied
+    title: Why did regular margins fall?
+    framing: Explain the rate effect.
+    deliverable: Regular-line shelf price ÷ list and unit cost ÷ list by quarter and region; regular margin; Q3 recovery.
+    expected: "Price index {{ a.d5_cap_reg_pidx_q1 }} → {{ a.d5_cap_reg_pidx_q2 }} (Q3 {{ a.d5_cap_reg_pidx_q3 }}); cost index {{ a.d5_cap_reg_cidx_q1 }} → {{ a.d5_cap_reg_cidx_q2 }}; regular margin {{ a.d5_cap_reg_m_q1 }}% → {{ a.d5_cap_reg_m_q2 }}%."
+    tolerance: "± 0.005"
+    model: "Regional shelf prices were cut (North, South, West) while costs were flat; prices recovered in Q3 and so did margin."
+    wrong: "Blaming supplier costs."
+    leader: Was the price cut a good decision? What would you need to know (volume response, Day 8)?
+  - id: R5-15
+    lesson: L5.7
+    tier: Stretch
+    title: Promotion depth
+    framing: Promoted lines' margin also fell.
+    deliverable: Promoted-line margin by quarter; regression of margin rate on discount depth + category + quarter.
+    expected: "Promo margin {{ a.d5_cap_promo_m_q1 }}% → {{ a.d5_cap_promo_m_q2 }}%; each +1 pp discount costs {{ a.d5_cap_mr_per_disc_pp | abs }} pp margin; Q2 effect {{ a.d5_cap_q2_effect_raw_pp }} → {{ a.d5_cap_q2_effect_after_disc_pp }} pp after adjusting for depth."
+    tolerance: "± 0.3 pp"
+    model: "Deeper discounts explain part of the promo-margin fall; the remainder reflects the same regional price cuts."
+    wrong: "Attributing the whole fall to discount depth."
+    leader: What guardrail would you put on promotion depth?
+finance:
+  - id: F5-1
+    lesson: L5.1
+    tier: Basic
+    title: How limits are set
+    framing: Risk asks for evidence of how credit limits relate to income.
+    deliverable: log(limit) on log(income) + product type; elasticity, product effect, R².
+    expected: "Elasticity {{ a.d5_lim_elast }}; personal loans +{{ a.d5_lim_loan_pct }}%; R² {{ a.d5_lim_r2 }}."
+    tolerance: "± 0.01"
+    model: "Limits are proportional to income (the policy rule). Near-perfect R² reflects a rule, not behaviour."
+    wrong: "Presenting the elasticity as a customer insight."
+    leader: What does this imply for using both income and limit in risk models?
+  - id: F5-2
+    lesson: L5.1
+    tier: Applied
+    title: Risk-based pricing
+    framing: Is pricing driven by risk?
+    deliverable: Interest rate (%) on bureau score + product + DTI; effect per 100 bureau points; DTI p; R².
+    expected: "{{ a.d5_rate_bureau_100 }} pp per +100 points; personal loans {{ a.d5_rate_loan }} pp; DTI p = {{ a.d5_rate_dti_p }}; R² {{ a.d5_rate_r2 }}."
+    tolerance: "± 0.05"
+    model: "Pricing follows bureau score; DTI adds nothing given the score."
+    wrong: "Concluding DTI 'doesn't matter for risk' — it matters for default (L5.3), just not for our pricing rule."
+    leader: Should DTI enter pricing?
+  - id: F5-3
+    lesson: L5.2
+    tier: Basic
+    title: VIF for income and limit
+    framing: "Run `finance_vif_income_limit.yaml`."
+    deliverable: VIFs and correlation of income with limit (cards).
+    expected: "VIF {{ a.d5_vif | kv }}; r = {{ a.d5_il_corr_cards }}."
+    tolerance: "± 1"
+    model: "Extreme collinearity: their separate coefficients are not interpretable."
+    wrong: "Interpreting the income odds ratio."
+    leader: Which one would you keep, and why?
+  - id: F5-4
+    lesson: L5.2
+    tier: Applied
+    title: Flipping signs
+    framing: Two model versions disagree about income.
+    deliverable: Income and limit coefficients from five random 3,000-account samples; income-only model.
+    expected: "Income positive in {{ a.d5_flip_n_inc_pos }} of 5; income-only β {{ a.d5_inc_only_b }} (SE {{ a.d5_inc_only_se }})."
+    tolerance: "signs"
+    model: "Collinearity makes the split arbitrary; the income-only model is stable and near zero once bureau score is in."
+    wrong: "Building a narrative on the latest sign."
+    leader: How would this fail an adverse-action explanation review?
+  - id: F5-5
+    lesson: L5.3
+    tier: Basic
+    title: Default drivers as odds ratios
+    framing: "Run `finance_logit_default.yaml` (or the lesson model)."
+    deliverable: ORs with CIs for bureau (+50), utilisation (+10 pp), DTI, unverified income, partner and online channels; AUC.
+    expected: "Bureau {{ a.d5_or_bureau }}; utilisation {{ a.d5_or_util }}; DTI {{ a.d5_or_dti }}; unverified {{ a.d5_or_unver }}; partner {{ a.d5_or_partner }}; online {{ a.d5_or_online }}; AUC {{ a.d5_logit_auc }}."
+    tolerance: "± 0.05"
+    model: "Bureau score is protective; partner channel, unverified income, DTI and utilisation raise the odds; online ≈ branch."
+    wrong: "Saying partner customers are '2.5 times more likely' without noting it is odds."
+    leader: Rewrite the partner finding for the CRO in pp.
+  - id: F5-6
+    lesson: L5.3
+    tier: Applied
+    title: Marginal effects
+    framing: The CRO wants percentage points.
+    deliverable: Average marginal effect of the partner channel on PD.
+    expected: "+{{ a.d5_me_partner_pp }} pp."
+    tolerance: "± 0.2 pp"
+    model: "Holding other drivers at their observed values, partner customers' PD is ~3 pp higher on average."
+    wrong: "Using the odds ratio as a pp effect."
+    leader: Is the partner premium priced in?
+  - id: F5-7
+    lesson: L5.4
+    tier: Basic
+    title: Lasso feature screen
+    framing: 40 candidate features (20 noise) for a default model, 4,000 training accounts.
+    deliverable: "Unpenalised vs lasso (best CV and 1-SE): features kept, noise kept, test AUC."
+    expected: "Full: train {{ a.d5_f_auc_full_tr }}, test {{ a.d5_f_auc_full_te }}; best CV: {{ a.d5_f_l1best_kept }} kept, {{ a.d5_f_l1best_noise_kept }} noise, AUC {{ a.d5_f_auc_l1best_te }}; 1-SE: {{ a.d5_f_l1_kept }} kept, AUC {{ a.d5_f_auc_l1_te }}."
+    tolerance: "± 0.01 AUC"
+    model: "Lasso drops noise and predicts as well with far fewer variables; 1-SE gives an even simpler model at little cost."
+    wrong: "Keeping all 40 because AUC on training is higher."
+    leader: Which model would you take to production?
+  - id: F5-8
+    lesson: L5.4
+    tier: Applied
+    title: Ridge vs lasso with collinear predictors
+    framing: Income and limit are both candidates.
+    deliverable: Compare ridge and lasso coefficients for income and limit (standardised).
+    expected: "Ridge shares the effect between them; lasso tends to keep one and zero the other."
+    tolerance: "—"
+    model: "Neither split is causal; choose by business meaning and stability."
+    wrong: "Concluding lasso 'proved' limit doesn't matter."
+    leader: What governance note would you add to a model using lasso selection?
+  - id: F5-9
+    lesson: L5.5
+    tier: Basic
+    title: Claim frequency GLM
+    framing: "Run `finance_claims_frequency.yaml`."
+    deliverable: Rate ratios by driver age and vehicle group; overall frequency; Poisson dispersion and AIC vs NB.
+    expected: "Frequency {{ a.d5_freq_rate }}/policy-year; rate ratios {{ a.d5_freq_rr | kv }} (vs {{ a.d5_freq_base_band }}); vehicle group ×{{ a.d5_freq_rr_vg }}; dispersion {{ a.d5_freq_pois_disp }}; AIC {{ a.d5_freq_pois_aic | n }} vs {{ a.d5_freq_nb_aic | n }}."
+    tolerance: "± 0.05"
+    model: "Young drivers claim ~1.7× as often; NB fits better than Poisson (unobserved heterogeneity)."
+    wrong: "Fitting counts without the exposure offset."
+    leader: Which rating factor would you revisit first?
+  - id: F5-10
+    lesson: L5.5
+    tier: Applied
+    title: Large-loss loading
+    framing: Pricing uses mean severity.
+    deliverable: Mean severity, P99 cap, capped mean, loading.
+    expected: "Mean {{ a.d5_sev_mean | n }}; cap {{ a.d5_sev_cap | n }}; capped mean {{ a.d5_sev_mean_capped | n }}; loading {{ a.d5_large_loading_pct }}%."
+    tolerance: "± 1%"
+    model: "Model attritional severity with Gamma on capped claims and add a separate large-loss load."
+    wrong: "Dropping large claims from pricing."
+    leader: How often should the load be revisited?
+  - id: F5-11
+    lesson: L5.5
+    tier: Stretch
+    title: Is motor profitable?
+    framing: The board asks about product profitability.
+    deliverable: Loss ratio by product; motor pure premium per policy-year.
+    expected: "Loss ratios {{ a.d5_loss_ratio | kv }}; motor pure premium {{ a.d5_pure_premium_motor | n }}."
+    tolerance: "± 0.01"
+    model: "Motor claims exceed premiums; re-rate (young drivers, vehicle group, large-loss load)."
+    wrong: "Averaging products into one loss ratio."
+    leader: What is your target loss ratio, and how fast would you re-price?
+  - id: F5-12
+    lesson: L5.6
+    tier: Basic
+    title: The utilisation curve
+    framing: Collections triggers are set on utilisation.
+    deliverable: Observed default by utilisation band vs linear-logit prediction; AIC/AUC of linear, bins, spline.
+    expected: "Observed {{ a.d5_util_obs | kv('%') }}; linear predicted {{ a.d5_util_lin_pred | kv('%') }}; AIC linear {{ a.d5_util_lin_aic | n }}, bins {{ a.d5_util_bin_aic | n }}, spline {{ a.d5_util_spl_aic | n }}."
+    tolerance: "± 0.3 pp"
+    model: "Risk climbs steeply above 80%; the linear term under-predicts the top band. Splines fit best; bins are the explainable alternative."
+    wrong: "Judging only by AUC (nearly identical)."
+    leader: Where would you set a collections trigger?
+  - id: F5-13
+    lesson: L5.6
+    tier: Applied
+    title: Young × high DTI
+    framing: Is high DTI worse for young customers?
+    deliverable: 2×2 default rates; interaction OR with CI; cell size.
+    expected: "Rates {{ a.d5_int_rates | kv('%') }}; interaction OR {{ a.d5_int_or }} (CI {{ a.d5_int_ci[0] }}–{{ a.d5_int_ci[1] }}), n = {{ a.d5_int_n_cell }}."
+    tolerance: "± 0.1"
+    model: "Yes — the combination is worse than the sum of parts, but the estimate is imprecise."
+    wrong: "Interpreting main effects alone when an interaction is present."
+    leader: Would you add a policy rule or a model term?
+  - id: F5-14
+    lesson: L5.7
+    tier: Basic
+    title: Why are approvals down?
+    framing: The sales director says underwriting got stricter.
+    deliverable: Approval rate by quarter and channel (booked + declined); partner share in 2025Q2.
+    expected: "{{ a.d5_appr_q1 }}% → {{ a.d5_appr_q2 }}%; non-partner {{ a.d5_appr_nonpartner_q1 }}% → {{ a.d5_appr_nonpartner_q2 }}%; partner {{ a.d5_appr_by_ch['2025Q2_partner'] }}% approval and {{ a.d5_partner_share_q2 }}% of applications."
+    tolerance: "± 0.2 pp"
+    model: "A pure mix effect: a new, weaker applicant stream arrived; underwriting is unchanged."
+    wrong: "Comparing overall rates without the channel split."
+    leader: What is the right question for the sales director?
+  - id: F5-15
+    lesson: L5.7
+    tier: Applied
+    title: Link approvals to defaults
+    framing: Risk committee wants one story.
+    deliverable: Connect the approval drop to the default rise in 2025Q2–Q3 vintages (L3.3) and to channel default rates.
+    expected: "Partner customers default at ~{{ a.d2_pd_partner_pct }}% vs ~3% elsewhere; their arrival explains both the approval drop and much of the default rise."
+    tolerance: "—"
+    model: "One cause, two symptoms. Evaluate the partner channel's economics (approval, default, margin) rather than treating each metric separately."
+    wrong: "Two separate investigations."
+    leader: What decision does the committee actually need to take?

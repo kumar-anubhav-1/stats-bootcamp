@@ -1,0 +1,9 @@
+# L2.3: which distribution describes basket value? (clean sales lines aggregated to baskets)
+recipe: rcp_distribution_fit
+dataset: {name: northstar_transactions, path: data/retail/transactions.parquet}
+columns: {target: revenue}
+filters:
+  - "return_flag == False and quantity > 0"
+  - "unit_price < 20 * list_price"
+params: {unit: basket_id, agg: sum, kind: continuous, tail_quantiles: [0.9, 0.99]}
+output: {folder: "outputs/{recipe}/{date}_retail_basket_value"}

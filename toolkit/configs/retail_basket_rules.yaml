@@ -1,0 +1,12 @@
+# L8.3: subcategory association rules (subcategory mapped from the product masters, including archived SKUs).
+recipe: rcp_basket
+dataset: {name: northstar_transactions, path: data/retail/transactions.parquet}
+columns: {basket: basket_id, item: subcategory}
+filters: ["return_flag == False"]
+params:
+  item_map: {paths: [data/retail/products.parquet, data/retail/products_archive.parquet], key: sku, value: subcategory, source: sku}
+  min_support: 0.01
+  min_lift: 1.2
+  top_n: 10
+  common_share: 0.3
+output: {folder: "outputs/{recipe}/{date}_retail_basket_rules"}

@@ -1,0 +1,11 @@
+{
+  "name": "Stats Bootcamp",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "postCreateCommand": "pip install -e . && python -m datagen.generate",
+  "customizations": {
+    "vscode": {
+      "extensions": ["anthropic.claude-code", "ms-python.python", "ms-toolsai.jupyter", "redhat.vscode-yaml", "yzhang.markdown-all-in-one"]
+    }
+  },
+  "forwardPorts": [8000]
+}

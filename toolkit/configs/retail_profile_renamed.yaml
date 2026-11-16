@@ -1,0 +1,14 @@
+# Reuse drill: same recipe, renamed-column variant. Only the column mapping changes.
+recipe: rcp_profile
+dataset:
+  name: northstar_transactions_renamed
+  path: data/retail/variants/transactions_renamed.parquet
+  grain: line
+columns:
+  id: row_ref
+  date: txn_date
+  target: net_sales
+filters: []
+params: {}
+output:
+  folder: outputs/{recipe}/{date}_{dataset}

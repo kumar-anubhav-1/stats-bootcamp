@@ -1,0 +1,17 @@
+# L5.1/L5.2: drivers of weekly Beverages units per store. Temperature and holidays come from weekly_store (join).
+recipe: rcp_regression
+dataset:
+  name: northstar_weekly_store_category
+  path: data/retail/weekly_store_category.parquet
+  joins:
+    - {path: data/retail/weekly_store.parquet, keys: [store_id, week], columns: [avg_temperature_c, holiday_flag, format, region]}
+columns: {target: units, features: [promo_sku_share, stockout_sku_share, avg_temperature_c, holiday_flag]}
+filters:
+  - "category == 'Beverages'"
+  - "units > 0"
+params:
+  family: ols
+  formula: "np.log(units) ~ promo_sku_share + stockout_sku_share + avg_temperature_c + holiday_flag + C(store_id)"
+  robust: HC3
+  hide: ["C(store_id)"]
+output: {folder: "outputs/{recipe}/{date}_retail_regression_beverages"}

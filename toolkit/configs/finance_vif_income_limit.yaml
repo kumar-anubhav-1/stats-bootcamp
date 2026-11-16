@@ -1,0 +1,12 @@
+# L5.2 (F06): income and credit limit together in a credit-card default model — check VIF and coefficient stability.
+recipe: rcp_regression
+dataset: {name: meridian_accounts, path: data/finance/accounts.parquet}
+columns: {target: default_12m, features: [income_annual, limit_or_loan_amount, bureau_score, dti]}
+filters:
+  - "product_type == 'credit_card'"
+  - "income_annual > 0"
+params:
+  family: logit
+  formula: "default_12m ~ I(income_annual/1e4) + I(limit_or_loan_amount/1e4) + bureau_score + dti"
+  robust: none
+output: {folder: "outputs/{recipe}/{date}_finance_vif_income_limit"}

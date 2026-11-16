@@ -1,0 +1,7 @@
+# L6.4: out-of-time validation — train on vintages up to 2024Q4, test on 2025Q1-Q3.
+recipe: rcp_classifier
+dataset: {name: meridian_accounts, path: data/finance/accounts.parquet}
+columns: {target: default_12m, features: [age, income_annual, income_verified_flag, bureau_score, dti, inquiries_6m, delinq_2y, utilisation, product_type, limit_or_loan_amount, acquisition_channel, tenure_months_with_bank, employment_type], time: vintage}
+filters: []
+params: {split: time, cutoff: "2024Q4", models: [logistic, gbm], seed: 42}
+output: {folder: "outputs/{recipe}/{date}_finance_classifier_oot"}

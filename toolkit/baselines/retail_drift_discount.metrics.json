@@ -1,0 +1,72 @@
+{
+  "n_reference": 448,
+  "n_current": 252,
+  "psi": {
+    "discount_pct": 8.5015,
+    "unit_price": 0.0444,
+    "quantity": 0.0021,
+    "category": 0.0577
+  },
+  "bands": {
+    "discount_pct": "act",
+    "unit_price": "stable",
+    "quantity": "stable",
+    "category": "stable"
+  },
+  "unit_flags": [
+    "discount_pct"
+  ],
+  "categorical_shares": {
+    "category": {
+      "Bakery": [
+        0.1183,
+        0.0794
+      ],
+      "Beer & Wine": [
+        0.0312,
+        0.0357
+      ],
+      "Beverages": [
+        0.1384,
+        0.1944
+      ],
+      "Dairy": [
+        0.1183,
+        0.123
+      ],
+      "Electronics": [
+        0.0022,
+        0.004
+      ],
+      "Fresh Produce": [
+        0.1384,
+        0.1071
+      ],
+      "Frozen": [
+        0.058,
+        0.0675
+      ],
+      "Hair Care": [
+        0.0223,
+        0.0317
+      ],
+      "Household": [
+        0.0513,
+        0.0595
+      ],
+      "Pantry": [
+        0.0714,
+        0.0833
+      ],
+      "Personal Care": [
+        0.0424,
+        0.0357
+      ],
+      "Snacks": [
+        0.2076,
+        0.1786
+      ]
+    }
+  },
+  "performance": {}
+}

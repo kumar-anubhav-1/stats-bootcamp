@@ -1,0 +1,44 @@
+{
+  "rows": 25000,
+  "duplicate_rows": 150,
+  "duplicate_ids": 150,
+  "rules": {
+    "negative_qty_not_return": 40,
+    "price_far_above_list": 25,
+    "revenue_not_qty_x_price": 235,
+    "discount_as_fraction": 262
+  },
+  "missing_pct": {
+    "age_band": 5.44,
+    "household_size": 17.89,
+    "temperature_c": 2.37
+  },
+  "missing_tests": {
+    "age_band|loyalty_flag|row": 0.0,
+    "age_band|region|row": 0.00079,
+    "age_band|channel|row": 0.000878,
+    "age_band|format|row": 0.0,
+    "age_band|loyalty_flag|customer_id": 0.0,
+    "age_band|region|customer_id": 0.659401,
+    "age_band|channel|customer_id": 0.298235,
+    "age_band|format|customer_id": 0.167535,
+    "household_size|loyalty_flag|row": 0.009205,
+    "household_size|region|row": 1e-06,
+    "household_size|channel|row": 0.0,
+    "household_size|format|row": 0.0,
+    "household_size|loyalty_flag|customer_id": 0.612594,
+    "household_size|region|customer_id": 0.889607,
+    "household_size|channel|customer_id": 0.613404,
+    "household_size|format|customer_id": 0.636397,
+    "temperature_c|loyalty_flag|row": 0.493443,
+    "temperature_c|region|row": 1e-06,
+    "temperature_c|channel|row": 0.870424,
+    "temperature_c|format|row": 0.011726,
+    "temperature_c|loyalty_flag|region+date": 0.114558,
+    "temperature_c|region|region+date": 0.83432,
+    "temperature_c|channel|region+date": 0.853118,
+    "temperature_c|format|region+date": 0.536161
+  },
+  "reconciliation": null,
+  "clean_rows": 24785
+}

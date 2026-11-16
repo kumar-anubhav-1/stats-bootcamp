@@ -1,0 +1,7 @@
+# L8.4 (R13): Snacks own-price elasticity — Poisson with SKU, store and week fixed effects and promo/display controls.
+recipe: rcp_elasticity
+dataset: {name: northstar_price_extract, path: data/retail/price_elasticity_extract.parquet}
+columns: {units: units, price: shelf_price, ref_price: list_price, item: sku, store: store_id, time: week}
+filters: ["category == 'Snacks'"]
+params: {controls: [promo_flag, display_flag], family: poisson, exclude_stockouts: stockout_flag, cost_ratio: 0.667, price_changes: [-0.10, -0.05, 0.05, 0.10]}
+output: {folder: "outputs/{recipe}/{date}_retail_elasticity_snacks"}

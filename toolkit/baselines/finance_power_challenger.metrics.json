@@ -1,0 +1,41 @@
+{
+  "design": "proportions",
+  "alpha": 0.05,
+  "power": 0.8,
+  "ratio": 0.25,
+  "baseline_rate": 0.349925,
+  "table": {
+    "+2.0 pp": {
+      "effect": 0.02,
+      "n_control": 22599,
+      "n_treatment": 5650,
+      "n_total": 28249
+    },
+    "+3.0 pp": {
+      "effect": 0.03,
+      "n_control": 10102,
+      "n_treatment": 2526,
+      "n_total": 12628
+    },
+    "+5.0 pp": {
+      "effect": 0.05,
+      "n_control": 3675,
+      "n_treatment": 919,
+      "n_total": 4594
+    },
+    "+8.0 pp": {
+      "effect": 0.08,
+      "n_control": 1455,
+      "n_treatment": 364,
+      "n_total": 1819
+    }
+  },
+  "n_available_control": 3335.0,
+  "achieved_power": {
+    "+2.0 pp": 0.188424,
+    "+3.0 pp": 0.363087,
+    "+5.0 pp": 0.760807,
+    "+8.0 pp": 0.988746
+  },
+  "mde_at_n_available": 0.052545
+}

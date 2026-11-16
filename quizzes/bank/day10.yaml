@@ -1,0 +1,1374 @@
+quizzes:
+- id: L10.1-F
+  title: L10.1 Transfer (Basic → Advanced)
+  lesson: L10.1
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts: &id001
+    - C291
+    prompt: To reuse a recipe on a new dataset you change…
+    options:
+    - id: a
+      text: 'The config: dataset path and column mapping'
+      correct: true
+      why: Configuration only.
+    - id: b
+      text: The recipe code
+      why: Never.
+    - id: c
+      text: The data to match old column names by hand
+      why: Map instead.
+    - id: d
+      text: Nothing
+      why: Names differ.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C003
+    prompt: First thing to check in an unseen file?
+    options:
+    - id: a
+      text: Grain and units
+      correct: true
+      why: Everything depends on them.
+    - id: b
+      text: Model accuracy
+      why: Later.
+    - id: c
+      text: Colours of charts
+      why: No.
+    - id: d
+      text: P-values
+      why: Later.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C003
+    prompt: A median basket of 1,700 'currency units' for 5 groceries suggests…
+    options:
+    - id: a
+      text: Amounts are in minor units (cents)
+      correct: true
+      why: ÷ 100.
+    - id: b
+      text: Luxury customers
+      why: Implausible.
+    - id: c
+      text: Outliers
+      why: Median.
+    - id: d
+      text: Fine
+      why: No.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C009
+    prompt: Duplicates loaded under new ids are found by…
+    options:
+    - id: a
+      text: Checking content (timestamp, amounts, rider) not just the id
+      correct: true
+      why: Keys can be new.
+    - id: b
+      text: Checking id uniqueness
+      why: Misses them.
+    - id: c
+      text: Sorting by id
+      why: No.
+    - id: d
+      text: Ignoring
+      why: Inflates KPIs.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C291
+    prompt: The schema report says a required role is unmapped. You…
+    options:
+    - id: a
+      text: Map it to the right column (it suggests candidates)
+      correct: true
+      why: Designed for this.
+    - id: b
+      text: Delete the role from the recipe
+      why: No.
+    - id: c
+      text: Rename data columns in Excel
+      why: Unreproducible.
+    - id: d
+      text: Ignore
+      why: Fails.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C015
+    prompt: Only 55% of orders have ratings. Average rating is…
+    options:
+    - id: a
+      text: Possibly biased if rating depends on experience (MNAR)
+      correct: true
+      why: Who rates.
+    - id: b
+      text: Unbiased
+      why: Not necessarily.
+    - id: c
+      text: Unusable
+      why: Use with care.
+    - id: d
+      text: Zero for missing
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Which recipe first on an unseen file?
+    options:
+    - id: a
+      text: rcp_profile then rcp_quality
+      correct: true
+      why: Data first.
+    - id: b
+      text: rcp_classifier
+      why: Too early.
+    - id: c
+      text: rcp_drift
+      why: Needs windows.
+    - id: d
+      text: None
+      why: Always profile.
+    concepts: *id001
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: A day with double the usual orders, identical content, new ids, is…
+    options:
+    - id: a
+      text: A duplicated load
+      correct: true
+      why: Check content duplicates.
+    - id: b
+      text: A sale
+      why: Content identical.
+    - id: c
+      text: Normal peak
+      why: Too exact.
+    - id: d
+      text: Fraud
+      why: Unlikely.
+    concepts: *id001
+- id: L10.1-L
+  title: L10.1 Reuse review (Leader)
+  lesson: L10.1
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts: &id002
+    - C292
+    prompt: The transfer readout reports average basket 18.40 without mentioning units. You…
+    options:
+    - id: a
+      text: Ask how units were checked and whether duplicates were removed
+      correct: true
+      why: Data first.
+    - id: b
+      text: Accept
+      why: Unverified.
+    - id: c
+      text: Ask for more charts
+      why: No.
+    - id: d
+      text: Reject outright
+      why: Ask first.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C291
+    prompt: A reusable analysis is one where…
+    options:
+    - id: a
+      text: Next month's file runs by changing one path
+      correct: true
+      why: Reproducible.
+    - id: b
+      text: The analyst remembers the steps
+      why: No.
+    - id: c
+      text: Results are in slides
+      why: No.
+    - id: d
+      text: Code is long
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C294
+    prompt: Tell the COO what to do about delivery in two sentences.
+    model: Each extra minute beyond ~15 lowers ratings measurably and zone Z4 is the slowest by about six minutes; prioritise Z4 capacity (riders/dark-store location) and measure the rating change with a phased rollout.
+    rubric: 'Full: driver + zone + test. Partial: one.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C269
+    prompt: '''Promo codes grow baskets 18%'' — what next?'
+    options:
+    - id: a
+      text: Randomised promo test to estimate the causal effect and margin
+      correct: true
+      why: Association so far.
+    - id: b
+      text: Give codes to everyone
+      why: Untested.
+    - id: c
+      text: Stop codes
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: The transfer readout claims delivery time causes low ratings. You ask…
+    options:
+    - id: a
+      text: Is it association, and what confounders (zone, hour) were controlled?
+      correct: true
+      why: Association vs causation.
+    - id: b
+      text: Accept
+      why: Causal claim.
+    - id: c
+      text: Ask for colours
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+    concepts: *id002
+- id: L10.2-F
+  title: L10.2 Capstone (Basic → Advanced)
+  lesson: L10.2
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 2
+    concepts: &id003
+    - C294
+    prompt: Q4 revenue growth (%) 2025 vs 2024?
+    answer: "{{ a.d10_q4_rev_growth }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: Panel sample.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C269
+    prompt: Why can't YoY alone say the plan worked?
+    options:
+    - id: a
+      text: 'No control: other things changed (traffic, prices, online share)'
+      correct: true
+      why: Counterfactual.
+    - id: b
+      text: Sample too big
+      why: No.
+    - id: c
+      text: It can
+      why: No.
+    - id: d
+      text: Margins rose
+      why: Irrelevant.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C247
+    prompt: 2025 Q4 margin rate (%) on promoted lines?
+    answer: "{{ a.d10_q4_margin_promo }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: "vs {{ a.d10_q4_margin_nonpromo }}% full price."
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C246
+    prompt: Share (%) of the default rise explained by channel mix?
+    answer: "{{ a.d10_share_mix }}"
+    tolerance_abs: 3
+    unit: '%'
+    explanation: Rest is within-channel.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C220
+    prompt: Within-channel default rates also rose. This points to…
+    options:
+    - id: a
+      text: Deterioration beyond mix (concept drift / macro)
+      correct: true
+      why: L9.6.
+    - id: b
+      text: Only partner mix
+      why: No.
+    - id: c
+      text: Data error
+      why: No.
+    - id: d
+      text: Seasonality
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C294
+    prompt: Capstone appendix must include…
+    options:
+    - id: a
+      text: Every number with its source file and config
+      correct: true
+      why: Verifiable.
+    - id: b
+      text: Raw data dump
+      why: No.
+    - id: c
+      text: Nothing
+      why: No.
+    - id: d
+      text: Only charts
+      why: No.
+  - id: t1
+    type: numeric
+    difficulty: 2
+    prompt: Default rate (%) of the 2025Q3 vintage?
+    answer: "{{ a.d10_def_late }}"
+    tolerance_abs: 0.2
+    explanation: "vs {{ a.d10_def_ref }}% in 2025Q1."
+    concepts: *id003
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: BOGO margin was negative in Q4. First question?
+    options:
+    - id: a
+      text: Was it incremental volume or discounted purchases that would happen anyway?
+      correct: true
+      why: Incrementality.
+    - id: b
+      text: Stop all promos
+      why: Blunt.
+    - id: c
+      text: Run more BOGO
+      why: No.
+    - id: d
+      text: Ignore
+      why: No.
+    concepts: *id003
+- id: L10.2-L
+  title: L10.2 Challenge panel (Leader)
+  lesson: L10.2
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts: &id004
+    - C295
+    prompt: 'Presenter: ''Defaults rose because of the partner channel.'' Your probe?'
+    options:
+    - id: a
+      text: How much is mix vs within-channel deterioration?
+      correct: true
+      why: "{{ a.d10_share_mix }}% vs rest."
+    - id: b
+      text: Which font?
+      why: No.
+    - id: c
+      text: Agree
+      why: Partial truth.
+    - id: d
+      text: Why not deep learning?
+      why: Irrelevant.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C295
+    prompt: Best Monday action for the CRO?
+    options:
+    - id: a
+      text: Tighten partner cut-off + recalibrate PDs + fairness check
+      correct: true
+      why: Addresses both parts.
+    - id: b
+      text: Close partner channel immediately
+      why: Overreaction without analysis.
+    - id: c
+      text: Wait for 12-month data
+      why: Too late.
+    - id: d
+      text: Raise all rates
+      why: Blunt.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C294
+    prompt: 'Retail: one-sentence verdict on the Q4 plan.'
+    model: "The plan delivered higher margin rate ({{ a.d10_q4_margin_rate['2024'] }}% → {{ a.d10_q4_margin_rate['2025'] }}%) with {{ a.d10_q4_disc_growth | abs }}% less discount spend, but we cannot attribute the {{ a.d10_q4_rev_growth }}% revenue growth to it without a control — run a store holdout in 2026."
+    rubric: 'Full: result + limitation + test. Partial: result.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C295
+    prompt: A capstone with no uncertainty statements should…
+    options:
+    - id: a
+      text: Be sent back for ranges/CIs
+      correct: true
+      why: Interpretation.
+    - id: b
+      text: Pass
+      why: No.
+    - id: c
+      text: Get extra credit
+      why: No.
+    - id: d
+      text: Be ignored
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: A capstone uses lesson numbers without re-running. Verdict?
+    options:
+    - id: a
+      text: Send back — every number must come from their own configs and outputs
+      correct: true
+      why: Reproducibility.
+    - id: b
+      text: Accept
+      why: Unverified.
+    - id: c
+      text: Extra credit
+      why: No.
+    - id: d
+      text: Ignore
+      why: No.
+    concepts: *id004
+- id: L10.3-F
+  title: L10.3 Navigator sprint (Basic → Advanced)
+  lesson: L10.3
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C006
+    prompt: '''Is mean basket value higher in Hyper than Super stores?'' (skewed)'
+    options:
+    - id: a
+      text: N-TEST-2G-MEAN (Welch on log / permutation)
+      correct: true
+      why: Two groups, continuous.
+    - id: b
+      text: N-TEST-CHI
+      why: Categorical.
+    - id: c
+      text: N-REG-LOGIT
+      why: Binary outcome.
+    - id: d
+      text: N-CLUST-KMEANS
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C006
+    prompt: '''Is payment method related to channel?'''
+    options:
+    - id: a
+      text: N-TEST-CHI (+ Cramér's V)
+      correct: true
+      why: Two categoricals.
+    - id: b
+      text: N-TEST-2G-MEAN
+      why: No.
+    - id: c
+      text: N-DESC-CORR
+      why: Numeric.
+    - id: d
+      text: N-FCST-SEASON
+      why: No.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C006
+    prompt: '''Complaints per branch per month — do branches differ?'''
+    options:
+    - id: a
+      text: N-TEST-COUNT (Poisson/NB with exposure)
+      correct: true
+      why: Counts.
+    - id: b
+      text: N-TEST-2G-PROP
+      why: No.
+    - id: c
+      text: N-TEST-PAIRED
+      why: No.
+    - id: d
+      text: N-SEG-RFM
+      why: No.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C144
+    prompt: '''How many test stores do we need to detect +3%?'''
+    options:
+    - id: a
+      text: N-EXP-POWER (cluster design)
+      correct: true
+      why: Sample size.
+    - id: b
+      text: N-EXP-SRM
+      why: After launch.
+    - id: c
+      text: N-TEST-MULTI
+      why: No.
+    - id: d
+      text: N-REG-VIF
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C282
+    prompt: '''Predict who defaults; regulator needs reasons.'''
+    options:
+    - id: a
+      text: N-ML-SCORECARD (vs GBM benchmark)
+      correct: true
+      why: Explainable.
+    - id: b
+      text: N-ML-DL
+      why: Opaque.
+    - id: c
+      text: N-CLUST-GMM
+      why: No.
+    - id: d
+      text: N-FCST-HIER
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C230
+    prompt: '''Weekly units for slow movers with many zeros'''
+    options:
+    - id: a
+      text: N-FCST-INTERMITTENT
+      correct: true
+      why: Croston/SBA, MASE.
+    - id: b
+      text: N-FCST-SEASON
+      why: Not for sparse.
+    - id: c
+      text: N-REG-OLS
+      why: No.
+    - id: d
+      text: N-ANOM-BENFORD
+      why: No.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C256
+    prompt: '''Accounts sharing devices — coordinated fraud?'''
+    options:
+    - id: a
+      text: N-ANOM-GRAPH
+      correct: true
+      why: Components.
+    - id: b
+      text: N-ANOM-STRUCT
+      why: Thresholds.
+    - id: c
+      text: N-SEG-BASKET
+      why: No.
+    - id: d
+      text: N-TEST-CHI
+      why: No.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C269
+    prompt: '''Did the promotion in 20 test stores lift sales?'' (pre-period available)'
+    options:
+    - id: a
+      text: N-CAUSAL-DID
+      correct: true
+      why: Treated/control × pre/post.
+    - id: b
+      text: N-CAUSAL-RDD
+      why: No cut-off.
+    - id: c
+      text: N-DESC-CORR
+      why: No.
+    - id: d
+      text: N-ML-GBM
+      why: No.
+  - id: q9
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C219
+    prompt: '''Did the incoming applicant population change?'''
+    options:
+    - id: a
+      text: N-MON-PSI
+      correct: true
+      why: Distribution shift.
+    - id: b
+      text: N-MON-FAIR
+      why: Different.
+    - id: c
+      text: N-TEST-SURV
+      why: No.
+    - id: d
+      text: N-EXP-CUPED
+      why: No.
+  - id: q10
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C246
+    prompt: '''How much does demand fall if we raise price 5%?'''
+    options:
+    - id: a
+      text: N-REG-LOGLOG (with promo controls)
+      correct: true
+      why: Elasticity.
+    - id: b
+      text: N-TEST-2G-MEAN
+      why: No.
+    - id: c
+      text: N-CLUST-KMEANS
+      why: No.
+    - id: d
+      text: N-DIST-POIS
+      why: No.
+- id: L10.3-L
+  title: L10.3 Coaching through the map (Leader)
+  lesson: L10.3
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C006
+    prompt: A junior asks 'which test should I use?' Your first question?
+    options:
+    - id: a
+      text: What decision, and what type is the outcome?
+      correct: true
+      why: Navigator entry.
+    - id: b
+      text: t-test, obviously
+      why: Telling.
+    - id: c
+      text: What's the p-value?
+      why: Backwards.
+    - id: d
+      text: Use AI
+      why: Not coaching.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C006
+    prompt: 'Junior: ''model is 99% accurate''. Probe?'
+    options:
+    - id: a
+      text: Base rate and leakage
+      correct: true
+      why: Rare events, leaks.
+    - id: b
+      text: Congratulate
+      why: No.
+    - id: c
+      text: Ask for 100%
+      why: No.
+    - id: d
+      text: Ask for more features
+      why: No.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C269
+    prompt: '''Sales rose after we launched X.'' Node to steer to?'
+    options:
+    - id: a
+      text: N-CAUSAL-DAG / N-CAUSAL-DID (compared with what?)
+      correct: true
+      why: Counterfactual.
+    - id: b
+      text: N-DESC-CAT
+      why: No.
+    - id: c
+      text: N-FCST-SEASON
+      why: Partial.
+    - id: d
+      text: N-ANOM-MULTI
+      why: No.
+  - id: q4
+    type: open
+    difficulty: 3
+    concepts:
+    - C006
+    prompt: Write your four coaching questions in order.
+    model: What decision? What's the outcome and its type? What kind of question — compare, relate, predict, forecast, cause, check? What would make the answer wrong (assumption)?
+    rubric: 'Full: four in order. Partial: two.'
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C006
+    prompt: Biggest Navigator anti-pattern?
+    options:
+    - id: a
+      text: Choosing the method you know instead of the one the question needs
+      correct: true
+      why: Hammer/nail.
+    - id: b
+      text: Checking assumptions
+      why: Good.
+    - id: c
+      text: Using fallbacks
+      why: Good.
+    - id: d
+      text: Asking about the decision
+      why: Good.
+- id: L10.4-EXAM
+  title: Final exam — Part A (pass 75%)
+  lesson: L10.4
+  track: Mixed
+  pass_mark: 75
+  questions:
+  - id: e01
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C003
+    prompt: Before any statistic on new data you confirm…
+    options:
+    - id: a
+      text: Grain, units, duplicates, missingness
+      correct: true
+      why: Data first.
+    - id: b
+      text: Model choice
+      why: Later.
+    - id: c
+      text: Chart style
+      why: No.
+    - id: d
+      text: Sample size only
+      why: Partial.
+  - id: e02
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C015
+    prompt: Missingness that depends on the missing value itself is…
+    options:
+    - id: a
+      text: MNAR
+      correct: true
+      why: Definition.
+    - id: b
+      text: MCAR
+      why: Random.
+    - id: c
+      text: MAR
+      why: Depends on observed.
+    - id: d
+      text: Ignorable
+      why: No.
+  - id: e03
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C022
+    prompt: Heavily skewed revenue is best summarised by…
+    options:
+    - id: a
+      text: Median and percentiles (plus mean for totals)
+      correct: true
+      why: Robust.
+    - id: b
+      text: Mean ± SD only
+      why: Misleading.
+    - id: c
+      text: Mode
+      why: No.
+    - id: d
+      text: Max
+      why: No.
+  - id: e04
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C070
+    prompt: A trend reverses within every subgroup when aggregated. This is…
+    options:
+    - id: a
+      text: Simpson's paradox — stratify
+      correct: true
+      why: Confounding by mix.
+    - id: b
+      text: Noise
+      why: No.
+    - id: c
+      text: Benford
+      why: No.
+    - id: d
+      text: Leakage
+      why: No.
+  - id: e05
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C182
+    prompt: Over-dispersed counts call for…
+    options:
+    - id: a
+      text: Negative binomial
+      correct: true
+      why: Variance > mean.
+    - id: b
+      text: Poisson
+      why: Too narrow.
+    - id: c
+      text: Normal
+      why: No.
+    - id: d
+      text: Binomial
+      why: No.
+  - id: e06
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C120
+    prompt: A 95% CI means…
+    options:
+    - id: a
+      text: The procedure captures the true value in 95% of repeated samples
+      correct: true
+      why: Frequentist.
+    - id: b
+      text: 95% chance the value is inside this interval
+      why: Bayesian reading.
+    - id: c
+      text: 95% of data inside
+      why: No.
+    - id: d
+      text: p = 0.05
+      why: No.
+  - id: e07
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C126
+    prompt: With 25,000 rows, p < 0.001 for a 0.3% difference means…
+    options:
+    - id: a
+      text: Statistically detectable, possibly practically trivial
+      correct: true
+      why: Effect size.
+    - id: b
+      text: Huge effect
+      why: No.
+    - id: c
+      text: Error
+      why: No.
+    - id: d
+      text: Causal
+      why: No.
+  - id: e08
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C146
+    prompt: Testing 20 metrics at α = 0.05 without correction…
+    options:
+    - id: a
+      text: Expects ~1 false positive
+      correct: true
+      why: Multiplicity.
+    - id: b
+      text: Is fine
+      why: No.
+    - id: c
+      text: Lowers power
+      why: No.
+    - id: d
+      text: Guarantees significance
+      why: No.
+  - id: e09
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C154
+    prompt: Randomising stores but analysing transactions as independent…
+    options:
+    - id: a
+      text: Understates standard errors (design effect)
+      correct: true
+      why: Clustering.
+    - id: b
+      text: Is correct
+      why: No.
+    - id: c
+      text: Overstates SEs
+      why: No.
+    - id: d
+      text: Removes bias
+      why: No.
+  - id: e10
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C152
+    prompt: A sample-ratio mismatch means…
+    options:
+    - id: a
+      text: Assignment/logging is broken — don't trust the result yet
+      correct: true
+      why: SRM.
+    - id: b
+      text: Big effect
+      why: No.
+    - id: c
+      text: Fine
+      why: No.
+    - id: d
+      text: Low power
+      why: No.
+  - id: e11
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C156
+    prompt: CUPED helps most when…
+    options:
+    - id: a
+      text: The pre-period metric correlates strongly with the outcome
+      correct: true
+      why: Variance reduction ∝ ρ².
+    - id: b
+      text: There's no pre-period
+      why: Can't.
+    - id: c
+      text: Effects are huge
+      why: Irrelevant.
+    - id: d
+      text: Always equally
+      why: No.
+  - id: e12
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C164
+    prompt: Adjusting for a collider…
+    options:
+    - id: a
+      text: Creates spurious association
+      correct: true
+      why: DAG.
+    - id: b
+      text: Removes confounding
+      why: That's confounders.
+    - id: c
+      text: Is required
+      why: No.
+    - id: d
+      text: Has no effect
+      why: No.
+  - id: e13
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C172
+    prompt: VIF of 140 indicates…
+    options:
+    - id: a
+      text: Severe multicollinearity — unstable coefficients
+      correct: true
+      why: Sign flips.
+    - id: b
+      text: Strong effect
+      why: No.
+    - id: c
+      text: Good fit
+      why: No.
+    - id: d
+      text: Leakage
+      why: Different.
+  - id: e14
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C202
+    prompt: An AUC of 0.99 on a credit model first suggests…
+    options:
+    - id: a
+      text: Leakage — audit features for post-outcome information
+      correct: true
+      why: Too good.
+    - id: b
+      text: Deploy
+      why: No.
+    - id: c
+      text: Underfitting
+      why: No.
+    - id: d
+      text: Need more data
+      why: No.
+  - id: e15
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C207
+    prompt: For rare fraud with a fixed review team, evaluate with…
+    options:
+    - id: a
+      text: Precision@k / PR-AUC
+      correct: true
+      why: Capacity.
+    - id: b
+      text: Accuracy
+      why: Base rate.
+    - id: c
+      text: R²
+      why: No.
+    - id: d
+      text: MAPE
+      why: No.
+  - id: e16
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C210
+    prompt: PDs used for provisioning must be…
+    options:
+    - id: a
+      text: Calibrated
+      correct: true
+      why: Levels matter.
+    - id: b
+      text: Only well-ranked
+      why: Insufficient.
+    - id: c
+      text: Rounded
+      why: No.
+    - id: d
+      text: From deep learning
+      why: No.
+  - id: e17
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C229
+    prompt: A forecast must beat…
+    options:
+    - id: a
+      text: A seasonal-naive baseline in a rolling backtest
+      correct: true
+      why: Benchmark.
+    - id: b
+      text: Last year's slide
+      why: No.
+    - id: c
+      text: Nothing
+      why: No.
+    - id: d
+      text: In-sample fit
+      why: Overfits.
+  - id: e18
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C233
+    prompt: Sales during stock-outs are…
+    options:
+    - id: a
+      text: Censored demand — don't train on them as true demand
+      correct: true
+      why: Under-states.
+    - id: b
+      text: True demand
+      why: No.
+    - id: c
+      text: Outliers to delete
+      why: Treat.
+    - id: d
+      text: Irrelevant
+      why: No.
+  - id: e19
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C236
+    prompt: Cluster labels from K-Means are…
+    options:
+    - id: a
+      text: Useful only if distinct, stable and actionable
+      correct: true
+      why: Criteria.
+    - id: b
+      text: Ground truth
+      why: No.
+    - id: c
+      text: Always 5
+      why: No.
+    - id: d
+      text: Causal
+      why: No.
+  - id: e20
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C245
+    prompt: Rank basket rules by…
+    options:
+    - id: a
+      text: Lift with a support floor
+      correct: true
+      why: Affinity.
+    - id: b
+      text: Confidence
+      why: Popularity.
+    - id: c
+      text: Alphabet
+      why: No.
+    - id: d
+      text: Support only
+      why: No.
+  - id: e21
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C247
+    prompt: Promotion profitability =
+    options:
+    - id: a
+      text: Incremental margin net of cannibalisation and pull-forward vs discount cost
+      correct: true
+      why: ROI.
+    - id: b
+      text: Volume uplift
+      why: No.
+    - id: c
+      text: Revenue
+      why: No.
+    - id: d
+      text: Units sold
+      why: No.
+  - id: e22
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C258
+    prompt: IV above 0.5 for a new variable…
+    options:
+    - id: a
+      text: Is suspicious — check for leakage
+      correct: true
+      why: Too strong.
+    - id: b
+      text: Is ideal
+      why: No.
+    - id: c
+      text: Means drop it
+      why: Investigate.
+    - id: d
+      text: Is impossible
+      why: No.
+  - id: e23
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C261
+    prompt: Compare loan cohorts using…
+    options:
+    - id: a
+      text: Vintage curves at the same months on book
+      correct: true
+      why: Like with like.
+    - id: b
+      text: Calendar delinquency
+      why: Mixes ages.
+    - id: c
+      text: Balances
+      why: No.
+    - id: d
+      text: AUC
+      why: No.
+  - id: e24
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C269
+    prompt: Members spend more than non-members. Causal effect needs…
+    options:
+    - id: a
+      text: Randomisation or within-customer before/after vs controls
+      correct: true
+      why: Selection.
+    - id: b
+      text: More demographics
+      why: Unobserved.
+    - id: c
+      text: Bigger sample
+      why: Bias stays.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: e25
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C274
+    prompt: ~70% of accounts haven't churned yet. Use…
+    options:
+    - id: a
+      text: Kaplan–Meier / Cox
+      correct: true
+      why: Censoring.
+    - id: b
+      text: Mean churn month of churners
+      why: Biased.
+    - id: c
+      text: Linear regression
+      why: No.
+    - id: d
+      text: Drop them
+      why: Biased.
+  - id: e26
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C266
+    prompt: Expected shortfall is…
+    options:
+    - id: a
+      text: Average loss beyond VaR
+      correct: true
+      why: Tail mean.
+    - id: b
+      text: VaR
+      why: Quantile.
+    - id: c
+      text: Expected loss
+      why: Mean.
+    - id: d
+      text: Premium
+      why: No.
+  - id: e27
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C216
+    prompt: Excluding protected attributes from a model…
+    options:
+    - id: a
+      text: Doesn't remove disparity carried by proxies
+      correct: true
+      why: F15.
+    - id: b
+      text: Guarantees fairness
+      why: No.
+    - id: c
+      text: Is forbidden
+      why: No.
+    - id: d
+      text: Raises AUC
+      why: No.
+  - id: e28
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C219
+    prompt: A field's median jumps ×100 after a release →
+    options:
+    - id: a
+      text: 'Data incident (unit change): fix and restate'
+      correct: true
+      why: R19.
+    - id: b
+      text: Retrain
+      why: No.
+    - id: c
+      text: Real behaviour
+      why: No.
+    - id: d
+      text: Ignore
+      why: No.
+  - id: e29
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C220
+    prompt: AUC falls while input PSI is modest →
+    options:
+    - id: a
+      text: Concept drift — rebuild
+      correct: true
+      why: Relationships changed.
+    - id: b
+      text: Population drift only
+      why: No.
+    - id: c
+      text: Nothing
+      why: No.
+    - id: d
+      text: Random
+      why: No.
+  - id: e30
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C289
+    prompt: Claude Code reports a number in a summary. Before using it you…
+    options:
+    - id: a
+      text: Verify it against the output files and row accounting
+      correct: true
+      why: AI errors.
+    - id: b
+      text: Trust it
+      why: Hallucination risk.
+    - id: c
+      text: Round it
+      why: No.
+    - id: d
+      text: Ask again until it changes
+      why: No.

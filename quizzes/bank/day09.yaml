@@ -1,0 +1,2086 @@
+quizzes:
+- id: L9.1-F
+  title: L9.1 Causal methods (Basic → Advanced)
+  lesson: L9.1
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    concepts: &id001
+    - C269
+    prompt: DiD's key assumption is…
+    options:
+    - id: a
+      text: Parallel trends without treatment
+      correct: true
+      why: Identification.
+    - id: b
+      text: Random assignment
+      why: Not required.
+    - id: c
+      text: Normal outcomes
+      why: No.
+    - id: d
+      text: Equal group sizes
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C269
+    prompt: Two-way FE DiD lift (%) for Hair Care?
+    answer: "{{ a.d9_r09_twfe_pct }}"
+    tolerance_abs: 2
+    unit: '%'
+    explanation: Planted +12%.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C269
+    prompt: Post-only comparison wasn't significant because…
+    options:
+    - id: a
+      text: Store size differences swamp the effect; DiD compares each store with itself
+      correct: true
+      why: Variance.
+    - id: b
+      text: No effect
+      why: There was.
+    - id: c
+      text: Too few weeks
+      why: No.
+    - id: d
+      text: Wrong category
+      why: No.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C268
+    prompt: Naive loyalty basket uplift (%)?
+    answer: "{{ a.d9_r20_naive }}"
+    tolerance_abs: 2
+    unit: '%'
+    explanation: Selection.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C268
+    prompt: "Adjusting for demographics left the loyalty gap at {{ a.d9_r20_adj_demo }}% because…"
+    options:
+    - id: a
+      text: People join because they already spend more — unobserved
+      correct: true
+      why: Self-selection.
+    - id: b
+      text: Wrong covariates coded
+      why: No.
+    - id: c
+      text: Programme is very effective
+      why: Within-customer ≈ 5%.
+    - id: d
+      text: Sample too small
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C272
+    prompt: Eligibility by a score cut-off suggests…
+    options:
+    - id: a
+      text: Regression discontinuity
+      correct: true
+      why: Local comparison.
+    - id: b
+      text: Synthetic control
+      why: One unit.
+    - id: c
+      text: K-Means
+      why: No.
+    - id: d
+      text: Chi-square
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: A placebo test runs the DiD where…
+    options:
+    - id: a
+      text: No effect should exist (e.g. a category without the promotion)
+      correct: true
+      why: Falsification.
+    - id: b
+      text: The effect is largest
+      why: No.
+    - id: c
+      text: Only treated stores
+      why: No.
+    - id: d
+      text: Random weeks only
+      why: Partial.
+    concepts: *id001
+  - id: t2
+    type: numeric
+    difficulty: 2
+    prompt: Within-customer loyalty effect (%) from two-way fixed effects?
+    answer: "{{ a.d9_r20_twfe }}"
+    tolerance_abs: 3
+    explanation: True +5%.
+    concepts: *id001
+- id: L9.1-L
+  title: L9.1 Causal claims (Leader)
+  lesson: L9.1
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts: &id002
+    - C268
+    prompt: 'Marketing: ''Loyalty makes customers spend 38% more.'' Response?'
+    options:
+    - id: a
+      text: "Ask for pre-join spend or a randomised offer; causal ≈ {{ a.d9_r20_twfe }}%"
+      correct: true
+      why: Selection.
+    - id: b
+      text: Accept
+      why: Biased.
+    - id: c
+      text: Cancel programme
+      why: Not shown.
+    - id: d
+      text: Double rewards
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C271
+    prompt: Uplift models target…
+    options:
+    - id: a
+      text: Customers whose behaviour changes because of treatment
+      correct: true
+      why: Persuadables.
+    - id: b
+      text: Highest-propensity buyers
+      why: Sure things.
+    - id: c
+      text: Random customers
+      why: No.
+    - id: d
+      text: Lowest risk
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C269
+    prompt: How would you defend the Hair Care result to a sceptic?
+    model: "DiD with store and week effects gives +{{ a.d9_r09_twfe_pct }}% (CI {{ a.d9_r09_twfe_ci[0] }}–{{ a.d9_r09_twfe_ci[1] }}); pre-trends parallel (p = {{ a.d9_r09_pretrend_p }}); a placebo category shows no effect."
+    rubric: 'Full: estimate + pre-trend + placebo. Partial: estimate.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C269
+    prompt: '''Sales rose since launch'' lacks…'
+    options:
+    - id: a
+      text: A control over the same period
+      correct: true
+      why: Counterfactual.
+    - id: b
+      text: Decimals
+      why: No.
+    - id: c
+      text: A chart
+      why: Not the issue.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: '''Pre-trends look parallel'' — what evidence?'
+    options:
+    - id: a
+      text: Event-study plot and pre-period trend test
+      correct: true
+      why: Show the pre-period.
+    - id: b
+      text: A single week
+      why: Noisy.
+    - id: c
+      text: Gut feel
+      why: No.
+    - id: d
+      text: Post-period only
+      why: No.
+    concepts: *id002
+- id: L9.2-F
+  title: L9.2 Survival (Basic → Advanced)
+  lesson: L9.2
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts: &id003
+    - C274
+    prompt: A censored account is one that…
+    options:
+    - id: a
+      text: Hadn't churned by the end of observation
+      correct: true
+      why: Unknown end.
+    - id: b
+      text: Churned
+      why: Event.
+    - id: c
+      text: Has missing data
+      why: No.
+    - id: d
+      text: Was deleted
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C274
+    prompt: KM survival (%) at 12 months?
+    answer: "{{ a.d9_km_s12 }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: KM.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C274
+    prompt: "Average churn month among churners ({{ a.d9_naive_mean_churners }}) is biased because…"
+    options:
+    - id: a
+      text: It ignores those still active (censored)
+      correct: true
+      why: Selection on early exits.
+    - id: b
+      text: Rounding
+      why: No.
+    - id: c
+      text: It's unbiased
+      why: No.
+    - id: d
+      text: Seasonality
+      why: No.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C274
+    prompt: Log-rank compares…
+    options:
+    - id: a
+      text: Survival curves between groups
+      correct: true
+      why: Overall difference.
+    - id: b
+      text: Means
+      why: No.
+    - id: c
+      text: Hazard ratios
+      why: Cox.
+    - id: d
+      text: Medians only
+      why: No.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C275
+    prompt: Cox HR per complaint?
+    answer: "{{ a.d9_cox.complaints_12m.hr }}"
+    tolerance_abs: 0.05
+    explanation: Hazard × per complaint.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C274
+    prompt: When the median isn't reached, report…
+    options:
+    - id: a
+      text: Restricted mean survival time
+      correct: true
+      why: Area under KM.
+    - id: b
+      text: Mean of churners
+      why: Biased.
+    - id: c
+      text: Nothing
+      why: No.
+    - id: d
+      text: Max follow-up
+      why: No.
+  - id: t1
+    type: numeric
+    difficulty: 2
+    prompt: KM survival (%) at 24 months?
+    answer: "{{ a.d9_km_s24 }}"
+    tolerance_abs: 0.5
+    explanation: F13.
+    concepts: *id003
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: "Hazard ratio for digital share per 10 points {{ a.d9_cox.digital_share_10pp.hr }} means…"
+    options:
+    - id: a
+      text: Each +10 points of digital use lowers the churn hazard by about 11%
+      correct: true
+      why: HR < 1 protective.
+    - id: b
+      text: Raises churn
+      why: HR < 1.
+    - id: c
+      text: No effect
+      why: Significant.
+    - id: d
+      text: 11% churn
+      why: It's relative.
+    concepts: *id003
+- id: L9.2-L
+  title: L9.2 Retention (Leader)
+  lesson: L9.2
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts: &id004
+    - C274
+    prompt: A deck says 'average customer lifetime is 10.6 months'. Response?
+    options:
+    - id: a
+      text: That's churners only; use KM survival at fixed horizons
+      correct: true
+      why: Censoring.
+    - id: b
+      text: Accept
+      why: Biased.
+    - id: c
+      text: Ask for median of churners
+      why: Still biased.
+    - id: d
+      text: Ignore
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C275
+    prompt: "Complaints HR ≈ {{ a.d9_cox.complaints_12m.hr }}. Best use?"
+    options:
+    - id: a
+      text: Trigger service recovery after a complaint
+      correct: true
+      why: Actionable signal.
+    - id: b
+      text: Stop accepting complaints
+      why: No.
+    - id: c
+      text: Claim complaints cause churn
+      why: Association.
+    - id: d
+      text: Ignore
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C274
+    prompt: Propose a retention KPI.
+    model: "KM survival at 12 months by origination cohort ({{ a.d9_km_s12 }}% overall), with RMST to 24 months; tracked monthly by channel."
+    rubric: 'Full: KM horizon + cohort. Partial: churn rate.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C275
+    prompt: Proportional hazards means…
+    options:
+    - id: a
+      text: The HR is constant over time
+      correct: true
+      why: "Checked: {{ a.d9_ph_hr_early }} vs {{ a.d9_ph_hr_late }}."
+    - id: b
+      text: Hazards are equal
+      why: No.
+    - id: c
+      text: Survival is linear
+      why: No.
+    - id: d
+      text: No censoring
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Retention team wants 'average lifetime'. Offer?
+    options:
+    - id: a
+      text: "Restricted mean survival to 24 months ({{ a.d9_rmst24 }} months)"
+      correct: true
+      why: RMST handles censoring.
+    - id: b
+      text: Mean of churners
+      why: Biased.
+    - id: c
+      text: Max tenure
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+    concepts: *id004
+- id: L9.3-F
+  title: L9.3 Deep learning (Basic → Advanced)
+  lesson: L9.3
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts: &id005
+    - C282
+    prompt: An activation function provides…
+    options:
+    - id: a
+      text: Non-linearity between layers
+      correct: true
+      why: Otherwise linear.
+    - id: b
+      text: Regularisation
+      why: Different.
+    - id: c
+      text: Scaling
+      why: No.
+    - id: d
+      text: Data
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C282
+    prompt: MLP test AUC on default?
+    answer: "{{ a.d9_dl_auc.mlp }}"
+    tolerance_abs: 0.03
+    explanation: "vs logistic {{ a.d9_dl_auc.logistic }}."
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C282
+    prompt: For tabular business data, the default first choice is…
+    options:
+    - id: a
+      text: Gradient boosting or a GLM
+      correct: true
+      why: Strong, cheap.
+    - id: b
+      text: Transformer
+      why: Overkill.
+    - id: c
+      text: CNN
+      why: Images.
+    - id: d
+      text: RNN
+      why: Sequences.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C285
+    prompt: Embeddings are…
+    options:
+    - id: a
+      text: Vectors where distance reflects similarity
+      correct: true
+      why: Representation.
+    - id: b
+      text: Images
+      why: No.
+    - id: c
+      text: Hyperparameters
+      why: No.
+    - id: d
+      text: Labels
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C285
+    prompt: RAG reduces hallucination by…
+    options:
+    - id: a
+      text: Grounding answers in retrieved documents
+      correct: true
+      why: Citable.
+    - id: b
+      text: Bigger models
+      why: Not reliably.
+    - id: c
+      text: Lower temperature only
+      why: Partial.
+    - id: d
+      text: Removing data
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C282
+    prompt: "With 1,500 rows the MLP fell to {{ a.d9_dl_small_auc.mlp }}. Why?"
+    options:
+    - id: a
+      text: Many parameters, little data — overfitting/instability
+      correct: true
+      why: "{{ a.d9_dl_n_params }} parameters."
+    - id: b
+      text: Bug
+      why: No.
+    - id: c
+      text: Wrong metric
+      why: No.
+    - id: d
+      text: Too many features
+      why: Eight.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Weight decay in an MLP is the same idea as…
+    options:
+    - id: a
+      text: Ridge (L2) regularisation
+      correct: true
+      why: Penalty on weights.
+    - id: b
+      text: Bootstrap
+      why: No.
+    - id: c
+      text: PCA
+      why: No.
+    - id: d
+      text: Cross-entropy
+      why: Loss.
+    concepts: *id005
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: For shelf photos, the first choice is…
+    options:
+    - id: a
+      text: A convolutional / pretrained vision model
+      correct: true
+      why: Images = DL home turf.
+    - id: b
+      text: Logistic regression
+      why: Pixels need features.
+    - id: c
+      text: K-means
+      why: Unsupervised.
+    - id: d
+      text: ARIMA
+      why: No.
+    concepts: *id005
+- id: L9.3-L
+  title: L9.3 AI decisions (Leader)
+  lesson: L9.3
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts: &id006
+    - C282
+    prompt: 'Vendor: ''Our neural net beats your forecasts by 30%.'' First ask?'
+    options:
+    - id: a
+      text: Out-of-time backtest vs our baseline on the same split
+      correct: true
+      why: Fair comparison.
+    - id: b
+      text: Price
+      why: Later.
+    - id: c
+      text: Architecture
+      why: Secondary.
+    - id: d
+      text: References
+      why: Weak.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C286
+    prompt: Most important LLM governance control?
+    options:
+    - id: a
+      text: No personal data in unapproved tools + human review
+      correct: true
+      why: Privacy, accuracy.
+    - id: b
+      text: Use the biggest model
+      why: No.
+    - id: c
+      text: Ban all use
+      why: Too blunt.
+    - id: d
+      text: Let each team decide
+      why: Inconsistent.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C282
+    prompt: When would you fund deep learning?
+    model: For unstructured data (images, text, audio) or very large sequential data where features are hard to hand-craft, after a pilot beats a strong simple baseline on held-out data.
+    rubric: 'Full: data type + baseline test. Partial: one.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C282
+    prompt: An MLP adds what burden in credit?
+    options:
+    - id: a
+      text: Explainability for adverse-action reasons
+      correct: true
+      why: Regulation.
+    - id: b
+      text: None
+      why: No.
+    - id: c
+      text: Lower accuracy always
+      why: Not always.
+    - id: d
+      text: Data deletion
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: An LLM summary quotes a policy that doesn't exist. Root cause and fix?
+    options:
+    - id: a
+      text: Hallucination — ground with RAG and citations, add review
+      correct: true
+      why: Grounding.
+    - id: b
+      text: Bigger model
+      why: Doesn't guarantee.
+    - id: c
+      text: Ignore
+      why: Compliance risk.
+    - id: d
+      text: Retrain logistic
+      why: No.
+    concepts: *id006
+- id: L9.4-F
+  title: L9.4 Insurance and risk (Basic → Advanced)
+  lesson: L9.4
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    concepts: &id007
+    - C264
+    prompt: Exposure enters a frequency GLM as…
+    options:
+    - id: a
+      text: An offset (log exposure)
+      correct: true
+      why: Rate model.
+    - id: b
+      text: A weight only
+      why: No.
+    - id: c
+      text: The target
+      why: No.
+    - id: d
+      text: Ignored
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C265
+    prompt: Share (%) of losses from the top 3 claims?
+    answer: "{{ a.d9_ins_top3_share }}"
+    tolerance_abs: 1
+    unit: '%'
+    explanation: F17.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C266
+    prompt: Expected shortfall at 99.5% is…
+    options:
+    - id: a
+      text: Average loss beyond the 99.5% VaR
+      correct: true
+      why: Tail mean.
+    - id: b
+      text: The 99.5% quantile
+      why: VaR.
+    - id: c
+      text: Expected loss
+      why: No.
+    - id: d
+      text: Premium
+      why: No.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C266
+    prompt: Credit VaR 99.9% (millions)?
+    answer: "{{ a.d9_cr_var999 }}"
+    tolerance_abs: 3
+    explanation: Vasicek.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C266
+    prompt: Correlation between defaults…
+    options:
+    - id: a
+      text: Fattens the loss tail (raises VaR) without changing EL
+      correct: true
+      why: Clustering.
+    - id: b
+      text: Raises EL
+      why: No.
+    - id: c
+      text: Has no effect
+      why: No.
+    - id: d
+      text: Lowers VaR
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C265
+    prompt: Best treatment of catastrophic claims in pricing?
+    options:
+    - id: a
+      text: Price attritional losses + large-loss loading/reinsurance
+      correct: true
+      why: Stable.
+    - id: b
+      text: Delete them
+      why: Under-prices.
+    - id: c
+      text: Average them in
+      why: Volatile.
+    - id: d
+      text: Ignore severity
+      why: No.
+  - id: t1
+    type: numeric
+    difficulty: 2
+    prompt: Insurance loss ratio excluding the 3 catastrophic claims?
+    answer: "{{ a.d9_ins_loss_ratio_excat }}"
+    tolerance_abs: 0.02
+    explanation: "vs {{ a.d9_ins_loss_ratio }} with them."
+    concepts: *id007
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: Capital = VaR − expected loss covers…
+    options:
+    - id: a
+      text: Unexpected loss
+      correct: true
+      why: EL priced, UL capitalised.
+    - id: b
+      text: Expected loss
+      why: Priced in.
+    - id: c
+      text: All losses
+      why: No.
+    - id: d
+      text: Profit
+      why: No.
+    concepts: *id007
+- id: L9.4-L
+  title: L9.4 Risk appetite (Leader)
+  lesson: L9.4
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts: &id008
+    - C265
+    prompt: "Loss ratio {{ a.d9_ins_loss_ratio }}. Action?"
+    options:
+    - id: a
+      text: Reprice and/or reinsure the tail
+      correct: true
+      why: Unprofitable.
+    - id: b
+      text: Grow the book
+      why: Grows losses.
+    - id: c
+      text: Wait
+      why: No.
+    - id: d
+      text: Remove catastrophic claims from reports
+      why: Hides risk.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C267
+    prompt: Stress tests answer…
+    options:
+    - id: a
+      text: What if a severe scenario happens
+      correct: true
+      why: Scenario.
+    - id: b
+      text: How likely it is
+      why: VaR.
+    - id: c
+      text: Average loss
+      why: EL.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C266
+    prompt: Write a risk-appetite statement for the credit book.
+    model: "We hold capital to absorb a 1-in-1,000-year credit loss (VaR 99.9% ≈ {{ a.d9_cr_var999 }}M vs EL {{ a.d9_cr_el }}M) and review quarterly a stress of PD × 2.5 (EL {{ a.d9_cr_stress_el }}M)."
+    rubric: 'Full: percentile + numbers + stress. Partial: percentile.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C266
+    prompt: Why prefer ES to VaR for tail risk?
+    options:
+    - id: a
+      text: ES reflects how bad losses are beyond the threshold
+      correct: true
+      why: Tail-sensitive.
+    - id: b
+      text: ES is smaller
+      why: It's larger.
+    - id: c
+      text: VaR is illegal
+      why: No.
+    - id: d
+      text: No difference
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: "A stress of PD × 2.5 raises EL to {{ a.d9_cr_stress_el }}M. Use?"
+    options:
+    - id: a
+      text: Set limits and contingency plans for a downturn
+      correct: true
+      why: Scenario planning.
+    - id: b
+      text: Ignore — unlikely
+      why: Stress tests matter.
+    - id: c
+      text: Publish as forecast
+      why: It's a scenario.
+    - id: d
+      text: Delete
+      why: No.
+    concepts: *id008
+- id: L9.5-F
+  title: L9.5 Fairness (Basic → Advanced)
+  lesson: L9.5
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 2
+    concepts: &id009
+    - C216
+    prompt: Disparate impact ratio (B ÷ A approvals)?
+    answer: "{{ a.d9_di }}"
+    tolerance_abs: 0.01
+    explanation: < 0.8.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C216
+    prompt: "Outside R4 the ratio is {{ a.d9_di_nonR4 }}. Implication?"
+    options:
+    - id: a
+      text: Region R4 acts as a proxy for group
+      correct: true
+      why: "{{ a.d9_r4_share_B }}% B."
+    - id: b
+      text: No issue
+      why: No.
+    - id: c
+      text: Data error
+      why: No.
+    - id: d
+      text: Group B riskier
+      why: Default similar.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C216
+    prompt: Equal opportunity compares…
+    options:
+    - id: a
+      text: True positive rates across groups
+      correct: true
+      why: Definition.
+    - id: b
+      text: Approval rates
+      why: Parity.
+    - id: c
+      text: AUC
+      why: No.
+    - id: d
+      text: Sizes
+      why: No.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C216
+    prompt: Why can't all fairness criteria hold at once?
+    options:
+    - id: a
+      text: When base rates differ, calibration and error-rate parity conflict
+      correct: true
+      why: Impossibility.
+    - id: b
+      text: Bad code
+      why: No.
+    - id: c
+      text: They can
+      why: No.
+    - id: d
+      text: Too little data
+      why: No.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C218
+    prompt: 'Marginal conformal: share (%) of defaulters covered?'
+    answer: "{{ a.d9_conf_cov_def }}"
+    tolerance_abs: 3
+    unit: '%'
+    explanation: Coverage is on average.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C218
+    prompt: Class-conditional (Mondrian) conformal…
+    options:
+    - id: a
+      text: Guarantees coverage within each class
+      correct: true
+      why: "{{ a.d9_confm_cov_def }}% defaulters."
+    - id: b
+      text: Improves AUC
+      why: No.
+    - id: c
+      text: Removes uncertainty
+      why: No.
+    - id: d
+      text: Needs no calibration set
+      why: Needs.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Calibration within groups means…
+    options:
+    - id: a
+      text: The same predicted PD gives the same default rate in each group
+      correct: true
+      why: Score means the same.
+    - id: b
+      text: Equal approval rates
+      why: Parity.
+    - id: c
+      text: Equal TPR
+      why: Opportunity.
+    - id: d
+      text: Equal sizes
+      why: No.
+    concepts: *id009
+  - id: t2
+    type: numeric
+    difficulty: 2
+    prompt: Approval rate (%) for group B?
+    answer: "{{ a.d9_appr_B }}"
+    tolerance_abs: 0.5
+    explanation: "vs {{ a.d9_appr_A }}% A."
+    concepts: *id009
+- id: L9.5-L
+  title: L9.5 Responsible AI (Leader)
+  lesson: L9.5
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts: &id010
+    - C216
+    prompt: '''We don''t use protected attributes, so we''re fair.'' Response?'
+    options:
+    - id: a
+      text: Measure outcomes by group; proxies (R4) can carry the attribute
+      correct: true
+      why: "DI {{ a.d9_di }}."
+    - id: b
+      text: Agree
+      why: No.
+    - id: c
+      text: Add the attribute
+      why: Not the fix.
+    - id: d
+      text: Stop lending in R4
+      why: Worsens it.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C217
+    prompt: Model risk management includes…
+    options:
+    - id: a
+      text: Inventory, independent validation, monitoring, change control
+      correct: true
+      why: MRM.
+    - id: b
+      text: Only accuracy
+      why: No.
+    - id: c
+      text: Annual vendor demo
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C216
+    prompt: "Good group-B customers are wrongly flagged more ({{ a.d9_fair.B.fpr }}% vs {{ a.d9_fair.A.fpr }}%). What do you do?"
+    model: Investigate the R4 feature's business justification; test a model without it or with group-aware thresholds (with legal sign-off); quantify the accuracy/approval trade-off; document the decision.
+    rubric: 'Full: proxy + alternatives + documentation. Partial: one.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C216
+    prompt: The 80% rule is…
+    options:
+    - id: a
+      text: A screening threshold, not a legal safe harbour
+      correct: true
+      why: Context matters.
+    - id: b
+      text: A law
+      why: Guideline.
+    - id: c
+      text: A model metric
+      why: No.
+    - id: d
+      text: Irrelevant
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Personalised pricing charges one area 8% more. First step?
+    options:
+    - id: a
+      text: Check whether the area proxies a protected group and whether the gap is justified
+      correct: true
+      why: Proxy check.
+    - id: b
+      text: Launch
+      why: Risky.
+    - id: c
+      text: Lower all prices
+      why: Blunt.
+    - id: d
+      text: Ignore
+      why: No.
+    concepts: *id010
+- id: L9.6-F
+  title: L9.6 Monitoring (Basic → Advanced)
+  lesson: L9.6
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts: &id011
+    - C219
+    prompt: PSI ≥ 0.25 means…
+    options:
+    - id: a
+      text: Significant shift — act
+      correct: true
+      why: Band.
+    - id: b
+      text: Stable
+      why: < 0.10.
+    - id: c
+      text: Monitor
+      why: 0.10–0.25.
+    - id: d
+      text: Error
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C219
+    prompt: PSI of online discount after the unit fix?
+    answer: "{{ a.d9_r19_psi_fixed }}"
+    tolerance_abs: 0.03
+    explanation: "Was {{ a.d9_r19_psi }}."
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C219
+    prompt: Median 23.2 → 0.22 suggests…
+    options:
+    - id: a
+      text: Logging change (percent → fraction)
+      correct: true
+      why: ×100.
+    - id: b
+      text: Discounts stopped
+      why: No.
+    - id: c
+      text: Population drift
+      why: No.
+    - id: d
+      text: Seasonality
+      why: No.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C220
+    prompt: Late-vintage AUC of the application score?
+    answer: "{{ a.d9_f12_auc_late }}"
+    tolerance_abs: 0.01
+    explanation: "From {{ a.d9_f12_auc_early }}."
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C220
+    prompt: "Utilisation CSI {{ a.d9_f12_csi_util }} but slope {{ a.d9_f12_util_slope.early }} → {{ a.d9_f12_util_slope.late }}. This is…"
+    options:
+    - id: a
+      text: Concept drift (relationship changed)
+      correct: true
+      why: Inputs stable-ish.
+    - id: b
+      text: Population drift only
+      why: No.
+    - id: c
+      text: Unit change
+      why: No.
+    - id: d
+      text: Noise
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C221
+    prompt: Monitoring on booked accounts only…
+    options:
+    - id: a
+      text: Flatters low-score performance (declined unobserved)
+      correct: true
+      why: F18.
+    - id: b
+      text: Is complete
+      why: No.
+    - id: c
+      text: Overstates risk
+      why: Understates.
+    - id: d
+      text: Is illegal
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Score PSI 0.27 with stable AUC suggests…
+    options:
+    - id: a
+      text: Population drift — recalibrate and review cut-offs
+      correct: true
+      why: Ladder.
+    - id: b
+      text: Concept drift
+      why: AUC stable.
+    - id: c
+      text: Data bug
+      why: Check units first, but likely mix.
+    - id: d
+      text: No issue
+      why: Act band.
+    concepts: *id011
+  - id: t2
+    type: numeric
+    difficulty: 2
+    prompt: Late-vintage default rate (%)?
+    answer: "{{ a.d9_f12_def_late }}"
+    tolerance_abs: 0.2
+    explanation: "vs {{ a.d9_f12_def_early }}% early."
+    concepts: *id011
+- id: L9.6-L
+  title: L9.6 Drift response (Leader)
+  lesson: L9.6
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts: &id012
+    - C220
+    prompt: "Late vintages: predicted {{ a.d9_cal_pred_late }}%, actual {{ a.d9_cal_actual_late }}%. Action?"
+    options:
+    - id: a
+      text: Recalibrate now, rebuild with partner data, tighten partner cut-off meanwhile
+      correct: true
+      why: Ladder.
+    - id: b
+      text: Wait a year
+      why: Losses.
+    - id: c
+      text: Retrain on old data
+      why: No.
+    - id: d
+      text: Ignore — AUC fine
+      why: Calibration off.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C219
+    prompt: First response to a ×100 shift in a field?
+    options:
+    - id: a
+      text: 'Treat as data incident: fix pipeline, restate reports'
+      correct: true
+      why: Not behaviour.
+    - id: b
+      text: Retrain
+      why: Bakes in bug.
+    - id: c
+      text: Change strategy
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C219
+    prompt: Design a monthly monitoring pack for the credit score.
+    model: PSI/CSI for score and inputs, channel/product mix, early delinquency by vintage, AUC/Gini and calibration on matured cohorts, fairness metrics, with thresholds, owners and the monitor/recalibrate/rebuild ladder.
+    rubric: 'Full: inputs + performance + calibration + owners. Partial: PSI only.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C219
+    prompt: Score PSI jumped in 2025Q2 because…
+    options:
+    - id: a
+      text: "The partner channel became {{ a.d9_f11_mix.partner }}% of applications"
+      correct: true
+      why: Mix.
+    - id: b
+      text: Score bug
+      why: No.
+    - id: c
+      text: Seasonality
+      why: No.
+    - id: d
+      text: Fewer applications
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Who should own a model's monitoring?
+    options:
+    - id: a
+      text: A named model owner with thresholds and escalation
+      correct: true
+      why: MRM.
+    - id: b
+      text: Nobody
+      why: No.
+    - id: c
+      text: The vendor only
+      why: Accountability stays.
+    - id: d
+      text: IT only
+      why: Business owns risk.
+    concepts: *id012
+- id: L9.7-F
+  title: L9.7 Storytelling (Basic → Advanced)
+  lesson: L9.7
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts: &id013
+    - C294
+    prompt: The pyramid principle starts with…
+    options:
+    - id: a
+      text: The answer/recommendation
+      correct: true
+      why: Answer first.
+    - id: b
+      text: Methods
+      why: Appendix.
+    - id: c
+      text: Data sources
+      why: Appendix.
+    - id: d
+      text: Caveats
+      why: Later.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C294
+    prompt: Each supporting point should have…
+    options:
+    - id: a
+      text: A number and its uncertainty
+      correct: true
+      why: Quantified.
+    - id: b
+      text: An adjective
+      why: No.
+    - id: c
+      text: A 3-D chart
+      why: No.
+    - id: d
+      text: A p-value only
+      why: Effect size.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C294
+    prompt: A good chart title…
+    options:
+    - id: a
+      text: States the message
+      correct: true
+      why: '''Partner vintages default 3× faster''.'
+    - id: b
+      text: Names the variable
+      why: Weak.
+    - id: c
+      text: Is blank
+      why: No.
+    - id: d
+      text: Lists methods
+      why: No.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C294
+    prompt: Which loyalty number belongs in the readout?
+    options:
+    - id: a
+      text: "≈ +{{ a.d9_r20_twfe }}% causal (wide CI)"
+      correct: true
+      why: Defensible.
+    - id: b
+      text: "+{{ a.d9_r20_naive }}%"
+      why: Selection.
+    - id: c
+      text: Both without comment
+      why: Confusing.
+    - id: d
+      text: Neither
+      why: Report it.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C295
+    prompt: After Claude Code drafts a readout you must…
+    options:
+    - id: a
+      text: Check every number against output files
+      correct: true
+      why: Verification.
+    - id: b
+      text: Send it
+      why: No.
+    - id: c
+      text: Add more hedges
+      why: No.
+    - id: d
+      text: Remove numbers
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C294
+    prompt: Avoid…
+    options:
+    - id: a
+      text: Dual axes and 3-D charts
+      correct: true
+      why: Mislead.
+    - id: b
+      text: Annotations
+      why: Helpful.
+    - id: c
+      text: Intervals
+      why: Helpful.
+    - id: d
+      text: Titles
+      why: Helpful.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Which chart title is best?
+    options:
+    - id: a
+      text: Partner vintages default 3× faster
+      correct: true
+      why: Message titles.
+    - id: b
+      text: Default rate by vintage
+      why: Descriptive only.
+    - id: c
+      text: Chart 3
+      why: No.
+    - id: d
+      text: Data
+      why: No.
+    concepts: *id013
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: A number without its uncertainty invites…
+    options:
+    - id: a
+      text: False precision and overconfident decisions
+      correct: true
+      why: Show ranges.
+    - id: b
+      text: Trust
+      why: Unearned.
+    - id: c
+      text: Nothing
+      why: No.
+    - id: d
+      text: Better decisions
+      why: No.
+    concepts: *id013
+- id: L9.7-L
+  title: L9.7 Executive readouts (Leader)
+  lesson: L9.7
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts: &id014
+    - C294
+    prompt: CRO asks 'why did defaults rise?' Best opening line?
+    options:
+    - id: a
+      text: Riskier partner-channel mix and an under-predicting score; we'll tighten cut-offs and recalibrate
+      correct: true
+      why: Answer + action.
+    - id: b
+      text: Let me walk through our methodology
+      why: Method-first.
+    - id: c
+      text: It's complicated
+      why: No.
+    - id: d
+      text: Seasonality
+      why: Wrong.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C294
+    prompt: '''What would change your mind?'' is answered with…'
+    options:
+    - id: a
+      text: The test or data that would
+      correct: true
+      why: Falsifiable.
+    - id: b
+      text: Nothing
+      why: Dogmatic.
+    - id: c
+      text: More slides
+      why: No.
+    - id: d
+      text: Authority
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C294
+    prompt: Write the one-sentence answer for the promotion review.
+    model: "Keep the Hair Care mechanic (+{{ a.d9_r09_twfe_pct }}%, CI {{ a.d9_r09_twfe_ci[0] }}–{{ a.d9_r09_twfe_ci[1] }}%) and cut deep Snacks discounts, which return only {{ a.d8_promo_roi }} of their cost in margin."
+    rubric: 'Full: decision + 2 numbers. Partial: decision.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C294
+    prompt: Bad news should be…
+    options:
+    - id: a
+      text: Led with, followed by the plan
+      correct: true
+      why: Trust.
+    - id: b
+      text: Buried
+      why: No.
+    - id: c
+      text: Omitted
+      why: No.
+    - id: d
+      text: Softened into vagueness
+      why: No.
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: 'The CFO interrupts at slide 2: ''What do you want?'' You…'
+    options:
+    - id: a
+      text: State the decision and the ask immediately
+      correct: true
+      why: Answer first.
+    - id: b
+      text: Continue the agenda
+      why: Lose them.
+    - id: c
+      text: Show methods
+      why: No.
+    - id: d
+      text: Apologise
+      why: Answer.
+    concepts: *id014
+- id: L9.8-F
+  title: L9.8 Inside neural networks (Basic → Advanced)
+  lesson: L9.8
+  track: F
+  questions:
+  - id: t1
+    type: numeric
+    difficulty: 2
+    prompt: PD (%) from the one-neuron example (utilisation 0.9, bureau 620)?
+    answer: "{{ a.d9n_neuron.p }}"
+    tolerance_abs: 0.5
+    explanation: "σ(z) with z = {{ a.d9n_neuron.z }}."
+    concepts: &id015
+    - C277
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: A neuron with a sigmoid output on raw features is equivalent to…
+    options:
+    - id: a
+      text: Logistic regression
+      correct: true
+      why: Same formula.
+    - id: b
+      text: K-means
+      why: No.
+    - id: c
+      text: PCA
+      why: No.
+    - id: d
+      text: A decision tree
+      why: No.
+    concepts: *id015
+  - id: t3
+    type: mcq
+    difficulty: 2
+    prompt: Cross-entropy loss is used for…
+    options:
+    - id: a
+      text: Classification probabilities (e.g. default yes/no)
+      correct: true
+      why: Log-loss.
+    - id: b
+      text: Weekly sales amounts
+      why: Use MSE.
+    - id: c
+      text: Clustering
+      why: No.
+    - id: d
+      text: Benford tests
+      why: No.
+    concepts: *id015
+  - id: t4
+    type: mcq
+    difficulty: 2
+    prompt: Backpropagation computes…
+    options:
+    - id: a
+      text: Gradients of the loss with respect to every weight, via the chain rule
+      correct: true
+      why: Blame assignment.
+    - id: b
+      text: The data mean
+      why: No.
+    - id: c
+      text: Predictions only
+      why: That's the forward pass.
+    - id: d
+      text: Cluster centres
+      why: No.
+    concepts: *id015
+  - id: t5
+    type: mcq
+    difficulty: 2
+    prompt: Learning rate too high causes…
+    options:
+    - id: a
+      text: Oscillation or divergence of the loss
+      correct: true
+      why: See the 3-D bowl.
+    - id: b
+      text: Slow but steady progress
+      why: That's too low.
+    - id: c
+      text: Perfect fit
+      why: No.
+    - id: d
+      text: Nothing
+      why: It matters.
+    concepts: *id015
+  - id: t6
+    type: numeric
+    difficulty: 2
+    prompt: Epoch with the lowest validation loss for the weakly penalised network?
+    answer: "{{ a.d9n_weak_best_epoch }}"
+    tolerance_abs: 2
+    explanation: Then it overfits.
+    concepts: *id015
+  - id: t7
+    type: mcq
+    difficulty: 2
+    prompt: Self-attention lets a transformer…
+    options:
+    - id: a
+      text: Weigh every token against every other token for context
+      correct: true
+      why: softmax(QKᵀ/√d)V.
+    - id: b
+      text: Ignore word order completely
+      why: Positional encoding adds order.
+    - id: c
+      text: Only read one word
+      why: No.
+    - id: d
+      text: Cluster documents
+      why: No.
+    concepts: *id015
+  - id: t8
+    type: mcq
+    difficulty: 2
+    prompt: A diffusion model generates an image by…
+    options:
+    - id: a
+      text: Starting from noise and removing predicted noise step by step
+      correct: true
+      why: Reverse process.
+    - id: b
+      text: Copying a training image
+      why: It learns the distribution.
+    - id: c
+      text: Sorting pixels
+      why: No.
+    - id: d
+      text: Clustering colours
+      why: No.
+    concepts: *id015
+- id: L9.8-L
+  title: L9.8 Governing deep learning and GenAI (Leader)
+  lesson: L9.8
+  track: L
+  questions:
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: A vendor shows a falling training loss as proof of quality. You ask for…
+    options:
+    - id: a
+      text: Validation loss by epoch and an out-of-time test
+      correct: true
+      why: Generalisation evidence.
+    - id: b
+      text: More epochs
+      why: Worsens overfitting.
+    - id: c
+      text: A bigger GPU
+      why: Irrelevant.
+    - id: d
+      text: Nothing
+      why: No.
+    concepts: &id016
+    - C286
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: RAG matters for a policy chatbot because…
+    options:
+    - id: a
+      text: Answers are grounded in and cite your actual documents
+      correct: true
+      why: Grounding.
+    - id: b
+      text: It's faster
+      why: Not the point.
+    - id: c
+      text: It removes all errors
+      why: Reduces, not removes.
+    - id: d
+      text: It replaces review
+      why: No.
+    concepts: *id016
+  - id: t3
+    type: mcq
+    difficulty: 2
+    prompt: Generated product images must be…
+    options:
+    - id: a
+      text: Labelled, rights-checked and reviewed before publishing
+      correct: true
+      why: Governance.
+    - id: b
+      text: Published directly
+      why: Risky.
+    - id: c
+      text: Kept secret
+      why: Disclose.
+    - id: d
+      text: Banned outright
+      why: Too blunt.
+    concepts: *id016
+  - id: t4
+    type: open
+    difficulty: 3
+    prompt: Why does a strong L2 penalty help the network on 3,000 accounts?
+    model: "It limits how large weights can get, so the network can't memorise noise; validation loss stays near {{ a.d9n_strong_val_end }} instead of rising to {{ a.d9n_weak_val_end }}."
+    rubric: 'Full: mechanism + numbers. Partial: mechanism.'
+    concepts: *id016
+  - id: t5
+    type: mcq
+    difficulty: 2
+    prompt: SFT and RLHF are…
+    options:
+    - id: a
+      text: Post-training steps that teach a pre-trained model to follow instructions and preferred behaviour
+      correct: true
+      why: Post-training.
+    - id: b
+      text: Data cleaning
+      why: No.
+    - id: c
+      text: Clustering
+      why: No.
+    - id: d
+      text: Forecasting
+      why: No.
+    concepts: *id016
+- id: D9-GATE
+  title: Day 9 gate (pass 75%)
+  lesson: D9
+  track: Mixed
+  pass_mark: 75
+  questions:
+  - id: g01
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C269
+    prompt: DiD assumes…
+    options:
+    - id: a
+      text: Parallel trends
+      correct: true
+      why: Identification.
+    - id: b
+      text: Randomisation
+      why: No.
+    - id: c
+      text: Normality
+      why: No.
+    - id: d
+      text: Equal sizes
+      why: No.
+  - id: g02
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C268
+    prompt: Self-selection is best removed by…
+    options:
+    - id: a
+      text: Randomisation or within-unit comparisons
+      correct: true
+      why: Fixed differences.
+    - id: b
+      text: More demographics
+      why: Unobserved.
+    - id: c
+      text: Bigger sample
+      why: Bias stays.
+    - id: d
+      text: Log transform
+      why: No.
+  - id: g03
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C274
+    prompt: Censoring requires…
+    options:
+    - id: a
+      text: Survival methods (KM, Cox)
+      correct: true
+      why: Use partial info.
+    - id: b
+      text: Dropping censored
+      why: Biased.
+    - id: c
+      text: Mean of events
+      why: Biased.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: g04
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C275
+    prompt: Hazard ratio 1.7 means…
+    options:
+    - id: a
+      text: 70% higher instantaneous risk
+      correct: true
+      why: Multiplicative.
+    - id: b
+      text: 70% probability
+      why: No.
+    - id: c
+      text: 1.7 months
+      why: No.
+    - id: d
+      text: Survival 1.7×
+      why: No.
+  - id: g05
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C282
+    prompt: On tabular data, deep learning…
+    options:
+    - id: a
+      text: Rarely beats GBM/GLM; compare fairly
+      correct: true
+      why: Bake-off.
+    - id: b
+      text: Always wins
+      why: No.
+    - id: c
+      text: Needs no scaling
+      why: Needs.
+    - id: d
+      text: Is explainable by default
+      why: No.
+  - id: g06
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C264
+    prompt: Over-dispersed claim counts →
+    options:
+    - id: a
+      text: Negative binomial with exposure offset
+      correct: true
+      why: F17.
+    - id: b
+      text: Linear regression
+      why: No.
+    - id: c
+      text: Drop zeros
+      why: No.
+    - id: d
+      text: Poisson always
+      why: Under-states variance.
+  - id: g07
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C266
+    prompt: ES vs VaR…
+    options:
+    - id: a
+      text: ES ≥ VaR; it averages the tail
+      correct: true
+      why: Definition.
+    - id: b
+      text: ES < VaR
+      why: No.
+    - id: c
+      text: Same
+      why: No.
+    - id: d
+      text: ES ignores tail
+      why: No.
+  - id: g08
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C216
+    prompt: Excluding protected attributes…
+    options:
+    - id: a
+      text: Doesn't prevent disparity via proxies
+      correct: true
+      why: F15.
+    - id: b
+      text: Guarantees fairness
+      why: No.
+    - id: c
+      text: Is illegal
+      why: No.
+    - id: d
+      text: Improves AUC
+      why: No.
+  - id: g09
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C218
+    prompt: Conformal coverage is guaranteed…
+    options:
+    - id: a
+      text: On average over the calibration population
+      correct: true
+      why: Marginal.
+    - id: b
+      text: For every individual
+      why: No.
+    - id: c
+      text: Per class automatically
+      why: Mondrian needed.
+    - id: d
+      text: Never
+      why: No.
+  - id: g10
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C219
+    prompt: Median ×100 after a release →
+    options:
+    - id: a
+      text: Unit change — fix pipeline
+      correct: true
+      why: R19.
+    - id: b
+      text: Retrain
+      why: No.
+    - id: c
+      text: Strategy change
+      why: No.
+    - id: d
+      text: Ignore
+      why: No.
+  - id: g11
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C220
+    prompt: Falling AUC with modest CSI indicates…
+    options:
+    - id: a
+      text: Concept drift → rebuild
+      correct: true
+      why: F12.
+    - id: b
+      text: Population drift only
+      why: No.
+    - id: c
+      text: Nothing
+      why: No.
+    - id: d
+      text: Data error
+      why: No.
+  - id: g12
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C294
+    prompt: An executive readout opens with…
+    options:
+    - id: a
+      text: The answer and the decision needed
+      correct: true
+      why: Pyramid.
+    - id: b
+      text: Agenda
+      why: No.
+    - id: c
+      text: Data sources
+      why: No.
+    - id: d
+      text: Methods
+      why: No.

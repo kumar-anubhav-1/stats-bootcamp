@@ -1,0 +1,15 @@
+# L8.5 (R17): customers with unusual return behaviour (≥ 5 lines).
+recipe: rcp_anomaly_scan
+dataset: {name: northstar_transactions, path: data/retail/transactions.parquet}
+columns: {entity: customer_id}
+filters: []
+params:
+  mode: score
+  drop_duplicates: [line_id]
+  aggregate: {returns: [return_flag, sum], lines: [line_id, count], stores: [store_id, nunique]}
+  ratio: {return_rate: [returns, lines]}
+  metric: return_rate
+  min_rows: 5
+  contamination: [0.01, 0.02, 0.05]
+  top_n: 12
+output: {folder: "outputs/{recipe}/{date}_retail_anomaly_returns"}

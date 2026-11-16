@@ -1,0 +1,8 @@
+# L2.2: weekly Dairy units in one store — Poisson or negative binomial?
+recipe: rcp_distribution_fit
+dataset: {name: northstar_weekly_store_category, path: data/retail/weekly_store_category.parquet}
+columns: {target: units}
+filters:
+  - "store_id == 'S001' and category == 'Dairy'"
+params: {kind: count}
+output: {folder: "outputs/{recipe}/{date}_retail_weekly_units"}

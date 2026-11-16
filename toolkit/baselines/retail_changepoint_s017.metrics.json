@@ -1,0 +1,20 @@
+{
+  "series": "S017 share of other units' revenue",
+  "n": 104,
+  "breaks": [
+    61
+  ],
+  "levels": [
+    {
+      "from": 1,
+      "to": 60,
+      "mean": 0.01158
+    },
+    {
+      "from": 61,
+      "to": 104,
+      "mean": 0.007352
+    }
+  ],
+  "cusum_alarm": 61
+}

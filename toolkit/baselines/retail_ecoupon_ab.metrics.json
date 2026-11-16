@@ -1,0 +1,97 @@
+{
+  "arms": [
+    "treatment",
+    "control"
+  ],
+  "unit": "row",
+  "binary": true,
+  "counts": {
+    "treatment": 6000,
+    "control": 5421
+  },
+  "planned_split": {
+    "treatment": 0.5,
+    "control": 0.5
+  },
+  "srm_p": 0.0,
+  "srm_fail": true,
+  "srm_by_segment": {
+    "app_version=3.1": {
+      "n_t": 1742,
+      "n_c": 1781,
+      "share_t": 0.494465,
+      "p": 0.511139
+    },
+    "app_version=3.2": {
+      "n_t": 2388,
+      "n_c": 1820,
+      "share_t": 0.56749,
+      "p": 0.0
+    },
+    "app_version=3.3": {
+      "n_t": 1870,
+      "n_c": 1820,
+      "share_t": 0.506775,
+      "p": 0.410447
+    },
+    "platform=android": {
+      "n_t": 3352,
+      "n_c": 3034,
+      "share_t": 0.524898,
+      "p": 6.9e-05
+    },
+    "platform=ios": {
+      "n_t": 2648,
+      "n_c": 2387,
+      "share_t": 0.525919,
+      "p": 0.000235
+    }
+  },
+  "primary": {
+    "t_mean": 0.115,
+    "c_mean": 0.110681,
+    "diff": 0.004319,
+    "se": 0.005927,
+    "ci_low": -0.007297,
+    "ci_high": 0.015935,
+    "p": 0.46648,
+    "rel_lift": 0.039025,
+    "n_t": 6000,
+    "n_c": 5421
+  },
+  "cuped": {
+    "t_mean": 0.11527,
+    "c_mean": 0.110382,
+    "diff": 0.004888,
+    "se": 0.005888,
+    "ci_low": -0.006653,
+    "ci_high": 0.016429,
+    "p": 0.406466,
+    "rel_lift": 0.04416,
+    "n_t": 6000,
+    "n_c": 5421,
+    "theta": 0.045046,
+    "variance_reduction": 0.013278
+  },
+  "bayes": {
+    "p_treatment_better": 0.7679,
+    "ci_low": -0.00736,
+    "ci_high": 0.01596,
+    "expected_loss_if_ship": 0.000806,
+    "expected_loss_if_keep": 0.005148
+  },
+  "guardrails": {
+    "revenue_14d": {
+      "t": 4.5735,
+      "c": 4.325914,
+      "diff": 0.247586,
+      "ci_low": -0.313164,
+      "ci_high": 0.808336,
+      "p": 0.3868,
+      "direction": "lower_is_worse",
+      "breach": false
+    }
+  },
+  "decision": "STOP \u2014 sample-ratio mismatch. Do not read the effect until assignment/logging is fixed.",
+  "looks_naive_significant": 1
+}

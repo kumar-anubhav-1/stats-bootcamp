@@ -1,0 +1,8 @@
+# L2.6: Benford first-digit and rounding tests of line revenue by store
+recipe: rcp_benford
+dataset: {name: northstar_transactions, path: data/retail/transactions.parquet}
+columns: {target: revenue, group: store_id}
+filters:
+  - "return_flag == False"
+params: {min_n: 300, round_to: 0.5}
+output: {folder: "outputs/{recipe}/{date}_retail_stores"}

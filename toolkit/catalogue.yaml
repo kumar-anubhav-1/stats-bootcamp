@@ -1,0 +1,21 @@
+# Toolkit recipe catalogue. status: working | planned (built in the day it is taught)
+- {recipe: rcp_profile, node: N-DESC-PROFILE, lesson: L0.4, status: working}
+- {recipe: rcp_quality, node: N-DESC-QUALITY, lesson: L1.2, status: working}
+- {recipe: rcp_outliers, node: N-DESC-OUTLIER, lesson: L1.6, status: working}
+- {recipe: rcp_distribution_fit, node: N-DIST, lesson: L2.3, status: working}
+- {recipe: rcp_benford, node: N-ANOM-BENFORD, lesson: L2.6, status: working}
+- {recipe: rcp_two_group_test, node: N-TEST-2G, lesson: L3.4, status: working}
+- {recipe: rcp_multi_group_test, node: N-TEST-KG, lesson: L3.5, status: working}
+- {recipe: rcp_power, node: N-EXP-POWER, lesson: L3.6, status: working}
+- {recipe: rcp_ab_test, node: N-EXP-SRM, lesson: L4.1, status: working}
+- {recipe: rcp_regression, node: N-REG, lesson: L5.1, status: working}
+- {recipe: rcp_classifier, node: N-ML, lesson: L6.2, status: working}
+- {recipe: rcp_forecast, node: N-FCST, lesson: L7.2, status: working}
+- {recipe: rcp_changepoint, node: N-FCST-BREAK, lesson: L7.5, status: working}
+- {recipe: rcp_inventory, node: N-OPT-INVENTORY, lesson: L7.6, status: working}
+- {recipe: rcp_cluster, node: N-CLUST-KMEANS, lesson: L8.1, status: working}
+- {recipe: rcp_basket, node: N-SEG-BASKET, lesson: L8.3, status: working}
+- {recipe: rcp_elasticity, node: N-REG-LOGLOG, lesson: L8.4, status: working}
+- {recipe: rcp_anomaly_scan, node: N-ANOM-MULTI, lesson: L8.5, status: working}
+- {recipe: rcp_scorecard, node: N-ML-SCORECARD, lesson: L8.7, status: working}
+- {recipe: rcp_drift, node: N-MON-PSI, lesson: L9.6, status: working}

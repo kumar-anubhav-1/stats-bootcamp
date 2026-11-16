@@ -1,0 +1,147 @@
+{
+  "groups": 20,
+  "span_orders_of_magnitude": 2.21871,
+  "peer_median_mad": 0.007601,
+  "by_group": {
+    "BR07": {
+      "mad": 0.074608,
+      "excess_mad": 0.068455,
+      "chi2_p": 0.0,
+      "rounded_share": 0.702814,
+      "mad_peer_z": 27.969649
+    },
+    "BR17": {
+      "mad": 0.013611,
+      "excess_mad": 0.003818,
+      "chi2_p": 0.04709,
+      "rounded_share": 0.010435,
+      "mad_peer_z": 1.079868
+    },
+    "BR16": {
+      "mad": 0.013369,
+      "excess_mad": 0.003498,
+      "chi2_p": 0.111618,
+      "rounded_share": 0.0053,
+      "mad_peer_z": 0.946758
+    },
+    "BR06": {
+      "mad": 0.009081,
+      "excess_mad": 0.003011,
+      "chi2_p": 0.208471,
+      "rounded_share": 0.015364,
+      "mad_peer_z": 0.74443
+    },
+    "BR13": {
+      "mad": 0.00903,
+      "excess_mad": 0.00261,
+      "chi2_p": 0.038452,
+      "rounded_share": 0.010463,
+      "mad_peer_z": 0.577511
+    },
+    "BR08": {
+      "mad": 0.007916,
+      "excess_mad": 0.001657,
+      "chi2_p": 0.133611,
+      "rounded_share": 0.009943,
+      "mad_peer_z": 0.181267
+    },
+    "BR19": {
+      "mad": 0.007766,
+      "excess_mad": -0.001821,
+      "chi2_p": 0.882113,
+      "rounded_share": 0.01,
+      "mad_peer_z": -1.265952
+    },
+    "BR05": {
+      "mad": 0.007766,
+      "excess_mad": 0.001896,
+      "chi2_p": 0.185332,
+      "rounded_share": 0.009369,
+      "mad_peer_z": 0.280654
+    },
+    "BR10": {
+      "mad": 0.007761,
+      "excess_mad": 0.001725,
+      "chi2_p": 0.016796,
+      "rounded_share": 0.009908,
+      "mad_peer_z": 0.209552
+    },
+    "BR20": {
+      "mad": 0.00772,
+      "excess_mad": -0.001674,
+      "chi2_p": 0.749381,
+      "rounded_share": 0.0112,
+      "mad_peer_z": -1.204602
+    },
+    "BR02": {
+      "mad": 0.007481,
+      "excess_mad": 0.001491,
+      "chi2_p": 0.019359,
+      "rounded_share": 0.009759,
+      "mad_peer_z": 0.112039
+    },
+    "BR14": {
+      "mad": 0.007454,
+      "excess_mad": 0.001191,
+      "chi2_p": 0.298129,
+      "rounded_share": 0.012091,
+      "mad_peer_z": -0.01293
+    },
+    "BR04": {
+      "mad": 0.007228,
+      "excess_mad": 0.001253,
+      "chi2_p": 0.483845,
+      "rounded_share": 0.012945,
+      "mad_peer_z": 0.01293
+    },
+    "BR15": {
+      "mad": 0.007094,
+      "excess_mad": 0.000751,
+      "chi2_p": 0.27442,
+      "rounded_share": 0.006565,
+      "mad_peer_z": -0.195703
+    },
+    "BR18": {
+      "mad": 0.007012,
+      "excess_mad": -0.002894,
+      "chi2_p": 0.866267,
+      "rounded_share": 0.003559,
+      "mad_peer_z": -1.712313
+    },
+    "BR11": {
+      "mad": 0.006989,
+      "excess_mad": 0.000701,
+      "chi2_p": 0.308251,
+      "rounded_share": 0.009319,
+      "mad_peer_z": -0.216451
+    },
+    "BR12": {
+      "mad": 0.005648,
+      "excess_mad": -0.000697,
+      "chi2_p": 0.76645,
+      "rounded_share": 0.008759,
+      "mad_peer_z": -0.798017
+    },
+    "BR03": {
+      "mad": 0.005647,
+      "excess_mad": -0.000231,
+      "chi2_p": 0.69496,
+      "rounded_share": 0.012531,
+      "mad_peer_z": -0.604551
+    },
+    "BR01": {
+      "mad": 0.00527,
+      "excess_mad": -0.000725,
+      "chi2_p": 0.594991,
+      "rounded_share": 0.013029,
+      "mad_peer_z": -0.809687
+    },
+    "BR09": {
+      "mad": 0.005247,
+      "excess_mad": -0.000812,
+      "chi2_p": 0.760212,
+      "rounded_share": 0.009321,
+      "mad_peer_z": -0.846134
+    }
+  }
+}

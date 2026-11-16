@@ -1,0 +1,26 @@
+{
+  "mode": "score",
+  "entities": 1122,
+  "metric": "return_rate",
+  "median": 0.0,
+  "mad": 0.04452,
+  "flag_counts": {
+    "0.01": {
+      "k": 12,
+      "overlap": 6
+    },
+    "0.02": {
+      "k": 23,
+      "overlap": 14
+    },
+    "0.05": {
+      "k": 57,
+      "overlap": 21
+    }
+  },
+  "n_robust_z_gt_3_5": 58,
+  "_tolerance": {
+    "rtol": 0.05,
+    "atol": 0.02
+  }
+}

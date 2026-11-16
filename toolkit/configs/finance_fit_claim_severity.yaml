@@ -1,0 +1,7 @@
+# L2.3 reuse: claim severity, catastrophic claims treated separately
+recipe: rcp_distribution_fit
+dataset: {name: meridian_claims, path: data/finance/claims.parquet}
+columns: {target: claim_amount}
+filters: []
+params: {kind: continuous, candidates: [gamma, lognormal, exponential, weibull], exclude_above: 100000, tail_quantiles: [0.9, 0.99]}
+output: {folder: "outputs/{recipe}/{date}_finance_claim_severity"}

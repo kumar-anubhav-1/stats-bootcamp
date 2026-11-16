@@ -1,0 +1,333 @@
+# Day 3 exercises for L3.1–L3.3 and L3.5–L3.7 (L3.4 has its own set). 15 retail + 15 finance. Values are computed from the data.
+retail:
+  - id: R3-1
+    lesson: L3.1
+    tier: Basic
+    title: Mean basket value with its interval
+    framing: The CFO wants "the average basket" for the annual report.
+    deliverable: Mean basket value with 90%, 95% and 99% t-intervals (one row per basket; returns, entry errors and duplicates removed); n.
+    expected: "n = {{ a.d3_n_baskets | n }}; mean {{ a.d3_basket_mean }}; 95% CI {{ a.d3_basket_ci[0] }} – {{ a.d3_basket_ci[1] }}; 90% {{ a.d3_basket_ci90[0] }} – {{ a.d3_basket_ci90[1] }}; 99% {{ a.d3_basket_ci99[0] }} – {{ a.d3_basket_ci99[1] }}."
+    tolerance: "± 0.1"
+    model: "We estimate the average basket at {{ a.d3_basket_mean }}, and values between {{ a.d3_basket_ci[0] }} and {{ a.d3_basket_ci[1] }} are compatible with the data (95%). Higher confidence widens the interval."
+    wrong: "Computing on lines instead of baskets, or saying '95% of baskets are between 48 and 53'."
+    leader: How would you word this in the annual report for non-specialists?
+  - id: R3-2
+    lesson: L3.1
+    tier: Applied
+    title: Does the t-interval deserve trust here?
+    framing: A junior asks whether the textbook interval is reliable for basket value.
+    deliverable: "Simulate coverage of the 95% t-interval for samples of n = 30 and n = 200 drawn from all baskets (4,000 samples each)."
+    expected: "Coverage {{ a.d3_t_coverage[30] }}% at n = 30 and {{ a.d3_t_coverage[200] }}% at n = 200 — both below 95%."
+    tolerance: "± 1.5 pp"
+    model: "Bulk buyers make basket value extremely skewed (skew {{ a.l34_basket_skew }}); most samples miss them, so the interval is too narrow and too low. Use a bootstrap interval, the median, or a log-scale analysis."
+    wrong: "Assuming n ≥ 30 makes the CLT kick in for any data."
+    leader: Which KPIs in your organisation are likely to have this problem?
+  - id: R3-3
+    lesson: L3.1
+    tier: Stretch
+    title: Precision you can buy
+    framing: Marketing wants the mean basket of a new loyalty tier estimated to within ± 3.
+    deliverable: Expected 95% CI width for n = 100, 400 and 1,600 baskets using the chain's SD; the n needed for a half-width of 3.
+    expected: "Widths {{ a.d3_ci_width_by_n[100] }}, {{ a.d3_ci_width_by_n[400] }}, {{ a.d3_ci_width_by_n[1600] }}; half-width 3 needs about {{ ((1.96 * a.d3_basket_sd / 3) ** 2) | round(0) | int | n }} baskets."
+    tolerance: "± 5%"
+    model: "Width falls with √n: four times the data halves it. With SD ≈ {{ a.d3_basket_sd }}, ± 3 needs n ≈ (1.96 × SD / 3)². And the heavy tail means even that interval under-covers — plan for more or use the median."
+    wrong: "Scaling width linearly with n."
+    leader: Is ± 3 the right precision target? How would you decide?
+  - id: R3-4
+    lesson: L3.2
+    tier: Basic
+    title: Bootstrap the median
+    framing: Finance prefers the median basket because the mean is distorted by bulk buyers.
+    deliverable: Median basket value and median annual spend per customer, each with a 95% bootstrap CI (≥ 3,000 resamples, fixed seed).
+    expected: "Median basket {{ a.d3_basket_median }} (CI {{ a.d3_basket_median_ci[0] }} – {{ a.d3_basket_median_ci[1] }}); median customer spend {{ a.d3_cust_median }} (CI {{ a.d3_cust_median_ci[0] }} – {{ a.d3_cust_median_ci[1] }})."
+    tolerance: "± 0.5"
+    model: "No simple formula exists for the SE of a median; the bootstrap resamples baskets (or customers) to measure it. The median is far below the mean — the typical basket is smaller than the average one."
+    wrong: "Resampling lines instead of baskets or customers."
+    leader: When would you report the median rather than the mean to the board?
+  - id: R3-5
+    lesson: L3.2
+    tier: Applied
+    title: Lines or stores? The resampling unit
+    framing: A dashboard shows mean revenue per line with a very tight interval.
+    deliverable: SE of mean revenue per line by resampling lines vs resampling whole stores; the ratio.
+    expected: "SE {{ a.d3_se_lines }} (lines) vs {{ a.d3_se_stores }} (stores): {{ a.d3_se_ratio_store_line }}× larger."
+    tolerance: "ratio ± 1"
+    model: "Lines in the same store share prices, mix and customers; they are not independent. The cluster bootstrap gives the honest uncertainty. Any test on lines would be far too confident."
+    wrong: "Trusting the line-level interval because n is large."
+    leader: Which of your team's dashboards might show over-confident intervals for this reason?
+  - id: R3-6
+    lesson: L3.3
+    tier: Basic
+    title: State the hypotheses first
+    framing: "Store operations ask: are Friday–Saturday baskets bigger?"
+    deliverable: H0, H1 (two-sided), unit, outcome, test and α written before testing; then the result with CI.
+    expected: "H0: mean Fri–Sat basket = mean Mon–Thu basket; H1: they differ. Unit basket; Welch t (Mann-Whitney as robustness); α 0.05. Result {{ a.l34_wkend_mean }} vs {{ a.l34_wkday_mean }}, p = {{ a.l34_wkend_p }}, CI {{ a.l34_wkend_ci_lo }} to {{ a.l34_wkend_ci_hi }}."
+    tolerance: "p ± 0.02"
+    model: "No evidence that weekend baskets are bigger (the busier weekend comes from more baskets, not bigger ones). The CI shows differences of up to about ± 5 cannot be excluded."
+    wrong: "Concluding 'weekend has no effect on baskets' — not established at that precision."
+    leader: How would you phrase this finding so store operations don't over-read it?
+  - id: R3-7
+    lesson: L3.3
+    tier: Applied
+    title: An A/A test shows what α means
+    framing: The analytics lead wants to show the team why 1 in 20 tests is a false alarm.
+    deliverable: "{{ a.d3_aa_reps | n }} random 20/20 splits of the 40 stores (no treatment); Welch test on Snacks growth (weeks 70–77 ÷ 54–69). False-positive rate and p-value histogram."
+    expected: "False-positive rate {{ a.d3_aa_fpr }}%; p-values roughly uniform (bins: {{ a.d3_aa_p_hist | join(', ') }})."
+    tolerance: "± 1.5 pp"
+    model: "When nothing happens, p-values are uniformly distributed, so about 5% fall below 0.05 by construction. α is the false-alarm rate you chose."
+    wrong: "Expecting zero significant A/A tests."
+    leader: How would you use A/A tests to validate a new experimentation platform?
+  - id: R3-8
+    lesson: L3.3
+    tier: Stretch
+    title: The many-categories trap in A/A data
+    framing: The same analyst now checks all categories in every A/A split.
+    deliverable: "Share of A/A splits where at least one of {{ a.d3_n_cats_aa }} categories is 'significant'; compare with 1 − 0.95^k."
+    expected: "{{ a.d3_aa_any_sig }}% observed vs {{ a.d3_aa_any_theory }}% for independent tests."
+    tolerance: "± 3 pp"
+    model: "Testing many outcomes guarantees false discoveries. The observed rate is slightly below the independent-test formula because category growths are correlated."
+    wrong: "Reporting the 'winning' category as a finding."
+    leader: What rule would you set for experiment readouts with many metrics?
+  - id: R3-9
+    lesson: L3.5
+    tier: Basic
+    title: Basket value by region
+    framing: The regional director asks whether regions differ.
+    deliverable: "Run `retail_basket_by_region.yaml`: summary by region, ANOVA, Welch ANOVA, Kruskal-Wallis, Levene, η²."
+    expected: "ANOVA p = {{ a.d3_anova_p }}; Welch p = {{ a.d3_welch_p }}; Kruskal p = {{ a.d3_kw_p }}; Levene p = {{ a.d3_levene_p }}; η² = {{ a.d3_eta2 }}."
+    tolerance: "p within an order of magnitude; η² ± 0.001"
+    model: "All tests say regions differ; Kruskal-Wallis is primary because baskets are skewed. η² is tiny — region explains about half a percent of basket variation."
+    wrong: "Using classic ANOVA without checking variances or skew, or stopping at 'significant'."
+    leader: Would you change any regional plan on this evidence?
+  - id: R3-10
+    lesson: L3.5
+    tier: Applied
+    title: Which regions — and why?
+    framing: Follow-up — which regions differ, and what explains it?
+    deliverable: Pairwise Mann-Whitney with Holm; share of baskets from Express stores in North vs elsewhere; North's median gap within each format.
+    expected: "Significant pairs: {{ a.d3_mw_holm_sig | join(', ') }}. Express share {{ a.d3_north_share_express }}% (North) vs {{ a.d3_other_share_express }}%. Gap within format: {{ a.d3_north_gap_by_fmt | kv }}."
+    tolerance: "± 1"
+    model: "North differs from every region, but within formats it is not consistently lower — the difference is store mix (Express-heavy), a Simpson-type pattern."
+    wrong: "Concluding North shoppers spend less."
+    leader: What would you tell the North regional manager?
+  - id: R3-11
+    lesson: L3.5
+    tier: Stretch
+    title: 780 store pairs
+    framing: A consultant offers a league table of 'significantly different' stores.
+    deliverable: Welch tests for all pairs of 40 stores on basket value; count significant raw and after Holm.
+    expected: "{{ a.d3_store_pairs }} pairs; {{ a.d3_store_pairs_raw }} raw p < 0.05; {{ a.d3_store_pairs_holm }} after Holm."
+    tolerance: "± 10%"
+    model: "Stores genuinely differ (format, size), so many pairs survive, but correction removes a large share of the raw 'differences'. A league table should use intervals or a funnel plot, not 780 tests."
+    wrong: "Reporting 389 significant differences."
+    leader: How would you present store comparisons to the operations board instead?
+  - id: R3-12
+    lesson: L3.6
+    tier: Basic
+    title: Stores needed for the next test
+    framing: Category management wants to test a new fixture in Snacks next quarter.
+    deliverable: "Run `retail_power_store_test.yaml`: stores per arm for 5–20% lifts and the MDE with 20 stores per arm."
+    expected: "Per arm: 5% {{ a.d3_stores_per_arm[5] }}, 10% {{ a.d3_stores_per_arm[10] }}, 12% {{ a.d3_stores_per_arm[12] }}, 15% {{ a.d3_stores_per_arm[15] }}. MDE at 20/arm {{ a.d3_mde_20 }}%."
+    tolerance: "± 1 store; MDE ± 0.3"
+    model: "With 40 stores the test can reliably detect lifts of about {{ a.d3_mde_20 }}% or more. A 5% effect would need ~{{ a.d3_stores_per_arm[5] }} stores per arm — more than the chain has. Reduce variance (CUPED, longer windows) or accept a larger MDE."
+    wrong: "Sizing from transaction counts instead of stores."
+    leader: The fixture costs 2% of category sales to install. Is the test worth running?
+  - id: R3-13
+    lesson: L3.6
+    tier: Applied
+    title: Sizing the e-coupon test
+    framing: Digital marketing plans the next e-coupon A/B test (users randomised).
+    deliverable: "Users per arm for +1.0 and +1.5 pp conversion from the current base rate (80% power, α 0.05)."
+    expected: "Base {{ a.d3_ec_base_pct }}%; +1.0 pp needs {{ a.d3_ec_n_per_arm_1pp | n }} per arm; +1.5 pp needs {{ a.d3_ec_n_per_arm_15pp | n }} per arm."
+    tolerance: "± 3%"
+    model: "Small absolute lifts on an 11% base need tens of thousands of users. The last test had ~11,400 in total — under-powered for 1 pp."
+    wrong: "Using the same n as the last test without checking power."
+    leader: How long must the test run at your current app traffic?
+  - id: R3-14
+    lesson: L3.7
+    tier: Basic
+    title: 40 store tests
+    framing: Marketing wants to target stores with a 'weekend basket effect'.
+    deliverable: Per-store Welch tests (Fri–Sat vs Mon–Thu basket); counts flagged raw, Bonferroni, Holm, BH.
+    expected: "{{ a.d3_mt_r_raw }} raw (store {{ a.d3_mt_r_min_store }}, p = {{ a.d3_mt_r_min_p }}); Bonferroni {{ a.d3_mt_r_bonf }}; Holm {{ a.d3_mt_r_holm }}; BH {{ a.d3_mt_r_bh }}. Expected by chance: {{ a.d3_mt_r_expected_fp }}."
+    tolerance: "exact counts"
+    model: "Fewer raw hits than chance would produce; none survive correction. There is no evidence of store-specific weekend effects."
+    wrong: "Targeting store {{ a.d3_mt_r_min_store }}."
+    leader: Write the two-sentence reply to marketing.
+  - id: R3-15
+    lesson: L3.7
+    tier: Applied
+    title: Forking paths audit
+    framing: A promotion review reports a significant effect "in Express stores in the North on weekends, excluding the holiday week".
+    deliverable: List the forks taken; estimate how many analyses were implicitly possible; propose a pre-registration.
+    expected: "At least 4 forks (format, region, day type, window); with 3 formats × 4 regions × 2 day types × 2 windows = 48 possible cuts, a false positive is likely."
+    tolerance: "—"
+    model: "Treat it as exploratory. Pre-register a confirmatory test: primary outcome, population, window and analysis fixed in advance; secondary cuts corrected with Holm."
+    wrong: "Accepting the result because p < 0.05."
+    leader: How do you make pre-registration a habit rather than a bureaucratic burden?
+finance:
+  - id: F3-1
+    lesson: L3.1
+    tier: Basic
+    title: Default rate with a Wilson interval
+    framing: The CRO wants the portfolio default rate with its uncertainty.
+    deliverable: 12-month default rate overall and for students with 95% Wilson intervals.
+    expected: "Overall {{ a.d3_def_rate }}% ({{ a.d3_def_ci[0] }} – {{ a.d3_def_ci[1] }}); students {{ a.d3_stu_rate }}% ({{ a.d3_stu_ci[0] }} – {{ a.d3_stu_ci[1] }})."
+    tolerance: "± 0.05 pp"
+    model: "The student interval lies wholly above the overall rate — students are riskier, and the data are precise enough to say so."
+    wrong: "Using the Wald interval without checking it, or omitting n."
+    leader: Would you price students differently on this evidence alone?
+  - id: F3-2
+    lesson: L3.1
+    tier: Applied
+    title: The branch league table
+    framing: The network director ranks branches by default rate and wants to reward the best.
+    deliverable: Default rate by branch with Wilson CIs and n; number of branches whose interval is wider than 2 pp; the lowest-rate branch.
+    expected: "Rates range {{ a.d3_br_rate_range[0] }}% – {{ a.d3_br_rate_range[1] }}%; {{ a.d3_br_wide_n }} of {{ a.d3_br_n }} intervals are wider than 2 pp; lowest {{ a.d3_small_branch }} ({{ a.d3_small_branch_def }} / {{ a.d3_small_branch_n }}, CI {{ a.d3_small_branch_ci[0] }} – {{ a.d3_small_branch_ci[1] }}%)."
+    tolerance: "± 0.05 pp"
+    model: "Many intervals overlap; the 'best' branch is the smallest, in the low-default region {{ a.d3_small_branch_region }}. A ranking without intervals and without adjusting for region mix rewards luck and geography."
+    wrong: "Ranking on point estimates."
+    leader: What would a fair branch scorecard look like?
+  - id: F3-3
+    lesson: L3.1
+    tier: Stretch
+    title: Wald vs Wilson at fraud rates
+    framing: The fraud team reports monthly fraud rates from samples of 300 accounts with Wald intervals.
+    deliverable: Simulate coverage of 95% Wald and Wilson intervals at the fraud base rate, n = 300.
+    expected: "Wald {{ a.d3_wald_cov }}%, Wilson {{ a.d3_wilson_cov }}%; {{ a.d3_zero_share }}% of samples contain zero frauds."
+    tolerance: "± 1.5 pp"
+    model: "Wald collapses to 0–0 when no fraud is sampled and under-covers badly for rare events. Use Wilson or Clopper-Pearson."
+    wrong: "Reporting '0% fraud (95% CI 0–0%)'."
+    leader: What sample size would you require for monthly fraud-rate reporting?
+  - id: F3-4
+    lesson: L3.2
+    tier: Basic
+    title: Permutation test between two branches
+    framing: "Is branch {{ a.d3_perm_br_b }} riskier than {{ a.d3_perm_br_a }}?"
+    deliverable: Rates, difference, 10,000-shuffle permutation p; chi-square p for comparison.
+    expected: "{{ a.d3_perm_br_b }} {{ a.d3_perm_rate_b }}% vs {{ a.d3_perm_br_a }} {{ a.d3_perm_rate_a }}% (+{{ a.d3_perm_diff_pp }} pp); permutation p = {{ a.d3_perm_p }}; chi-square p = {{ a.d3_chi2_p_branches }}."
+    tolerance: "p ± 0.02"
+    model: "No evidence of a difference; both tests agree because n is large."
+    wrong: "Calling a 0.4 pp gap a risk problem."
+    leader: When would you insist on a permutation test rather than chi-square?
+  - id: F3-5
+    lesson: L3.2
+    tier: Applied
+    title: Bootstrap a ratio
+    framing: Collections wants a CI for the cure-rate ratio challenger ÷ champion.
+    deliverable: Relative risk with a bootstrap 95% CI (resample accounts within each arm, ≥ 3,000 resamples).
+    expected: "RR ≈ {{ a.d3_f16_rr }}; CI excludes 1 (the risk-difference CI is {{ a.d3_f16_ci[0] }} – {{ a.d3_f16_ci[1] }} pp)."
+    tolerance: "RR ± 0.01"
+    model: "Ratios have skewed sampling distributions; the bootstrap handles this without a log-transform formula. Resample within arms to keep group sizes fixed."
+    wrong: "Resampling the pooled data without arm labels."
+    leader: Which would you present to the collections head — RR or the pp difference? Why?
+  - id: F3-6
+    lesson: L3.3
+    tier: Basic
+    title: Did default change? Two vintage comparisons
+    framing: Risk committee asks whether default changed between recent vintages.
+    deliverable: 2025Q1 vs 2024Q4 and 2025Q2 vs 2025Q1 — rates, difference with CI, p-value; plain-English reading for each.
+    expected: "Q1 vs Q4: {{ a.d3_v_q1 }}% vs {{ a.d3_v_q4 }}%, CI {{ a.d3_v_q1q4_ci[0] }} to {{ a.d3_v_q1q4_ci[1] }} pp, p = {{ a.d3_v_q1q4_p }}. Q2 vs Q1: {{ a.d3_v_q2 }}% vs {{ a.d3_v_q1 }}%, CI {{ a.d3_v_q2q1_ci[0] }} to {{ a.d3_v_q2q1_ci[1] }} pp, p = {{ a.d3_v_q2q1_p }}."
+    tolerance: "± 0.05 pp"
+    model: "No evidence of change into 2025Q1; a large, highly significant rise in 2025Q2 — roughly a tripling. Investigate what changed in origination (channel mix, verification — L3.4, L9.6)."
+    wrong: "Saying 2025Q1 'proved' default was stable."
+    leader: What three questions do you ask before the risk committee meets?
+  - id: F3-7
+    lesson: L3.3
+    tier: Applied
+    title: Big n, tiny effect
+    framing: An MI report says online customers transact 'significantly more' than branch customers.
+    deliverable: Monthly transaction counts by channel on panel rows (difference, CI, p, Cohen's d) and on one row per account.
+    expected: "Panel rows ({{ a.d3_tc_n_rows | n }}): {{ a.d3_tc_branch }} vs {{ a.d3_tc_online }}, p = {{ a.d3_tc_p }}, d = {{ a.d3_tc_d }}. Account level ({{ a.d3_tc_n_acc | n }}): p = {{ a.d3_tc_acc_p }}."
+    tolerance: "p within an order of magnitude"
+    model: "The difference is a third of a transaction per month and the panel rows are pseudo-replicated. At the independent unit there is no evidence of a difference."
+    wrong: "Reporting 'highly significant' as if it meant 'important'."
+    leader: What reporting standard would prevent this in MI packs?
+  - id: F3-8
+    lesson: L3.3
+    tier: Stretch
+    title: Costing Type I and Type II errors
+    framing: A fraud rule will block cards automatically if a test shows it reduces fraud.
+    deliverable: Describe the Type I and Type II errors, their business costs, and propose α and power with a justification.
+    expected: "Type I: deploy a useless rule — customer friction and lost spend. Type II: miss a working rule — fraud losses. Choose α and power from the cost ratio, not convention."
+    tolerance: "—"
+    model: "If blocking genuine customers is expensive (churn, complaints), use a smaller α and require a larger effect; if fraud losses dominate, accept higher α for more power. Document the trade-off."
+    wrong: "Defaulting to α = 0.05 without discussion."
+    leader: Who in the organisation should sign off α for this decision?
+  - id: F3-9
+    lesson: L3.5
+    tier: Basic
+    title: Default by employment type
+    framing: Credit policy asks whether employment type matters.
+    deliverable: "Run `finance_default_by_employment.yaml`: rates, chi-square, Cramér's V, largest standardised residual."
+    expected: "χ² = {{ a.d3_emp_chi2 }} (df {{ a.d3_emp_dof }}), p = {{ a.d3_emp_p }}; V = {{ a.d3_emp_v }}; student residual +{{ a.d3_emp_resid_student }}."
+    tolerance: "χ² ± 0.5"
+    model: "Significant but very weak overall association, driven mainly by students. Smallest expected count {{ a.d3_emp_min_expected }} — chi-square is valid."
+    wrong: "Calling employment type a strong predictor."
+    leader: Would you add employment type to the scorecard? What else would you check?
+  - id: F3-10
+    lesson: L3.5
+    tier: Applied
+    title: Fisher's exact for a small branch
+    framing: "Is branch {{ a.d3_small_branch }}'s low default rate unusual for its region?"
+    deliverable: "2×2 table vs the rest of region {{ a.d3_small_branch_region }}; Fisher's exact p; expected defaults."
+    expected: "Table {{ a.d3_fisher_tab }}; expected ≈ {{ a.d3_fisher_exp }} defaults; Fisher p = {{ a.d3_fisher_p }}."
+    tolerance: "p ± 0.02"
+    model: "Compared with its own region the branch is unremarkable. Its low rate is regional mix."
+    wrong: "Using chi-square with expected counts below 5, or comparing with the whole bank."
+    leader: How would you set fair targets for branches in different regions?
+  - id: F3-11
+    lesson: L3.5
+    tier: Stretch
+    title: McNemar on delinquency
+    framing: Did delinquency rise between month 6 and month 12 on the same accounts?
+    deliverable: Paired 2×2 of 30+ DPD at months 6 and 12; McNemar test; explain why chi-square is wrong.
+    expected: "{{ a.d3_mc_n | n }} accounts; {{ a.d3_mc_m6 }}% → {{ a.d3_mc_m12 }}%; discordant {{ a.d3_mc_c }} newly delinquent vs {{ a.d3_mc_b }} recovered; p = {{ a.d3_mc_p }}."
+    tolerance: "± 0.05 pp"
+    model: "The same accounts are measured twice; only those that changed carry information. Delinquency builds with months on book."
+    wrong: "Treating month-6 and month-12 as independent samples."
+    leader: How would you use this seasoning pattern when comparing young and old vintages?
+  - id: F3-12
+    lesson: L3.6
+    tier: Basic
+    title: Size the collections challenger
+    framing: Collections plans a new call script and wants to detect +3 pp in 3-month cure rate.
+    deliverable: "Run `finance_power_challenger.yaml`: accounts for +2/+3/+5/+8 pp at 80/20; compare 50/50; months needed at 1,400 new 30+ DPD accounts a month."
+    expected: "+3 pp: {{ a.d3_n_total_3pp | n }} accounts at 80/20 ({{ a.d3_n_total_3pp_5050 | n }} at 50/50); curve {{ a.d3_prop_curve | kv }}; about {{ a.d3_months_3pp }} months."
+    tolerance: "± 1%"
+    model: "A 3 pp target needs about nine months of intake at 80/20. Options: target a larger effect, use 50/50 for a shorter test, or use a variance-reducing covariate."
+    wrong: "Running for a month and calling a null result 'no effect'."
+    leader: Which option would you choose and why?
+  - id: F3-13
+    lesson: L3.6
+    tier: Applied
+    title: Effect sizes for the last challenger
+    framing: The last challenger test is being written up.
+    deliverable: Risk difference with CI, RR, OR, NNT; achieved power for the planned 3 pp effect.
+    expected: "+{{ a.d3_f16_diff }} pp (CI {{ a.d3_f16_ci[0] }} – {{ a.d3_f16_ci[1] }}); RR {{ a.d3_f16_rr }}; OR {{ a.d3_f16_or }}; NNT {{ a.d3_f16_nnt }}; power for 3 pp {{ a.d3_power_actual_3pp }}%."
+    tolerance: "± 0.1"
+    model: "The effect is real and useful, but the test was under-powered for its own target; it succeeded because the true effect was about twice the planned one."
+    wrong: "Reporting OR as if it were RR ('29% more likely')."
+    leader: What would you change in the next test plan?
+  - id: F3-14
+    lesson: L3.7
+    tier: Basic
+    title: A 30-feature screen
+    framing: A junior screens 30 features against default and keeps those with p < 0.05.
+    deliverable: Counts of real and noise features kept by raw, Bonferroni, Holm and BH (10 seeded noise columns as control).
+    expected: "Raw {{ a.d3_mt_f_raw_real }} real + {{ a.d3_mt_f_raw_noise }} noise; Bonferroni {{ a.d3_mt_f_bonf_real }} + {{ a.d3_mt_f_bonf_noise }}; Holm {{ a.d3_mt_f_holm_real }} + {{ a.d3_mt_f_holm_noise }}; BH {{ a.d3_mt_f_bh_real }} + {{ a.d3_mt_f_bh_noise }}."
+    tolerance: "exact counts"
+    model: "Raw screening admits noise; Bonferroni/Holm drop real features; BH keeps the real ones without the noise. Use BH for screens, then validate on held-out data (Day 6)."
+    wrong: "Feature selection on raw p-values."
+    leader: What is your team's standard for feature screening?
+  - id: F3-15
+    lesson: L3.7
+    tier: Applied
+    title: Peeking at a test
+    framing: The collections dashboard updates daily and the team will stop the test 'as soon as it's significant'.
+    deliverable: Simulate an A/A test with 8 interim looks; false-positive rate with peeking; propose a fix.
+    expected: "≈ {{ a.d3_peek_fpr }}% false positives instead of 5%."
+    tolerance: "± 2 pp"
+    model: "Every look is another chance for noise to cross 0.05. Use a fixed horizon, or a sequential design with alpha spending (O'Brien-Fleming) — L4.2."
+    wrong: "Stopping at the first p < 0.05."
+    leader: Draft the stopping rule for the next challenger.

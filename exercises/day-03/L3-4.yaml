@@ -1,0 +1,304 @@
+# L3.4 exercises. Expected values are rendered from validator.answers (computed from the data).
+# Fields: id, tier (Basic|Applied|Stretch), title, framing, deliverable, expected, tolerance, model, wrong, leader
+retail:
+  - id: R-F1
+    tier: Basic
+    title: Was the randomisation balanced?
+    framing: Before reading any result, the category manager asks whether test and control stores are comparable.
+    deliverable: Count of test and control stores by format; pre-period (weeks 54–69) mean weekly Hair Care units by arm with a Welch test.
+    expected: "20 vs 20 stores, identical by format (Hyper {{ a.l34_arm_by_format.test.Hyper }}/{{ a.l34_arm_by_format.control.Hyper }}, Super {{ a.l34_arm_by_format.test.Super }}/{{ a.l34_arm_by_format.control.Super }}, Express {{ a.l34_arm_by_format.test.Express }}/{{ a.l34_arm_by_format.control.Express }}). Pre-period means {{ a.l34_pre_test_mean }} vs {{ a.l34_pre_ctrl_mean }} units/week, p = {{ a.l34_pre_balance_p }}."
+    tolerance: "means ± 0.5; p ± 0.02"
+    model: Randomisation was stratified by format, so counts match exactly. Pre-period means differ by chance (p well above 0.05) but stores vary enormously in size, which is why the analysis compares each store with itself.
+    wrong: "Testing balance on transaction lines (inflates n) or concluding 'the groups differ' from the raw gap in means without a test."
+    leader: A junior reports the pre-period gap between arms and wants to 'correct' it. Decide whether that is necessary and explain.
+  - id: R-F2
+    tier: Basic
+    title: State the hypotheses and the unit
+    framing: Write the analysis plan before running anything.
+    deliverable: H0, H1, unit of analysis, outcome, test, alpha.
+    expected: "H0: mean growth index (test) = mean growth index (control); H1: they differ (two-sided). Unit = store (n = 20 + 20). Outcome = weeks 70–77 mean ÷ weeks 54–69 mean. Welch t-test, α = 0.05."
+    tolerance: "—"
+    model: The store is the unit because stores were randomised. Dividing by each store's own pre-period removes the size differences between hypermarkets and express stores.
+    wrong: "Using transaction lines or store-weeks as independent observations."
+    leader: Mark a junior's plan that uses store-weeks (n = 320). What is wrong and what would you ask?
+  - id: R-F3
+    tier: Basic
+    title: Run the two-group recipe
+    framing: Estimate the lift from the feature promotion.
+    deliverable: "Run `toolkit/configs/retail_promo_lift.yaml`. Report the % lift, its 95% CI and the p-value."
+    expected: "Lift {{ a.l34_hc_lift_pct }}% (95% CI {{ a.l34_hc_ci_lo }}% to {{ a.l34_hc_ci_hi }}%), p = {{ a.l34_hc_p }}."
+    tolerance: "lift ± 0.3 pp"
+    model: Test stores' Hair Care units grew about {{ a.l34_hc_lift_pct }}% more than control stores' relative to their own baselines. The interval is wide because there are only 40 stores.
+    wrong: "Reporting the line-level or naive post-period result as the answer."
+    leader: Write the one-sentence result you would put in an executive summary.
+  - id: R-F4
+    tier: Basic
+    title: Check the assumptions
+    framing: Is the Welch t-test appropriate here?
+    deliverable: Skewness of the growth index, Shapiro-Wilk and Levene p-values, and your conclusion.
+    expected: "Max |skew| = {{ a.l34_growth_skew_max }}; smallest Shapiro p = {{ a.l34_shapiro_min_p }}; Levene p = {{ a.l34_levene_p }}. No assumption fails badly; Welch is appropriate, with rank and permutation tests as robustness checks."
+    tolerance: "± 0.05"
+    model: "With 20 units per group and skewness below the |2| rule of thumb, Welch is reasonable — and the conclusion does not hinge on it: Mann-Whitney (p = {{ a.l34_mw_p }}) and permutation (p ≈ {{ a.l34_perm_p }}) agree."
+    wrong: "Using Student's t without checking variances, or abandoning the t-test because a normality test was 'borderline'."
+    leader: A junior says 'Shapiro p was 0.30 so the data is normal'. What is wrong with that statement?
+  - id: R-F5
+    tier: Basic
+    title: Statistically significant — but big enough?
+    framing: Rollout needs at least a {{ a.l34_threshold_pct }}% lift to cover display and labour costs.
+    deliverable: Compare the CI with the {{ a.l34_threshold_pct }}% threshold and give a recommendation.
+    expected: "Point estimate {{ a.l34_hc_lift_pct }}% exceeds {{ a.l34_threshold_pct }}%, but the lower CI bound ({{ a.l34_hc_ci_lo }}%) is below it: the promotion 'may not clear' the threshold."
+    tolerance: "—"
+    model: We are fairly confident the effect is positive, but not that it is ≥ {{ a.l34_threshold_pct }}%. Options are a staged rollout with monitoring, or extending the test to narrow the interval.
+    wrong: "'p < 0.05, so roll out everywhere.'"
+    leader: Choose between full rollout, staged rollout and extended test. Justify with the CI and the cost of being wrong.
+  - id: R-A1
+    tier: Applied
+    title: Why does the naive comparison disagree?
+    framing: A colleague compared average weekly units in weeks 70–77 between arms and found a much bigger, non-significant effect.
+    deliverable: "Run `retail_promo_lift_naive.yaml`; report the lift and p; explain the difference."
+    expected: "Naive lift {{ a.l34_hc_naive_lift_pct }}%, p = {{ a.l34_hc_naive_p }}. Store sizes range from {{ a.l34_pre_min }} to {{ a.l34_pre_max }} units/week (SD {{ a.l34_pre_sd_stores }}), which swamps the signal."
+    tolerance: "lift ± 0.5 pp"
+    model: The naive comparison mixes the treatment effect with chance differences in store size between arms. Comparing each store to its own baseline removes that noise, giving a smaller but far more precise estimate.
+    wrong: "Concluding 'the effect is {{ a.l34_hc_naive_lift_pct }}%' or 'there is no effect'."
+    leader: Which result would you present, and how would you explain the discrepancy to the category director in two sentences?
+  - id: R-A2
+    tier: Applied
+    title: The wrong unit — transaction lines
+    framing: The panel transaction file also has `experiment_group`. Can it answer the question?
+    deliverable: "Run `retail_promo_lift_line_level.yaml`; report the number of lines per arm and the conclusion."
+    expected: "Only {{ a.l34_panel_lines_test }} test and {{ a.l34_panel_lines_ctrl }} control Hair Care lines in weeks 70–77 — far too few to measure a store-level effect; the result is inconclusive."
+    tolerance: "exact counts"
+    model: The panel is a small customer sample; it cannot measure a store-level effect. Lines are also the wrong unit (stores were randomised) and quantity per line is not the outcome the promotion targets.
+    wrong: "Reporting the line-level p-value as evidence against the promotion."
+    leader: A junior proudly shows a t-test on 70 lines. What three questions do you ask?
+  - id: R-A3
+    tier: Applied
+    title: Heavy tails — loyalty vs non-loyalty basket value
+    framing: Marketing claims loyalty baskets are bigger.
+    deliverable: Basket-level revenue (sales lines, de-duplicated, excluding 100× price errors); Welch vs Mann-Whitney; repeat excluding the top 25 customers.
+    expected: "Means {{ a.l34_loyal_mean }} vs {{ a.l34_nonloyal_mean }} (Welch p = {{ a.l34_loyal_welch_p }}); excluding the top 25 customers {{ a.l34_loyal_mean_excl_top25 }} vs {{ a.l34_nonloyal_mean_excl_top25 }}. Basket skewness ≈ {{ a.l34_basket_skew }}."
+    tolerance: "means ± 0.5"
+    model: The difference is real in this data, but basket values are extremely skewed, so report medians and a rank test alongside the means. This is an observational comparison — it does not show that loyalty *causes* bigger baskets (Day 9).
+    wrong: "Saying loyalty membership causes bigger baskets."
+    leader: Marketing wants to quote the raw loyalty uplift as 'spend driven by loyalty'. What do you allow them to say?
+  - id: R-A4
+    tier: Applied
+    title: A binary outcome per basket
+    framing: Are loyalty baskets more likely to contain at least one promoted item?
+    deliverable: Two-proportion test on baskets; risk difference with CI.
+    expected: "{{ a.l34_promo_basket_loyal_pct }}% vs {{ a.l34_promo_basket_nonloyal_pct }}%, p = {{ a.l34_promo_basket_p }}, difference CI {{ a.l34_promo_basket_ci_pp[0] }} to {{ a.l34_promo_basket_ci_pp[1] }} pp."
+    tolerance: "± 0.5 pp"
+    model: The binary outcome needs a proportion test, not a t-test on 0/1. The effect is small; whether it matters depends on margin, not on p.
+    wrong: "Using a t-test on basket counts of promo items."
+    leader: Is a difference of this size meaningful for promotional planning? What else would you want to know?
+  - id: R-A5
+    tier: Applied
+    title: How much do data errors move the answer?
+    framing: Twenty-five lines have unit prices 100× the list price.
+    deliverable: Mean basket value with and without those lines.
+    expected: "{{ a.l34_mean_basket_with_errors }} with errors vs {{ a.l34_mean_basket_clean }} without."
+    tolerance: "± 0.5"
+    model: A handful of decimal-shift errors moves the mean basket by several percent. Means are fragile; always clean known errors (and report it) before testing.
+    wrong: "Silently deleting the rows without reporting, or leaving them in."
+    leader: Write the one-line data note you expect in the appendix of any deck using basket values.
+  - id: R-S1
+    tier: Stretch
+    title: A null result done properly — weekend vs weekday baskets
+    framing: "Store ops believe Friday–Saturday baskets are bigger."
+    deliverable: Welch, Mann-Whitney, and a bootstrap CI of the difference in medians.
+    expected: "Means {{ a.l34_wkend_mean }} vs {{ a.l34_wkday_mean }}, difference CI {{ a.l34_wkend_ci_lo }} to {{ a.l34_wkend_ci_hi }} (p = {{ a.l34_wkend_p }}); median difference {{ a.l34_wkend_median_diff }} (bootstrap CI {{ a.l34_wkend_median_ci[0] }} to {{ a.l34_wkend_median_ci[1] }})."
+    tolerance: "± 0.5"
+    model: No evidence that weekend baskets are bigger — weekends have *more* baskets, not bigger ones. The CI shows which differences are ruled out, which is more useful than 'not significant'.
+    wrong: "'There is no difference' (absence of evidence ≠ evidence of absence) without quoting the interval."
+    leader: How do you present a null result so it still informs staffing decisions?
+  - id: R-S2
+    tier: Stretch
+    title: Permutation test
+    framing: Confirm the promo-lift p-value without distributional assumptions.
+    deliverable: Permutation test on the 40 store growth indices (10,000 shuffles, seeded).
+    expected: "p ≈ {{ a.l34_perm_p }}"
+    tolerance: "± 0.005"
+    model: Shuffling arm labels among the 40 stores mimics the randomisation itself, so the permutation p-value is exact under H0. It agrees with Welch.
+    wrong: "Shuffling transaction lines or store-weeks."
+    leader: When would you insist on a permutation test rather than a t-test?
+  - id: R-S3
+    tier: Stretch
+    title: Was the test big enough?
+    framing: Plan the next store test.
+    deliverable: Minimum detectable effect with 20 stores per arm at 80% power; stores per arm needed to detect the {{ a.l34_threshold_pct }}% threshold.
+    expected: "MDE ≈ {{ a.l34_mde_pct }}%; about {{ a.l34_stores_needed_thr }} stores per arm needed for a {{ a.l34_threshold_pct }}% lift (growth-index SD ≈ {{ a.l34_growth_sd }})."
+    tolerance: "MDE ± 0.5 pp; stores ± 5"
+    model: The test was powered for effects of about {{ a.l34_mde_pct }}%. To confirm the {{ a.l34_threshold_pct }}% threshold reliably you need more stores, a longer pre-period, or variance reduction (Day 4, CUPED).
+    wrong: "Using post-hoc 'observed power'."
+    leader: The business can offer 30 stores per arm. What do you recommend?
+  - id: R-S4
+    tier: Stretch
+    title: Does the lift differ by format?
+    framing: A format manager points to the format-level lifts and wants their format treated differently in the rollout.
+    deliverable: Lift by format with arm counts; your judgement.
+    expected: "Hyper {{ a.l34_lift_by_format.Hyper.lift_pct }}% ({{ a.l34_lift_by_format.Hyper.n_test }} v {{ a.l34_lift_by_format.Hyper.n_control }} stores), Super {{ a.l34_lift_by_format.Super.lift_pct }}%, Express {{ a.l34_lift_by_format.Express.lift_pct }}%."
+    tolerance: "± 0.5 pp"
+    model: With only 4 stores per arm in Hyper (and 7–9 elsewhere), format estimates are extremely noisy. This is a hypothesis for a future test, not a finding. Subgroup slicing after the fact invites false discoveries (L3.7).
+    wrong: "Changing the rollout for a format on the basis of 8–18 stores."
+    leader: How do you respond to the format manager without dismissing them?
+  - id: R-S5
+    tier: Stretch
+    title: Preview — the e-coupon A/B test
+    framing: The digital team ran a 50/50 e-coupon test and wants a two-proportion test.
+    deliverable: Conversion by arm, two-proportion p-value, and the user counts per arm.
+    expected: "{{ a.l34_ab_conv_t }}% vs {{ a.l34_ab_conv_c }}%, p = {{ a.l34_ab_p }}; but users {{ a.l34_ab_n_t | n }} vs {{ a.l34_ab_n_c | n }} — far from 50/50."
+    tolerance: "± 0.1 pp"
+    model: Before testing, check the sample ratio. A 50/50 design producing this split is a red flag (L4.1, SRM). Do not interpret the conversion difference until the cause is found.
+    wrong: "Reporting 'no significant lift' and closing the test."
+    leader: Do you allow the team to report this test? What must happen first?
+finance:
+  - id: F-F1
+    tier: Basic
+    title: Default rate by income verification
+    framing: Credit policy asks whether customers with unverified income default more.
+    deliverable: Accounts, defaults and 12-month default rate for verified and unverified.
+    expected: "Unverified {{ a.l34_unver_defaults }}/{{ a.l34_unver_n | n }} = {{ a.l34_unver_rate }}%; verified {{ a.l34_ver_defaults }}/{{ a.l34_ver_n | n }} = {{ a.l34_ver_rate }}%."
+    tolerance: "± 0.05 pp"
+    model: Counts first, rates second — always show the denominators.
+    wrong: "Reporting rates without counts."
+    leader: What is the first question you ask about how 'default' was defined?
+  - id: F-F2
+    tier: Basic
+    title: Two-proportion test
+    framing: Is the difference larger than chance?
+    deliverable: "Run `finance_default_by_verification.yaml`. Risk difference with 95% CI, z and p."
+    expected: "+{{ a.l34_ver_rd_pp }} pp (95% CI {{ a.l34_ver_ci_pp[0] }} to {{ a.l34_ver_ci_pp[1] }}), z = {{ a.l34_ver_z }}, p ≈ {{ a.l34_ver_p }}."
+    tolerance: "± 0.05 pp"
+    model: The difference is far beyond chance. Expected cell counts are large, so the z-test is appropriate (Fisher would agree).
+    wrong: "Running a t-test on the 0/1 default flag and quoting a 'mean difference' without a proportion interpretation."
+    leader: Translate the result into 'per 1,000 accounts'.
+  - id: F-F3
+    tier: Basic
+    title: Relative risk vs odds ratio
+    framing: The risk committee wants one number.
+    deliverable: Relative risk and odds ratio; explain the difference.
+    expected: "RR = {{ a.l34_ver_rr }}, OR = {{ a.l34_ver_or }}."
+    tolerance: "± 0.02"
+    model: Relative risk is the ratio of default rates and is easiest to explain. The odds ratio is close to it here because defaults are rare; the two diverge when outcomes are common.
+    wrong: "Saying the odds ratio means 'unverified customers are 1.9 times as likely to default' when outcomes are common."
+    leader: Which do you put in the committee paper and why?
+  - id: F-F4
+    tier: Basic
+    title: Per 100 customers
+    framing: Explain the effect to a branch manager.
+    deliverable: Extra defaults per 100 unverified customers.
+    expected: "About {{ a.l34_ver_per100 }} extra defaults per 100 unverified customers."
+    tolerance: "± 0.1"
+    model: Natural frequencies are understood far better than percentages or odds.
+    wrong: "Saying 'unverified customers are 84% more likely to default' to a non-technical audience without the base rate."
+    leader: Write the one sentence for the branch manager.
+  - id: F-F5
+    tier: Basic
+    title: A continuous comparison
+    framing: How different are defaulters' bureau scores?
+    deliverable: Mean bureau score of defaulters vs non-defaulters; Welch CI; Cohen's d.
+    expected: "{{ a.l34_bureau_def_mean }} vs {{ a.l34_bureau_good_mean }}, difference {{ a.l34_bureau_diff }} (CI {{ a.l34_bureau_ci[0] }} to {{ a.l34_bureau_ci[1] }}), d = {{ a.l34_bureau_d }}."
+    tolerance: "± 0.5"
+    model: A large standardised difference — yet the distributions still overlap heavily (probability a random non-defaulter outscores a random defaulter ≈ {{ a.l34_bureau_overlap_auc }}). A large d does not mean the score alone separates goods from bads.
+    wrong: "Concluding that bureau score 'predicts default perfectly'."
+    leader: Why is a d of this size compatible with a model AUC of only ~0.8?
+  - id: F-A1
+    tier: Applied
+    title: Acquisition channel
+    framing: Default by channel.
+    deliverable: Default rate and counts by acquisition channel.
+    expected: "Branch {{ a.l34_def_by_channel_pct.branch }}%, online {{ a.l34_def_by_channel_pct.online }}%, partner {{ a.l34_def_by_channel_pct.partner }}% (n = {{ a.l34_n_by_channel.partner | n }})."
+    tolerance: "± 0.05 pp"
+    model: The partner channel defaults several times more often. Since there are three groups, a chi-square test (L3.5) is the formal test; here the gap is obvious.
+    wrong: "Running three separate pairwise tests without correction."
+    leader: What would you ask about the partner channel before blaming it?
+  - id: F-A2
+    tier: Applied
+    title: What else could explain the verification effect?
+    framing: Unverified income is far more common in the partner channel.
+    deliverable: Share unverified by channel; default by verification within each channel.
+    expected: "Unverified share: partner {{ a.l34_unver_share_partner_pct }}% vs others {{ a.l34_unver_share_other_pct }}%. Within channel — branch {{ a.l34_ver_by_channel.branch.unverified_pct }}% vs {{ a.l34_ver_by_channel.branch.verified_pct }}%, online {{ a.l34_ver_by_channel.online.unverified_pct }}% vs {{ a.l34_ver_by_channel.online.verified_pct }}%, partner {{ a.l34_ver_by_channel.partner.unverified_pct }}% vs {{ a.l34_ver_by_channel.partner.verified_pct }}%."
+    tolerance: "± 0.1 pp"
+    model: Part of the overall {{ a.l34_ver_rd_pp }} pp gap is channel mix (confounding). Within channels the gap is smaller but still positive. The overall comparison overstates the verification effect; a regression with channel (Day 5) estimates it properly.
+    wrong: "Quoting the overall {{ a.l34_ver_rd_pp }} pp as the causal effect of verification."
+    leader: Credit policy wants to require verification for all applicants based on the {{ a.l34_ver_rd_pp }} pp. What do you tell them?
+  - id: F-A3
+    tier: Applied
+    title: Skewed outcome — utilisation
+    framing: Do defaulters have higher card utilisation?
+    deliverable: Median utilisation by default status; Mann-Whitney and Welch p-values.
+    expected: "Medians {{ a.l34_util_def_median }} vs {{ a.l34_util_good_median }}; Mann-Whitney p ≈ {{ a.l34_util_mw_p }}; Welch p ≈ {{ a.l34_util_welch_p }}."
+    tolerance: "± 0.005"
+    model: Both tests agree with large samples. The relationship is non-linear (risk jumps above ~80% utilisation, L5.6), which a single mean difference hides.
+    wrong: "Concluding a linear relationship from a difference in medians."
+    leader: How would you present utilisation risk to the policy team?
+  - id: F-A4
+    tier: Applied
+    title: Champion vs challenger (preview of L4.5)
+    framing: Collections tested a new strategy on 20% of accounts entering 30 DPD.
+    deliverable: "Run `finance_challenger_cure.yaml`; cure-rate difference with CI."
+    expected: "+{{ a.l34_cure_diff_pp }} pp (95% CI {{ a.l34_cure_ci_pp[0] }} to {{ a.l34_cure_ci_pp[1] }}), n = {{ a.l34_cure_n_ch }} challenger vs {{ a.l34_cure_n_cp | n }} champion."
+    tolerance: "± 0.2 pp"
+    model: Same recipe, different dataset, config change only. The challenger cures more accounts; the 80/20 split makes the challenger estimate the less precise one.
+    wrong: "Using `strategy_group` or `cured_within_3m` as predictors in a default model (they are known only after delinquency)."
+    leader: The CI lower bound is about {{ a.l34_cure_ci_pp[0] }} pp. Is that enough to switch strategy? What guardrails do you check?
+  - id: F-A5
+    tier: Applied
+    title: Small counts — Fisher's exact test
+    framing: Is the default rate different for the top-1% income customers?
+    deliverable: Defaults and rate in the top 1% by income; Fisher's exact p-value; expected defaults if the rate were average.
+    expected: "{{ a.l34_hni_defaults }} defaults among {{ a.l34_hni_n }} ({{ a.l34_hni_rate_pct }}%), expected ≈ {{ a.l34_hni_expected_defaults }}; Fisher p = {{ a.l34_hni_fisher_p }}."
+    tolerance: "± 0.02"
+    model: With single-digit counts, use Fisher's exact test. There is no evidence of a difference in either direction — and too few events to rule out a meaningful one.
+    wrong: "Using the z-test with very small counts, or concluding anything about high earners from a handful of defaults."
+    leader: Would you approve a special limit policy for this group based on this analysis?
+  - id: F-S1
+    tier: Stretch
+    title: A median that is zero
+    framing: Compare current balances of defaulters and non-defaulters with a bootstrap CI of the median difference.
+    deliverable: Medians, bootstrap CI, and an explanation of anything surprising.
+    expected: "Defaulter median balance = {{ a.l34_bal_def_median | n }}, non-defaulter {{ a.l34_bal_good_median | n }} (CI of difference {{ a.l34_bal_median_ci[0] | n }} to {{ a.l34_bal_median_ci[1] | n }})."
+    tolerance: "± 50"
+    model: The defaulter median is zero because charged-off balances are written off — `balance_current` is measured *after* the outcome. It is a timing (leakage) trap, not a finding about defaulters.
+    wrong: "Concluding defaulters had low balances."
+    leader: What rule would you add to the team's checklist after seeing this?
+  - id: F-S2
+    tier: Stretch
+    title: Sample size for a small difference
+    framing: Risk wants to detect a 0.5 pp difference around a 4% default rate.
+    deliverable: Accounts needed per group (α = 0.05 two-sided, 80% power).
+    expected: "About {{ a.l34_n_per_group_05pp | n }} accounts per group."
+    tolerance: "± 500"
+    model: Small differences on rare outcomes need very large samples — a key reason credit tests run for many months or use proxies (early delinquency).
+    wrong: "Planning a test with 2,000 accounts per arm."
+    leader: How do you shorten the test without losing validity?
+  - id: F-S3
+    tier: Stretch
+    title: Does the effect hold by vintage year?
+    framing: Check the verification gap within each origination year.
+    deliverable: Default rate by verification within 2023, 2024, 2025.
+    expected: "2023 {{ a.l34_ver_by_year['2023'].unverified_pct }}% vs {{ a.l34_ver_by_year['2023'].verified_pct }}%; 2024 {{ a.l34_ver_by_year['2024'].unverified_pct }}% vs {{ a.l34_ver_by_year['2024'].verified_pct }}%; 2025 {{ a.l34_ver_by_year['2025'].unverified_pct }}% vs {{ a.l34_ver_by_year['2025'].verified_pct }}%."
+    tolerance: "± 0.1 pp"
+    model: The gap is positive in every year but varies in size, and 2025 is much riskier overall — a population shift (Day 9, PSI) that also inflates the pooled comparison.
+    wrong: "Pooling all years without checking for drift."
+    leader: What does the 2025 jump suggest you investigate?
+  - id: F-S4
+    tier: Stretch
+    title: The base-rate trap
+    framing: A vendor says their model is "{{ a.l34_acc_no_default_model_pct }}% accurate" at predicting default.
+    deliverable: Accuracy of a 'model' that predicts no one defaults.
+    expected: "{{ a.l34_acc_no_default_model_pct }}% — identical to the vendor's claim."
+    tolerance: "± 0.1"
+    model: With a 4% base rate, accuracy is meaningless. Ask for AUC/KS, precision and recall at the operating cut-off (L6.6).
+    wrong: "Accepting accuracy as a credit-model metric."
+    leader: Write the three questions you send back to the vendor.
+  - id: F-S5
+    tier: Stretch
+    title: Write the readout
+    framing: One page for the Head of Credit Risk on verification and default.
+    deliverable: Finding, size with CI, caveats (channel confounding, vintage drift), recommended action, next analysis.
+    expected: "Must cite +{{ a.l34_ver_rd_pp }} pp overall, explain that part is channel mix, and recommend a regression/experiment before changing policy."
+    tolerance: "rubric"
+    model: See the explain-it-back rubric — correctness, assumptions, interpretation, action, clarity.
+    wrong: "Recommending mandatory verification on the raw comparison alone."
+    leader: Score a junior's readout with the rubric.

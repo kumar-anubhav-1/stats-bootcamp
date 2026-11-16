@@ -1,0 +1,68 @@
+{
+  "groups": [
+    false,
+    true
+  ],
+  "unit_of_analysis": "row",
+  "n": {
+    "False": 5194,
+    "True": 19806
+  },
+  "row_level_n": {
+    "True": 19806,
+    "False": 5194
+  },
+  "outcome_type": "binary",
+  "outcome_label": "default_12m",
+  "primary_test": "two_proportion_z",
+  "tests": {
+    "two_proportion_z": {
+      "z": 10.201841,
+      "p_value": 0.0
+    },
+    "chi_square": {
+      "p_value": 0.0
+    },
+    "fisher_exact": {
+      "p_value": 0.0
+    }
+  },
+  "effects": {
+    "rate": {
+      "False": 0.06469,
+      "True": 0.033525
+    },
+    "risk_difference": 0.031165,
+    "risk_difference_ci": [
+      0.024021,
+      0.038309
+    ],
+    "relative_risk": 1.929594,
+    "relative_risk_ci": [
+      1.69842,
+      2.192234
+    ],
+    "odds_ratio": 1.993889,
+    "odds_ratio_ci": [
+      1.742192,
+      2.28195
+    ],
+    "pct_lift": 0.929594,
+    "nnt": 32.08745,
+    "min_expected_cell": 207.76,
+    "mde_80pct_power_abs": 0.007861
+  },
+  "assumptions": {
+    "min_expected_cell_count": 207.76,
+    "independent_units": "assumed \u2014 check design"
+  },
+  "icc": null,
+  "design_effect": null,
+  "alpha": 0.05,
+  "alternative": "two-sided",
+  "verdict": {
+    "statistically_significant": true,
+    "p_value": 0.0,
+    "practical_vs_threshold": null
+  }
+}

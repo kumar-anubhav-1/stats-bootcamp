@@ -1,0 +1,12 @@
+# L4.2 / L4.5: Hair Care store test read with CUPED — post-period weekly units per store adjusted by the store's own
+# pre-period units (weeks 54-69). Unit = store.
+recipe: rcp_ab_test
+dataset: {name: northstar_weekly_store_category, path: data/retail/weekly_store_category.parquet}
+columns: {arm: experiment_group, outcome: units, unit: store_id}
+filters:
+  - "category == 'Hair Care'"
+params:
+  arms: [test, control]
+  planned_split: {test: 0.5, control: 0.5}
+  baseline: {period_col: week, pre: [54, 69], post: [70, 77]}
+output: {folder: "outputs/{recipe}/{date}_retail_store_test_cuped"}

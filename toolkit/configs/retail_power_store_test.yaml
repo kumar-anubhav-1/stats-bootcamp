@@ -1,0 +1,17 @@
+# L3.6: how many stores per arm does the next category test need? SD of the store growth index (weeks 70-77 ÷ 54-69)
+# from the Hair Care test, pooled within arms so the treatment effect does not inflate it (same SD as L3.4).
+recipe: rcp_power
+dataset: {name: northstar_weekly_store_category, path: data/retail/weekly_store_category.parquet}
+columns: {target: units, cluster: store_id, group: experiment_group}
+filters:
+  - "category == 'Hair Care'"
+params:
+  design: means
+  baseline: {period_col: week, pre: [54, 69], post: [70, 77]}
+  control_label: control
+  sd_method: pooled_within
+  effects: [0.05, 0.08, 0.10, 0.12, 0.15, 0.20]
+  alpha: 0.05
+  power: 0.8
+  n_available: 20
+output: {folder: "outputs/{recipe}/{date}_retail_power_store_test"}

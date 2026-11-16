@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+site/
+outputs/
+data/**/*.parquet
+data/**/*.csv
+data/**/variants/
+instructor/truth/
+instructor/exam/
+instructor/transfer/
+.venv/
+.DS_Store
+instructor/pack/transfer_key.md
+instructor/pack/exam_key.md
+data/**/*.npz

@@ -1,0 +1,1496 @@
+# Statistics Navigator v1 — single source for the interactive page, the poster and lesson markers.
+# Question nodes: {q, opts: [{label, next}]}. Technique (leaf) nodes:
+#   t: technique · use: when to use · check: assumptions to check · fail: fallback if a check fails
+#   alt: alternatives worth trying · pit: common pitfalls · act: typical business action
+#   lessons, recipe, concepts
+master:
+  q: What is the business question?
+  opts:
+    - {label: "Describe / profile the data", next: T-DESC}
+    - {label: "Which distribution describes this?", next: T-DIST}
+    - {label: "Compare groups (is A different from B?)", next: T-TEST}
+    - {label: "Design an experiment / how many units?", next: T-EXP}
+    - {label: "Explain drivers of an outcome", next: T-REG}
+    - {label: "Predict an outcome for each customer/account", next: T-ML}
+    - {label: "Forecast a quantity over time", next: T-FCST}
+    - {label: "Segment customers or stores", next: T-CLUST}
+    - {label: "Detect anomalies or fraud", next: T-ANOM}
+    - {label: "Measure the causal impact of an action", next: T-CAUSAL}
+    - {label: "Choose an evaluation metric or threshold", next: T-METRIC}
+    - {label: "Monitor a model or KPI over time", next: T-MON}
+    - {label: "Optimise a decision (price, stock, budget)", next: T-OPT}
+
+trees:
+  T-DESC:
+    title: Which descriptive summary?
+    start: N-DESC-Q1
+    nodes:
+      N-DESC-Q1:
+        q: First — has the data been profiled and quality-checked?
+        opts:
+          - {label: "No, not yet", next: N-DESC-PROFILE}
+          - {label: "Yes — summarise one categorical variable", next: N-DESC-CAT}
+          - {label: "Yes — summarise one numeric variable", next: N-DESC-Q2}
+          - {label: "Yes — relationship between two variables", next: N-DESC-Q3}
+          - {label: "Yes — values are missing and I need to decide what to do", next: N-DESC-MISSING}
+          - {label: "Profiling flagged duplicates, impossible values or unit errors", next: N-DESC-QUALITY}
+          - {label: "I worry the data only contains survivors / approved cases", next: N-DESC-BIAS}
+      N-DESC-Q2:
+        q: What does the distribution look like (histogram / ECDF)?
+        opts:
+          - {label: "Roughly symmetric, no extreme tail", next: N-DESC-SYM}
+          - {label: "Skewed or heavy-tailed (spend, balances)", next: N-DESC-SKEW}
+          - {label: "A few values look impossible or extreme", next: N-DESC-OUTLIER}
+      N-DESC-Q3:
+        q: What types are the two variables?
+        opts:
+          - {label: "Both numeric", next: N-DESC-CORR}
+          - {label: "Both categorical", next: N-DESC-XTAB}
+          - {label: "The relationship flips when I split by a third variable", next: N-DESC-STRATIFY}
+      N-DESC-PROFILE:
+        t: Profile + data-quality checklist
+        use: Always first. Types, nulls, uniques, ranges, duplicates, impossible values, grain.
+        check:
+          - "Declared grain matches keys"
+          - "Control totals reconcile"
+          - "Business rules (no negative prices; returns flagged)"
+        fail:
+          - "Write a rule per issue and count rows affected before changing anything"
+        alt:
+          - "Reconcile to finance totals"
+          - "Compare with last month's profile"
+        pit:
+          - "Silently dropping rows"
+          - "\"Cleaning\" valid returns as errors"
+          - "Joining at the wrong grain"
+        act: Fix at source where possible; document every rule in the analysis log.
+        lessons: [L0.3, L1.2]
+        recipe: rcp_profile
+        concepts: [C007, C008, C009, C010]
+      N-DESC-QUALITY:
+        t: Data-quality rules (validity, duplicates, reconciliation)
+        use: Profiling flagged duplicates, impossible values or unit errors.
+        check:
+          - "Is the value impossible or merely unusual?"
+          - "Duplicate key vs duplicate row"
+        fail:
+          - "Quarantine doubtful rows into a separate file rather than deleting"
+        alt:
+          - "Ask the data owner"
+          - "Compare against source system"
+        pit:
+          - "Removing genuine extremes"
+          - "Not reporting rows removed"
+        act: Correct, quarantine or keep with a flag — never silently drop.
+        lessons: [L1.2]
+        recipe: rcp_quality
+        concepts: [C008, C009, C010, C011, C012]
+      N-DESC-CAT:
+        t: Counts, percentages, mode; bar chart
+        use: One categorical variable (region, product type).
+        check:
+          - "Categories consistent (spelling"
+          - "case)"
+          - "Rare levels"
+        fail:
+          - "Group rare levels into \"Other\""
+        alt:
+          - "Pareto chart for concentration"
+        pit:
+          - "Pie charts with many slices"
+          - "Percentages without the base n"
+        act: Report shares with counts.
+        lessons: [L1.4]
+        concepts: [C023, C041]
+      N-DESC-SYM:
+        t: Mean ± standard deviation; histogram
+        use: Symmetric numeric data without heavy tails.
+        check:
+          - "Histogram/Q-Q looks symmetric"
+          - "No impossible values"
+        fail:
+          - "Switch to median and IQR"
+        alt:
+          - "Coefficient of variation to compare spread across scales"
+        pit:
+          - "Reporting mean of a skewed variable as \"typical\""
+        act: Use the mean for planning totals; quote SD for variability.
+        lessons: [L1.4]
+        concepts: [C020, C026, C027, C031]
+      N-DESC-SKEW:
+        t: Median, IQR, percentiles (P90/P99), MAD; log-scale histogram, ECDF; Lorenz/Pareto
+        use: Spend, income, balances, claim amounts — skewed or heavy-tailed.
+        check:
+          - "Skewness > 1"
+          - "Mean ≫ median"
+          - "Top 1% share"
+        fail:
+          - "If decisions need totals"
+          - "keep the mean but show the tail separately"
+        alt:
+          - "Trimmed mean"
+          - "Log transform"
+          - "Separate model for extreme segment"
+        pit:
+          - "Averages driven by a few bulk buyers"
+          - "Removing genuine high-value customers"
+        act: Describe the typical customer with the median; manage the tail as its own segment.
+        lessons: [L1.4, L1.6]
+        concepts: [C022, C028, C029, C030, C032, C033, C034]
+      N-DESC-OUTLIER:
+        t: Outlier scan — IQR fences, robust (MAD) z-score; decide keep / cap / exclude / model separately
+        use: Values far from the rest; suspected errors.
+        check:
+          - "Error or genuine extreme?"
+          - "Effect on key results with and without"
+        fail:
+          - "Use robust statistics instead of deleting"
+        alt:
+          - "Isolation Forest for many variables"
+        pit:
+          - "Using a plain z-score on skewed data"
+          - "Deleting fraud signals"
+        act: Correct errors; keep genuine extremes but report sensitivity.
+        lessons: [L1.6]
+        recipe: rcp_outliers
+        concepts: [C043, C044, C045, C046, C047]
+      N-DESC-MISSING:
+        t: Missing-data diagnosis (MCAR / MAR / MNAR) and treatment
+        use: Any variable with missing values that matters to the analysis.
+        check:
+          - "Missingness rate by segment (MAR?)"
+          - "Do rows with missing values differ in outcome (MNAR?)"
+        fail:
+          - "MNAR → keep a \"missing\" category / flag and run a sensitivity analysis"
+        alt:
+          - "Multiple imputation (MICE) for MAR"
+          - "Simple imputation only for MCAR and small rates"
+        pit:
+          - "Listwise deletion that silently removes risky customers"
+          - "Mean-imputing MNAR data"
+        act: Document mechanism, method and rows affected; never hide missingness.
+        lessons: [L1.3]
+        concepts: [C013, C014, C015, C016, C017, C018, C019]
+      N-DESC-CORR:
+        t: Scatter plot first, then Pearson (linear) / Spearman (monotone) / Kendall (small n, ties)
+        use: Two numeric variables.
+        check:
+          - "Linearity on the scatter"
+          - "Outliers driving r"
+        fail:
+          - "Non-linear → Spearman or binned means; outliers → robust or rank methods"
+        alt:
+          - "LOESS smoother"
+          - "Binned plot"
+        pit:
+          - "Reading correlation as causation"
+          - "r on aggregated data (ecological fallacy)"
+        act: Use as a lead for further analysis, not a decision.
+        lessons: [L1.7]
+        concepts: [C053, C054, C055, C056, C058, C062]
+      N-DESC-XTAB:
+        t: Contingency table with row/column % and Cramér's V
+        use: Two categorical variables.
+        check:
+          - "Cell counts"
+          - "Which percentage answers the question"
+        fail:
+          - "Collapse sparse categories"
+        alt:
+          - "Chi-square test (→ T-TEST) if inference is needed"
+        pit:
+          - "Wrong denominator"
+        act: Show the comparison that matches the decision.
+        lessons: [L1.7]
+        concepts: [C059, C060]
+      N-DESC-STRATIFY:
+        t: Stratified analysis — check for Simpson's paradox and confounding
+        use: An overall comparison may be distorted by a third variable (format, channel, vintage).
+        check:
+          - "Is the third variable related to both groups and outcome?"
+        fail:
+          - "Report within-stratum results and a weighted overall"
+        alt:
+          - "Regression with the confounder as a covariate (→ T-REG)"
+        pit:
+          - "Reporting only the aggregate"
+        act: Decide on the within-stratum result; explain the reversal.
+        lessons: [L2.4]
+        concepts: [C070, C071]
+      N-DESC-BIAS:
+        t: Sampling, selection and survivorship-bias check
+        use: The data only contains "survivors" (current SKUs, approved applicants, active customers).
+        check:
+          - "What is missing from the population?"
+          - "How was the sample selected?"
+        fail:
+          - "Recover the missing history (archives"
+          - "declined applications) or state the limitation"
+        alt:
+          - "Reweighting"
+          - "Reject inference"
+        pit:
+          - "Analysing the current range only"
+        act: Restate conclusions for the population actually analysed.
+        lessons: [L2.4]
+        concepts: [C067, C068, C069]
+
+  T-DIST:
+    title: Which distribution to assume?
+    start: N-DIST-Q1
+    nodes:
+      N-DIST-Q1:
+        q: What kind of quantity is it?
+        opts:
+          - {label: "Yes/No per unit (default, conversion)", next: N-DIST-BIN}
+          - {label: "Count of events in a period (units sold, claims)", next: N-DIST-Q2}
+          - {label: "Positive skewed amount (spend, income, claim size)", next: N-DIST-AMT}
+          - {label: "Time until an event (churn, default)", next: N-DIST-TIME}
+          - {label: "A rate or probability itself", next: N-DIST-BETA}
+          - {label: "Sample drawn without replacement from a small lot (audit)", next: N-DIST-HYPER}
+      N-DIST-Q2:
+        q: Compare the variance with the mean.
+        opts:
+          - {label: "Variance ≈ mean", next: N-DIST-POIS}
+          - {label: "Variance ≫ mean (over-dispersed)", next: N-DIST-NB}
+          - {label: "Mostly zeros (intermittent)", next: N-FCST-INTERMITTENT}
+      N-DIST-BIN:
+        t: Bernoulli / Binomial (Beta-Binomial if the rate varies across groups)
+        use: Defaults in a vintage, conversions in an A/B test.
+        check:
+          - "Independent trials"
+          - "Same probability across units"
+        fail:
+          - "Rate varies by store/branch → Beta-Binomial or hierarchical model"
+        alt:
+          - "Logistic regression to model the rate"
+        pit:
+          - "Ignoring clustering → over-confident intervals"
+        act: Quote the rate with its interval.
+        lessons: [L2.2]
+        concepts: [C082, C083, C089]
+      N-DIST-POIS:
+        t: Poisson
+        use: Counts with variance ≈ mean (claims per policy, baskets per hour).
+        check:
+          - "Variance/mean ≈ 1"
+          - "Constant exposure"
+        fail:
+          - "Over-dispersion → Negative Binomial; varying exposure → rate with offset"
+        alt:
+          - "Poisson GLM with covariates"
+        pit:
+          - "Assuming Poisson for retail SKU sales (usually over-dispersed)"
+        act: Use for capacity and frequency planning.
+        lessons: [L2.2, L5.5]
+        concepts: [C086]
+      N-DIST-NB:
+        t: Negative Binomial
+        use: Over-dispersed counts (weekly SKU units, claims with heterogeneous risk).
+        check:
+          - "Variance/mean > 1 clearly"
+        fail:
+          - "Many structural zeros → zero-inflated / hurdle"
+        alt:
+          - "Quasi-Poisson"
+        pit:
+          - "Under-stated uncertainty if Poisson is used"
+        act: Size safety stock with the wider spread.
+        lessons: [L2.2, L5.5]
+        concepts: [C085, C182]
+      N-DIST-AMT:
+        t: Lognormal or Gamma (compare Q-Q plots and AIC)
+        use: Basket spend, income, claim severity.
+        check:
+          - "Positive only"
+          - "Q-Q on log scale"
+          - "Tail fit"
+        fail:
+          - "Extreme tail → separate large-loss model / Pareto tail"
+        alt:
+          - "Weibull"
+          - "Empirical quantiles"
+        pit:
+          - "Assuming normality for amounts"
+        act: Use quantiles (P90, P99) for limits and reserves.
+        lessons: [L2.3]
+        concepts: [C092, C094, C104]
+      N-DIST-TIME:
+        t: Exponential (constant hazard) → Weibull (changing hazard); censoring-aware methods
+        use: Time to churn, time to default, time between purchases.
+        check:
+          - "Censoring present?"
+          - "Hazard constant over time?"
+        fail:
+          - "Non-constant hazard → Weibull or Kaplan-Meier"
+        alt:
+          - "Survival analysis (→ N-TEST-SURV)"
+        pit:
+          - "Averaging only observed event times (ignores censoring)"
+        act: Use survival curves for retention planning.
+        lessons: [L2.3, L9.2]
+        concepts: [C093, C095]
+      N-DIST-BETA:
+        t: Beta (uncertainty about a probability)
+        use: Prior/posterior for a conversion or default rate.
+        check:
+          - "Bounded 0-1"
+        fail:
+          - "—"
+        alt:
+          - "Bootstrap the rate"
+        pit:
+          - "Treating a small-sample rate as exact"
+        act: Report probability that rate exceeds a threshold.
+        lessons: [L2.3, L4.3]
+        concepts: [C096, C159]
+      N-DIST-HYPER:
+        t: Hypergeometric (acceptance sampling)
+        use: Audit samples drawn without replacement from a finite file population.
+        check:
+          - "Sample is a large share of the lot"
+        fail:
+          - "Small share → Binomial approximation is fine"
+        alt:
+          - "Simulation"
+        pit:
+          - "Using Binomial when sampling 50 of 200 files"
+        act: Choose sample size for a target detection probability.
+        lessons: [L2.2]
+        concepts: [C087]
+
+  T-TEST:
+    title: Which hypothesis test?
+    start: N-TEST-Q0
+    nodes:
+      N-TEST-Q0:
+        q: Is this an experiment that needs an SRM / design check first?
+        opts:
+          - {label: "Yes — randomised test, not yet checked", next: N-EXP-SRM}
+          - {label: "No, or already checked", next: N-TEST-Q1}
+      N-TEST-Q1:
+        q: What type is the outcome?
+        opts:
+          - {label: "Continuous (amount, units, score)", next: N-TEST-Q2}
+          - {label: "Binary (rate: default, conversion, return)", next: N-TEST-Q3}
+          - {label: "Count / rate with exposure", next: N-TEST-COUNT}
+          - {label: "Time-to-event with censoring", next: N-TEST-SURV}
+          - {label: "I am running many tests at once", next: N-TEST-MULTI}
+      N-TEST-Q2:
+        q: How many groups, and are they independent?
+        opts:
+          - {label: "2 independent groups", next: N-TEST-2G-MEAN}
+          - {label: "2 paired measurements (same store before/after)", next: N-TEST-PAIRED}
+          - {label: "More than 2 groups", next: N-TEST-KG}
+          - {label: "2 groups and I have a strong pre-period measure per unit", next: N-REG-ANCOVA}
+          - {label: "Very small samples; I want minimal assumptions", next: N-TEST-PERM}
+          - {label: "I need to adjust for several covariates", next: N-REG-OLS}
+      N-TEST-Q3:
+        q: How many groups / is it paired?
+        opts:
+          - {label: "2 independent groups", next: N-TEST-2G-PROP}
+          - {label: "Paired yes/no (same customer before/after)", next: N-TEST-MCNEMAR}
+          - {label: "More than 2 groups or categories", next: N-TEST-CHI}
+      N-TEST-2G-MEAN:
+        t: Welch two-sample t-test (+ effect size and CI)
+        use: Compare average outcome between two independent groups — at the unit that was randomised.
+        check:
+          - "Independent units (aggregate to store/branch if randomised there)"
+          - "≥30 units/group or not heavy-tailed"
+          - "Unequal variances are fine (Welch)"
+        fail:
+          - "Heavy tails and small n → Mann-Whitney or bootstrap CI"
+          - "Clustered rows → aggregate to cluster or mixed model"
+          - "Size differences → growth vs own pre-period"
+        alt:
+          - "Permutation test"
+          - "Bayesian estimate of the difference"
+          - "Regression with pre-period covariate (CUPED)"
+        pit:
+          - "Testing transaction lines when stores were randomised"
+          - "Reading p < 0.05 as \"large\""
+          - "Ignoring a few bulk buyers"
+        act: Roll out / extend / stop — sized by the CI of the lift, not the p-value.
+        lessons: [L3.4]
+        recipe: rcp_two_group_test
+        concepts: [C129, C131, C141, C133]
+      N-TEST-2G-PROP:
+        t: Two-proportion z-test (Fisher's exact if any expected cell < 5)
+        use: Compare a rate (default, conversion, cure) between two independent groups.
+        check:
+          - "Expected cell counts ≥ 5"
+          - "Independent units"
+          - "Same definition and observation window"
+        fail:
+          - "Small counts → Fisher exact"
+          - "Clustered → aggregate or GLMM"
+        alt:
+          - "Logistic regression with covariates"
+          - "Bayesian Beta-Binomial"
+        pit:
+          - "Base-rate blindness (0.5 pp may be huge at a 4% base)"
+          - "Confounding (channel"
+          - "vintage)"
+        act: Quote risk difference in pp and relative risk; translate to accounts or units per 1,000.
+        lessons: [L3.4, L4.5]
+        recipe: rcp_two_group_test
+        concepts: [C128, C139, C142]
+      N-TEST-PAIRED:
+        t: Paired t-test (Wilcoxon signed-rank if differences are skewed)
+        use: Same units measured twice (store before/after, customer pre/post).
+        check:
+          - "Differences roughly symmetric"
+          - "Pairs correctly matched"
+        fail:
+          - "Skewed differences → Wilcoxon signed-rank"
+        alt:
+          - "Difference-in-differences when a control group exists (→ T-CAUSAL)"
+        pit:
+          - "Before/after without control ignores seasonality"
+        act: Use only with a control group for causal claims.
+        lessons: [L3.4]
+        concepts: [C130, C132]
+      N-TEST-KG:
+        t: One-way ANOVA (+ Levene); Welch ANOVA + Games-Howell if variances differ; Kruskal-Wallis + Dunn if non-normal
+        use: Compare means across 3+ groups (regions, formats).
+        check:
+          - "Equal variances (Levene)"
+          - "Normal residuals / large n"
+        fail:
+          - "Welch ANOVA"
+          - "Kruskal-Wallis"
+        alt:
+          - "Regression with dummies"
+        pit:
+          - "Many pairwise t-tests without correction"
+        act: Act on the pairs that differ by a meaningful amount.
+        lessons: [L3.5]
+        recipe: rcp_multi_group_test
+        concepts: [C134, C135, C136, C137]
+      N-TEST-CHI:
+        t: Chi-square test of independence (Fisher exact for small tables) + Cramér's V
+        use: Association between two categorical variables.
+        check:
+          - "Expected counts ≥ 5"
+        fail:
+          - "Fisher exact or collapse categories"
+        alt:
+          - "Logistic / multinomial regression"
+        pit:
+          - "Huge n makes trivial associations significant"
+        act: Report the effect size, not just p.
+        lessons: [L3.5]
+        concepts: [C138, C139, C143]
+      N-TEST-MCNEMAR:
+        t: McNemar's test
+        use: Paired binary outcomes.
+        check:
+          - "Discordant pairs count"
+        fail:
+          - "Exact binomial on discordant pairs"
+        alt:
+          - "Conditional logistic regression"
+        pit:
+          - "Treating paired data as independent"
+        act: Report change in rate.
+        lessons: [L3.5]
+        concepts: [C140]
+      N-TEST-COUNT:
+        t: Poisson / Negative Binomial rate comparison (GLM with exposure offset)
+        use: Claims per policy-year, units per store-week.
+        check:
+          - "Over-dispersion"
+        fail:
+          - "Negative Binomial"
+        alt:
+          - "Bootstrap the rate ratio"
+        pit:
+          - "Ignoring different exposure"
+        act: Report rate ratio with CI.
+        lessons: [L5.5]
+        concepts: [C181, C182]
+      N-TEST-SURV:
+        t: Kaplan-Meier curves + log-rank test (RMST if hazards cross)
+        use: Time to churn or default with censoring.
+        check:
+          - "Censoring non-informative"
+          - "Proportional hazards for log-rank"
+        fail:
+          - "Crossing curves → restricted mean survival time"
+        alt:
+          - "Cox regression"
+        pit:
+          - "Comparing average time among churners only"
+        act: Target retention where curves diverge.
+        lessons: [L9.2]
+        concepts: [C274, C275]
+      N-TEST-MULTI:
+        t: Multiple-testing correction — Holm (family-wise) or Benjamini-Hochberg (false discovery rate)
+        use: Many segments, metrics or features tested.
+        check:
+          - "How many tests were run (including ones not reported)?"
+        fail:
+          - "Pre-register primary metric; treat the rest as exploratory"
+        alt:
+          - "Hierarchical / Bayesian shrinkage"
+        pit:
+          - "p-hacking"
+          - "reporting only \"winners\""
+        act: Re-test winners on fresh data before acting.
+        lessons: [L3.7]
+        concepts: [C146, C147, C148, C149]
+      N-TEST-PERM:
+        t: Permutation test
+        use: Small samples or unusual statistics; minimal assumptions.
+        check:
+          - "Exchangeability under the null (randomised design)"
+        fail:
+          - "—"
+        alt:
+          - "Bootstrap CI"
+        pit:
+          - "Permuting at the wrong level (lines vs stores)"
+        act: Use alongside the main test as a robustness check.
+        lessons: [L3.2]
+        concepts: [C123]
+
+  T-EXP:
+    title: Experiment design and sample size
+    start: N-EXP-Q1
+    nodes:
+      N-EXP-Q1:
+        q: Can you randomise who/what gets the treatment?
+        opts:
+          - {label: "No", next: N-CAUSAL-ROOT}
+          - {label: "Yes — I need a sample size", next: N-EXP-POWER}
+          - {label: "Yes — the test is running/finished and I need to check it", next: N-EXP-SRM}
+          - {label: "Yes — variance is high and the test would take too long", next: N-EXP-CUPED}
+          - {label: "Yes — stakeholders want to look at results early", next: N-EXP-SEQ}
+          - {label: "Yes — I want the probability B beats A", next: N-BAYES-AB}
+      N-EXP-POWER:
+        t: Power and sample size (α, power, MDE, baseline variance; cluster design effect)
+        use: Before any test — how many customers/stores/weeks?
+        check:
+          - "Unit of randomisation"
+          - "Historic SD or base rate"
+          - "Smallest effect worth acting on"
+        fail:
+          - "Too many units needed → CUPED"
+          - "longer test"
+          - "paired stores"
+          - "larger MDE"
+        alt:
+          - "Simulation-based power"
+        pit:
+          - "Forgetting the design effect for store-level tests"
+          - "Post-hoc power"
+        act: Agree MDE and duration with the business before launch.
+        lessons: [L3.6]
+        recipe: rcp_power
+        concepts: [C144, C145, C154]
+      N-EXP-SRM:
+        t: Sample-ratio-mismatch check (chi-square on assignment counts)
+        use: Every experiment, before reading results.
+        check:
+          - "Observed split vs planned split"
+          - "By platform/version/day"
+        fail:
+          - "SRM detected → stop"
+          - "find the assignment or logging bug; do not trust the results"
+        alt:
+          - "Analyse the unaffected segment only"
+          - "clearly labelled"
+        pit:
+          - "Analysing a broken test because \"the lift looks good\""
+        act: Fix the pipeline and re-run.
+        lessons: [L4.1]
+        recipe: rcp_ab_test
+        concepts: [C152]
+      N-EXP-CUPED:
+        t: CUPED / pre-period covariate adjustment
+        use: High-variance metrics with a correlated pre-period measure.
+        check:
+          - "Covariate measured before treatment"
+        fail:
+          - "Post-treatment covariates bias the result"
+        alt:
+          - "Stratified randomisation"
+          - "paired design"
+          - "growth vs own baseline"
+        pit:
+          - "Using covariates affected by the treatment"
+        act: Shorter tests with the same power.
+        lessons: [L4.2]
+        concepts: [C156]
+      N-EXP-SEQ:
+        t: Sequential testing (alpha spending / always-valid p-values)
+        use: Need to monitor results before the planned end.
+        check:
+          - "Planned looks and boundaries defined upfront"
+        fail:
+          - "Ad-hoc peeking → treat results as exploratory"
+        alt:
+          - "Bayesian monitoring with pre-agreed decision rule"
+        pit:
+          - "Stopping the first day p < 0.05"
+        act: Pre-register stopping rules.
+        lessons: [L4.2]
+        concepts: [C155]
+      N-BAYES-AB:
+        t: Bayesian A/B test (Beta-Binomial; P(B > A), expected loss)
+        use: Decision-makers want probability statements; prior knowledge exists.
+        check:
+          - "Prior is justified and disclosed"
+          - "Same SRM hygiene"
+        fail:
+          - "Sensitive to prior → report with a weak prior too"
+        alt:
+          - "Frequentist CI"
+        pit:
+          - "Treating P(B > A) = 0.8 as certainty"
+        act: Ship when expected loss is below an agreed tolerance.
+        lessons: [L4.3]
+        concepts: [C158, C159, C160, C161]
+
+  T-REG:
+    title: Which regression or GLM?
+    start: N-REG-Q1
+    nodes:
+      N-REG-Q1:
+        q: What type is the outcome?
+        opts:
+          - {label: "Continuous, roughly symmetric residuals", next: N-REG-OLS}
+          - {label: "Positive skewed amount", next: N-REG-GLM}
+          - {label: "Binary", next: N-REG-LOGIT}
+          - {label: "Count", next: N-REG-GLM}
+          - {label: "Elasticity: % change in units for % change in price", next: N-REG-LOGLOG}
+          - {label: "Many predictors / signs flip / VIF high", next: N-REG-VIF}
+          - {label: "Effect depends on another variable", next: N-REG-INTERACT}
+          - {label: "Risk jumps above a threshold (curved effect)", next: N-REG-NONLINEAR}
+          - {label: "Insurance pricing: frequency × severity", next: N-REG-GLM-INS}
+      N-REG-OLS:
+        t: Linear regression (OLS) with diagnostics
+        use: Explain a continuous outcome with several drivers.
+        check:
+          - "Linearity"
+          - "Constant variance (Breusch-Pagan)"
+          - "Independence"
+          - "Influential points (Cook's D)"
+          - "VIF"
+        fail:
+          - "Heteroscedastic → robust SEs or log outcome; outliers → robust/quantile regression; collinear → Ridge"
+        alt:
+          - "Quantile regression"
+          - "GAM"
+        pit:
+          - "Reading coefficients causally"
+          - "Extrapolating"
+        act: Use coefficients as "all else equal" associations; test causality separately.
+        lessons: [L5.1, L5.2]
+        recipe: rcp_regression
+        concepts: [C165, C166, C167, C170, C171, C172, C173]
+      N-REG-LOGIT:
+        t: Logistic regression (odds ratios)
+        use: Binary outcomes — default, churn, response.
+        check:
+          - "Linearity in the logit"
+          - "Enough events per variable (≥10)"
+          - "Separation"
+        fail:
+          - "Non-linear → bins/WoE or splines; rare events → penalised (Firth)"
+        alt:
+          - "Gradient boosting with SHAP (→ T-ML)"
+        pit:
+          - "Interpreting odds ratios as risk ratios when the outcome is common"
+        act: Score, rank, and set cut-offs with business costs.
+        lessons: [L5.3]
+        recipe: rcp_regression
+        concepts: [C175, C176]
+      N-REG-GLM:
+        t: GLM — Poisson/Negative Binomial for counts (offset for exposure), Gamma for positive amounts, Tweedie for zero + positive
+        use: Counts, claim severity, spend including non-buyers.
+        check:
+          - "Dispersion"
+          - "Link function"
+          - "Residual deviance"
+        fail:
+          - "Over-dispersion → NB; many zeros → zero-inflated/hurdle or Tweedie"
+        alt:
+          - "Log-OLS for amounts"
+        pit:
+          - "OLS on counts → negative predictions"
+        act: Price and plan on predicted means and quantiles.
+        lessons: [L5.5]
+        recipe: rcp_regression
+        concepts: [C180, C181, C182, C183, C184]
+      N-REG-LOGLOG:
+        t: Log-log regression / Poisson GLM on log price (elasticity), with promo, display, SKU, store and week controls
+        use: Price elasticity, promotion response.
+        check:
+          - "Price variation not driven only by promotions"
+          - "Controls for promo/display/seasonality"
+          - "Stockouts excluded"
+        fail:
+          - "No exogenous price variation → run a price test"
+        alt:
+          - "Hierarchical elasticity by category"
+        pit:
+          - "Omitting promo controls → biased elasticity"
+          - "Using chain-level averages that mix stores"
+        act: Feed elasticity into price/promo optimisation.
+        lessons: [L8.4]
+        recipe: rcp_elasticity
+        concepts: [C246, C167]
+      N-REG-VIF:
+        t: Multicollinearity check (VIF) → drop/combine features or regularise (Ridge, Lasso, Elastic Net)
+        use: Correlated predictors; unstable or flipping coefficient signs.
+        check:
+          - "VIF > 5–10 (rule of thumb)"
+          - "Correlation matrix"
+        fail:
+          - "Combine (e.g. limit/income ratio)"
+          - "Ridge"
+        alt:
+          - "PCA components"
+        pit:
+          - "Dropping the variable the business cares about without explanation"
+        act: Explain combined drivers, not individual unstable coefficients.
+        lessons: [L5.2, L5.4]
+        concepts: [C172, C177, C178]
+      N-REG-INTERACT:
+        t: Interaction terms, splines/polynomials; mixed models for grouped data
+        use: Effect depends on a second variable (young × high DTI) or is curved (utilisation).
+        check:
+          - "Partial-effect plots"
+          - "Enough data in each combination"
+        fail:
+          - "Too sparse → bins or regularisation"
+        alt:
+          - "Tree-based models detect interactions automatically"
+        pit:
+          - "Interpreting main effects alone when interaction is present"
+        act: Target policies at the combination, not each factor alone.
+        lessons: [L5.6]
+        concepts: [C186, C187, C188]
+      N-REG-NONLINEAR:
+        t: Non-linear effects — bins/WoE, splines
+        use: Risk jumps above a threshold (utilisation > 80%).
+        check:
+          - "Binned outcome rates by decile"
+        fail:
+          - "—"
+        alt:
+          - "Gradient boosting"
+        pit:
+          - "A single linear term hides the threshold"
+        act: Set policy rules at the threshold.
+        lessons: [L5.6, L8.7]
+        concepts: [C186, C258]
+      N-REG-ANCOVA:
+        t: Regression of outcome on group + pre-period covariate (ANCOVA / CUPED-style)
+        use: Two-group comparison with a strong baseline covariate.
+        check:
+          - "Covariate measured before treatment"
+        fail:
+          - "—"
+        alt:
+          - "Growth vs own baseline"
+        pit:
+          - "Adjusting for post-treatment variables"
+        act: Tighter CI for the same data.
+        lessons: [L4.2]
+        concepts: [C156, C166]
+      N-REG-GLM-INS:
+        t: Frequency-severity GLMs (Poisson/NB × Gamma) or Tweedie pure premium
+        use: Insurance pricing.
+        check:
+          - "Exposure offset"
+          - "Large-loss treatment"
+        fail:
+          - "—"
+        alt:
+          - "GBM with Tweedie loss"
+        pit:
+          - "Catastrophic claims distorting severity"
+        act: Price = expected frequency × severity × loadings.
+        lessons: [L9.4]
+        concepts: [C264, C184]
+
+  T-ML:
+    title: Which ML model?
+    start: N-ML-Q1
+    nodes:
+      N-ML-Q1:
+        q: What matters most?
+        opts:
+          - {label: "Regulator/customer needs reasons for each decision", next: N-ML-SCORECARD}
+          - {label: "Best accuracy on tabular data", next: N-ML-GBM}
+          - {label: "The target is rare (fraud ~1%)", next: N-ML-IMBALANCE}
+          - {label: "Score looks too good to be true", next: N-ML-LEAK}
+          - {label: "Images, text, sequences at scale", next: N-ML-DL}
+      N-ML-SCORECARD:
+        t: Logistic scorecard with WoE binning (points to double the odds)
+        use: Credit decisions needing adverse-action reasons and stability.
+        check:
+          - "Monotonic WoE"
+          - "IV per feature"
+          - "Out-of-time validation"
+          - "Calibration"
+        fail:
+          - "Weak lift → GBM challenger with SHAP under model-risk governance"
+        alt:
+          - "Explainable boosting machines"
+        pit:
+          - "Using post-outcome fields"
+          - "Using protected attributes or proxies"
+        act: Set cut-offs on profit/loss by score band.
+        lessons: [L8.7]
+        recipe: rcp_scorecard
+        concepts: [C258, C259, C260]
+      N-ML-GBM:
+        t: Gradient boosting (LightGBM/XGBoost) vs logistic/linear baseline; random forest check
+        use: Tabular prediction where accuracy matters.
+        check:
+          - "Leakage audit"
+          - "Out-of-time or grouped CV"
+          - "Calibration"
+          - "Stability across segments"
+        fail:
+          - "Overfitting → stronger regularisation"
+          - "fewer features"
+        alt:
+          - "Random forest"
+          - "Stacking"
+        pit:
+          - "Tuning on the test set"
+          - "Random split when time matters"
+        act: Deploy with monitoring and a champion/challenger test.
+        lessons: [L6.2, L6.4]
+        recipe: rcp_classifier
+        concepts: [C191, C192, C193, C198, C199, C201]
+      N-ML-IMBALANCE:
+        t: Class weights or threshold moving (SMOTE with care); evaluate with PR-AUC, precision@k
+        use: Rare events — fraud, default in good books.
+        check:
+          - "Base rate"
+          - "Cost of FP vs FN"
+          - "Investigator capacity"
+        fail:
+          - "—"
+        alt:
+          - "Anomaly detection for unseen patterns (→ T-ANOM)"
+        pit:
+          - "99% accuracy by predicting no fraud"
+          - "Resampling before the train/test split"
+        act: Set the threshold by cost or capacity (→ T-METRIC).
+        lessons: [L6.5]
+        concepts: [C204, C207]
+      N-ML-LEAK:
+        t: Leakage audit — target, temporal and preprocessing leakage
+        use: AUC suspiciously high (e.g. > 0.95 in credit), or a feature "too predictive".
+        check:
+          - "When is each field known?"
+          - "Was preprocessing fit on all data?"
+          - "Same customer in train and test?"
+        fail:
+          - "Remove post-outcome fields; refit pipeline inside CV"
+        alt:
+          - "Out-of-time validation"
+        pit:
+          - "Celebrating a 0.98 AUC"
+        act: Never ship until the leak is explained.
+        lessons: [L6.4]
+        concepts: [C202]
+      N-ML-DL:
+        t: Deep learning (awareness) — usually not better than GBM on tabular data
+        use: Unstructured data at scale.
+        check:
+          - "Data volume"
+          - "Explainability needs"
+          - "Baseline comparison"
+        fail:
+          - "Use GBM"
+        alt:
+          - "Embeddings + GBM"
+        pit:
+          - "Complexity without lift"
+        act: Benchmark against a simple baseline first.
+        lessons: [L9.3]
+        concepts: [C282, C283]
+
+  T-CLUST:
+    title: Which clustering method?
+    start: N-CLUST-Q1
+    nodes:
+      N-CLUST-Q1:
+        q: What do the data and goal look like?
+        opts:
+          - {label: "Business rules are enough (recency, frequency, value)", next: N-SEG-RFM}
+          - {label: "Numeric features, compact groups", next: N-CLUST-KMEANS}
+          - {label: "Odd shapes, noise points", next: N-CLUST-DBSCAN}
+          - {label: "Overlapping groups, soft membership", next: N-CLUST-GMM}
+          - {label: "Which products are bought together?", next: N-SEG-BASKET}
+      N-SEG-RFM:
+        t: RFM segmentation
+        use: Simple, explainable CRM segments.
+        check:
+          - "Time window"
+          - "Score cut-offs"
+        fail:
+          - "—"
+        alt:
+          - "K-Means on RFM features"
+        pit:
+          - "Static segments never refreshed"
+        act: Tailor CRM offers by segment.
+        lessons: [L8.2]
+        concepts: [C242]
+      N-CLUST-KMEANS:
+        t: K-Means (scale features; choose k with elbow + silhouette; check stability)
+        use: Customer/store segmentation on numeric features.
+        check:
+          - "Scaling"
+          - "Outliers"
+          - "Stability across seeds and samples"
+        fail:
+          - "Unstable → fewer features"
+          - "PCA first"
+          - "GMM"
+        alt:
+          - "Hierarchical (Ward)"
+          - "GMM"
+        pit:
+          - "Clusters that do not change any action"
+          - "Including IDs as features"
+        act: Name each cluster and link it to a different action.
+        lessons: [L8.1]
+        recipe: rcp_cluster
+        concepts: [C236, C240]
+      N-CLUST-DBSCAN:
+        t: DBSCAN / HDBSCAN
+        use: Irregular shapes; isolate noise.
+        check:
+          - "eps / min_samples sensitivity"
+        fail:
+          - "—"
+        alt:
+          - "Isolation Forest for anomalies"
+        pit:
+          - "Varying density"
+        act: Treat noise points as candidates for review.
+        lessons: [L8.1]
+        concepts: [C238]
+      N-CLUST-GMM:
+        t: Gaussian mixture model (BIC for k)
+        use: Soft, overlapping segments.
+        check:
+          - "BIC curve"
+        fail:
+          - "—"
+        alt:
+          - "K-Means"
+        pit:
+          - "Over-interpreting probabilities"
+        act: Use membership probabilities for targeting.
+        lessons: [L8.1]
+        concepts: [C239]
+      N-SEG-BASKET:
+        t: Market-basket analysis (support, confidence, lift)
+        use: Cross-sell, layout, bundles.
+        check:
+          - "Minimum support"
+          - "Lift > 1 meaningful"
+        fail:
+          - "—"
+        alt:
+          - "Sequential patterns"
+        pit:
+          - "Trivial rules (bread → milk)"
+          - "High lift on tiny support"
+        act: Bundle or co-locate high-lift, decent-support pairs.
+        lessons: [L8.3]
+        recipe: rcp_basket
+        concepts: [C245]
+
+  T-ANOM:
+    title: Which anomaly-detection method?
+    start: N-ANOM-Q1
+    nodes:
+      N-ANOM-Q1:
+        q: What does the suspicious pattern look like?
+        opts:
+          - {label: "One variable, static", next: N-DESC-OUTLIER}
+          - {label: "Many variables at once", next: N-ANOM-MULTI}
+          - {label: "Entities linked by shared devices/addresses", next: N-ANOM-GRAPH}
+          - {label: "Amounts bunched just below a threshold", next: N-ANOM-STRUCT}
+          - {label: "Numbers look made up or rounded", next: N-ANOM-BENFORD}
+          - {label: "A metric over time jumped", next: N-FCST-BREAK}
+      N-ANOM-MULTI:
+        t: Isolation Forest (global) / LOF (local) / residual-based scores
+        use: Multivariate outliers without labels (returns abuse, unusual accounts).
+        check:
+          - "Feature scaling"
+          - "Contamination = alert budget"
+        fail:
+          - "Too many alerts → raise threshold"
+          - "add rules"
+        alt:
+          - "Supervised model once labels exist"
+        pit:
+          - "Treating every anomaly as fraud"
+        act: Route top alerts to investigators; measure precision.
+        lessons: [L8.5]
+        recipe: rcp_anomaly_scan
+        concepts: [C252, C253, C254, C255]
+      N-ANOM-GRAPH:
+        t: Graph / link analysis (connected components on shared devices and addresses)
+        use: Fraud rings, mule networks.
+        check:
+          - "Benign sharing (households) vs suspicious"
+        fail:
+          - "—"
+        alt:
+          - "Community detection"
+        pit:
+          - "Flagging families"
+        act: Investigate components above a size threshold.
+        lessons: [L8.6]
+        concepts: [C256]
+      N-ANOM-STRUCT:
+        t: Threshold-bunching (structuring) check
+        use: Deposits just below a reporting limit.
+        check:
+          - "Compare just-below vs just-above frequencies"
+        fail:
+          - "—"
+        alt:
+          - "Rules on repeated near-threshold deposits"
+        pit:
+          - "Ignoring legitimate payroll patterns"
+        act: Escalate per AML policy.
+        lessons: [L8.6]
+        concepts: [C257]
+      N-ANOM-BENFORD:
+        t: Benford first-digit test + last-digit/rounding test, compared with peers
+        use: Suspected fabricated figures (a store, branch, expense claims).
+        check:
+          - "Data spans several orders of magnitude"
+          - "Compare with peer units not only theory"
+        fail:
+          - "Narrow-range data → use peer comparison and rounding tests"
+        alt:
+          - "Duplicate-amount tests"
+        pit:
+          - "Treating a Benford deviation as proof"
+        act: Audit the flagged unit.
+        lessons: [L2.6]
+        recipe: rcp_benford
+        concepts: [C109, C110]
+
+  T-FCST:
+    title: Which forecasting approach?
+    start: N-FCST-Q1
+    nodes:
+      N-FCST-Q1:
+        q: What does the series look like?
+        opts:
+          - {label: "Smooth with trend/seasonality", next: N-FCST-SEASON}
+          - {label: "Known drivers (price, promo, holidays, weather)", next: N-FCST-DRIVERS}
+          - {label: "Mostly zeros (intermittent)", next: N-FCST-INTERMITTENT}
+          - {label: "Hierarchy (SKU → category → total)", next: N-FCST-HIER}
+          - {label: "Sudden level change", next: N-FCST-BREAK}
+          - {label: "Sales capped by stockouts", next: N-FCST-CENSOR}
+      N-FCST-SEASON:
+        t: Decompose (STL) → ETS / SARIMA vs seasonal-naive baseline
+        use: Weekly category sales, monthly balances.
+        check:
+          - "Rolling-origin backtest vs seasonal-naive"
+          - "Residual autocorrelation"
+        fail:
+          - "Does not beat baseline → use baseline"
+        alt:
+          - "Prophet-style models"
+        pit:
+          - "Evaluating on one split"
+          - "MAPE near zero"
+        act: Plan with forecast + interval.
+        lessons: [L7.1, L7.2]
+        recipe: rcp_forecast
+        concepts: [C222, C225, C226, C227]
+      N-FCST-DRIVERS:
+        t: ARIMAX / regression with lags / GBM with calendar and driver features
+        use: Promotions, prices, holidays drive demand.
+        check:
+          - "Driver values known at forecast time"
+        fail:
+          - "—"
+        alt:
+          - "Prophet with regressors"
+        pit:
+          - "Using actual future weather/promos that will not be known"
+        act: Scenario forecasts for promo plans.
+        lessons: [L7.2]
+        concepts: [C227, C228]
+      N-FCST-INTERMITTENT:
+        t: Croston / SBA; classify with ADI and CV²; evaluate with MASE
+        use: Long-tail SKUs.
+        check:
+          - "ADI > 1.32"
+        fail:
+          - "—"
+        alt:
+          - "Aggregate to higher level"
+        pit:
+          - "MAPE undefined at zero"
+        act: Stock policy by service level, not point forecast.
+        lessons: [L7.4]
+        concepts: [C230]
+      N-FCST-HIER:
+        t: Hierarchical reconciliation (bottom-up, MinT)
+        use: Forecasts needed at several levels that must add up.
+        check:
+          - "Coherence"
+        fail:
+          - "—"
+        alt:
+          - "Top-down with proportions"
+        pit:
+          - "Inconsistent numbers across teams"
+        act: One reconciled number set.
+        lessons: [L7.4]
+        concepts: [C231]
+      N-FCST-BREAK:
+        t: Change-point detection (CUSUM, PELT) then refit post-break
+        use: Store refit, competitor opening, policy change.
+        check:
+          - "Break date confidence"
+          - "Business explanation"
+        fail:
+          - "—"
+        alt:
+          - "Intervention dummy in the model"
+        pit:
+          - "Fitting through the break"
+        act: Investigate cause; adjust targets.
+        lessons: [L7.5]
+        recipe: rcp_changepoint
+        concepts: [C232]
+      N-FCST-CENSOR:
+        t: Treat stockout periods as censored demand before modelling
+        use: Sales understate demand when out of stock.
+        check:
+          - "Stockout flags available"
+        fail:
+          - "Exclude or uncensor stockout periods"
+        alt:
+          - "Tobit-style models"
+        pit:
+          - "Forecasting sales instead of demand → chronic under-stocking"
+        act: Safety stock on uncensored demand.
+        lessons: [L7.5]
+        concepts: [C233]
+
+  T-CAUSAL:
+    title: Which causal method?
+    start: N-CAUSAL-ROOT
+    nodes:
+      N-CAUSAL-ROOT:
+        q: How was the treatment assigned?
+        opts:
+          - {label: "Randomly", next: N-TEST-Q0}
+          - {label: "Not random — first draw the causal diagram", next: N-CAUSAL-DAG}
+          - {label: "Treated vs control, before and after", next: N-CAUSAL-DID}
+          - {label: "Chosen based on observed characteristics", next: N-CAUSAL-PSM}
+          - {label: "By a score cut-off", next: N-CAUSAL-RDD}
+          - {label: "Who should I target (heterogeneous effects)?", next: N-CAUSAL-UPLIFT}
+      N-CAUSAL-DAG:
+        t: Causal diagram (DAG) — adjust for confounders, not colliders or mediators
+        use: Any observational causal question.
+        check:
+          - "All common causes listed"
+          - "Colliders identified"
+        fail:
+          - "Unmeasured confounders → sensitivity analysis or design an experiment"
+        alt:
+          - "Run an experiment"
+        pit:
+          - "Adjusting for everything available"
+        act: Decide what can and cannot be claimed.
+        lessons: [L4.4]
+        concepts: [C163, C164]
+      N-CAUSAL-DID:
+        t: Difference-in-differences (check parallel pre-trends)
+        use: Policy/promo applied to some stores or regions from a date.
+        check:
+          - "Parallel pre-trends"
+          - "No spill-over"
+        fail:
+          - "Synthetic control"
+        alt:
+          - "Event-study plot"
+        pit:
+          - "Ignoring different pre-trends"
+        act: Estimate incremental impact.
+        lessons: [L9.1]
+        concepts: [C269]
+      N-CAUSAL-PSM:
+        t: Propensity score matching / weighting (+ overlap and sensitivity checks)
+        use: Loyalty membership, credit-limit increases chosen by the business.
+        check:
+          - "Overlap"
+          - "Balance after matching"
+        fail:
+          - "Poor overlap → restrict population"
+        alt:
+          - "Doubly robust estimation"
+        pit:
+          - "Hidden confounding"
+        act: Present as best estimate with caveats.
+        lessons: [L9.1]
+        concepts: [C270]
+      N-CAUSAL-RDD:
+        t: Regression discontinuity (awareness)
+        use: Treatment assigned at a cut-off (score ≥ 650).
+        check:
+          - "No manipulation at the cut-off"
+        fail:
+          - "—"
+        alt:
+          - "—"
+        pit:
+          - "Extrapolating far from the cut-off"
+        act: Local effect at the threshold.
+        lessons: [L9.1]
+        concepts: [C272]
+      N-CAUSAL-UPLIFT:
+        t: Uplift modelling (T-learner, Qini curve)
+        use: Target customers who change behaviour because of the treatment.
+        check:
+          - "Randomised training data"
+        fail:
+          - "—"
+        alt:
+          - "Segment-level experiment results"
+        pit:
+          - "Targeting high-propensity \"sure things\""
+        act: Spend on persuadables.
+        lessons: [L9.1]
+        concepts: [C271]
+
+  T-METRIC:
+    title: Which evaluation metric and threshold?
+    start: N-METRIC-Q1
+    nodes:
+      N-METRIC-Q1:
+        q: What will the model output be used for?
+        opts:
+          - {label: "Ranking customers/accounts", next: N-METRIC-CLASS}
+          - {label: "Rare-event detection", next: N-METRIC-RARE}
+          - {label: "Probabilities used as numbers (pricing, provisions)", next: N-METRIC-CALIB}
+          - {label: "Choosing a cut-off", next: N-METRIC-COST}
+          - {label: "Forecast / regression accuracy", next: N-METRIC-REG}
+      N-METRIC-CLASS:
+        t: ROC-AUC / Gini, KS, lift and gain by decile
+        use: Credit or response ranking.
+        check:
+          - "Out-of-time sample"
+          - "Segment stability"
+        fail:
+          - "—"
+        alt:
+          - "PR-AUC for rare events"
+        pit:
+          - "AUC insensitive to calibration"
+        act: "Rule of thumb: application scorecards often AUC 0.70–0.85 (varies by product and regulator)."
+        lessons: [L6.6]
+        concepts: [C206, C208, C209]
+      N-METRIC-RARE:
+        t: PR-AUC, precision@k, recall at investigator capacity
+        use: Fraud, AML alerts.
+        check:
+          - "Base rate"
+        fail:
+          - "—"
+        alt:
+          - "Cost curves"
+        pit:
+          - "Accuracy"
+        act: Size the alert queue to capacity.
+        lessons: [L6.5, L6.6]
+        concepts: [C207, C205]
+      N-METRIC-CALIB:
+        t: Calibration curve, Brier score; recalibrate (Platt/isotonic)
+        use: PD for provisioning, risk-based pricing.
+        check:
+          - "Predicted vs observed by decile"
+        fail:
+          - "Recalibrate"
+        alt:
+          - "—"
+        pit:
+          - "Good AUC but wrong levels"
+        act: Recalibrate before using probabilities in money calculations.
+        lessons: [L6.6]
+        concepts: [C210]
+      N-METRIC-COST:
+        t: Expected-cost threshold (cost FN × FN + cost FP × FP) or capacity-based cut-off
+        use: Any yes/no decision from a score.
+        check:
+          - "Agreed costs with the business"
+        fail:
+          - "Unknown costs → show the trade-off curve"
+        alt:
+          - "—"
+        pit:
+          - "Defaulting to 0.5"
+        act: Pick the threshold with the lowest expected cost.
+        lessons: [L6.6]
+        concepts: [C211]
+      N-METRIC-REG:
+        t: MAE, RMSE, WAPE, MASE, bias
+        use: Forecasts and regressions.
+        check:
+          - "Level at which decisions are made"
+        fail:
+          - "Near-zero actuals → avoid MAPE; use WAPE/MASE"
+        alt:
+          - "Quantile loss"
+        pit:
+          - "MAPE on intermittent demand"
+        act: Report accuracy and bias at the decision level.
+        lessons: [L7.3]
+        concepts: [C212]
+
+  T-MON:
+    title: Which drift or monitoring check?
+    start: N-MON-Q1
+    nodes:
+      N-MON-Q1:
+        q: What changed, or what are you worried about?
+        opts:
+          - {label: "Score or input distributions", next: N-MON-PSI}
+          - {label: "Model performance (AUC, calibration)", next: N-MON-CONCEPT}
+          - {label: "Fairness across groups", next: N-MON-FAIR}
+          - {label: "Only approved/booked cases have outcomes", next: N-MON-REJECT}
+      N-MON-PSI:
+        t: PSI (score) and CSI (each feature)
+        use: Monthly model monitoring; data pipeline changes.
+        check:
+          - "Rule of thumb: < 0.10 stable · 0.10–0.25 investigate · > 0.25 significant shift"
+        fail:
+          - "Find the driver: mix change (channel"
+          - "product) or data error"
+        alt:
+          - "KS test on distributions"
+        pit:
+          - "Treating PSI as a performance measure"
+        act: Monitor → investigate → recalibrate → rebuild.
+        lessons: [L9.6]
+        recipe: rcp_drift
+        concepts: [C219]
+      N-MON-CONCEPT:
+        t: Performance decay by vintage (AUC/KS, calibration) — concept drift
+        use: Relationship between inputs and outcome changes.
+        check:
+          - "Mature outcome window"
+          - "Segment breakdown"
+        fail:
+          - "Recalibrate or rebuild"
+        alt:
+          - "Challenger model"
+        pit:
+          - "Stable PSI ≠ stable performance"
+        act: Escalate under model-risk policy.
+        lessons: [L9.6]
+        concepts: [C220]
+      N-MON-FAIR:
+        t: Fairness metrics (approval rate ratio / 80% rule, equal opportunity) incl. proxy checks
+        use: Credit, pricing, hiring decisions.
+        check:
+          - "Outcomes by protected group"
+          - "Proxies (region"
+          - "postcode)"
+        fail:
+          - "Remove/adjust proxy features; policy review"
+        alt:
+          - "—"
+        pit:
+          - "Assuming removing the protected attribute removes bias"
+        act: Document and remediate.
+        lessons: [L9.5]
+        concepts: [C216, C217]
+      N-MON-REJECT:
+        t: Reject-inference awareness
+        use: Models trained only on approved applicants.
+        check:
+          - "Score distribution of declined vs booked"
+        fail:
+          - "Parcelling / augmentation"
+          - "or a small randomised approval test"
+        alt:
+          - "—"
+        pit:
+          - "Under-estimating risk at low scores"
+        act: Be cautious when lowering cut-offs.
+        lessons: [L8.7, L9.6]
+        concepts: [C221]
+
+  T-OPT:
+    title: Which optimisation approach?
+    start: N-OPT-Q1
+    nodes:
+      N-OPT-Q1:
+        q: Which decision?
+        opts:
+          - {label: "Promotion depth / frequency", next: N-OPT-PROMO}
+          - {label: "Stock level / safety stock", next: N-OPT-INVENTORY}
+          - {label: "Price", next: N-REG-LOGLOG}
+          - {label: "Decision under uncertainty", next: N-OPT-MC}
+      N-OPT-PROMO:
+        t: Promo uplift net of cannibalisation, halo and pull-forward → promo ROI
+        use: Evaluating and planning promotions.
+        check:
+          - "Baseline estimate"
+          - "Cannibalised SKUs"
+          - "Post-promo dip"
+        fail:
+          - "—"
+        alt:
+          - "Store-level promo test"
+        pit:
+          - "Counting gross uplift as incremental"
+        act: Keep promotions with positive incremental margin.
+        lessons: [L8.4]
+        recipe: rcp_elasticity
+        concepts: [C247, C249]
+      N-OPT-INVENTORY:
+        t: Safety stock = z(service level) × σ(demand over lead time); newsvendor for perishables; ABC/XYZ
+        use: Replenishment policy.
+        check:
+          - "Forecast error distribution"
+          - "Lead-time variability"
+        fail:
+          - "—"
+        alt:
+          - "Simulation"
+        pit:
+          - "Using sales (censored) instead of demand"
+        act: Set service levels by ABC/XYZ class.
+        lessons: [L7.6]
+        recipe: rcp_inventory
+        concepts: [C234, C235, C251]
+      N-OPT-MC:
+        t: Monte Carlo simulation of the decision's P&L
+        use: Uncertain inputs (demand, elasticity, default rates).
+        check:
+          - "Input distributions justified"
+          - "Correlations between inputs"
+        fail:
+          - "—"
+        alt:
+          - "Scenario analysis"
+        pit:
+          - "Point estimates hiding risk"
+        act: Choose the option with acceptable downside.
+        lessons: [L2.5]
+        concepts: [C108]

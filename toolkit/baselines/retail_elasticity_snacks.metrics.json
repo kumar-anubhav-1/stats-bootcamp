@@ -1,0 +1,21 @@
+{
+  "elasticity": -1.824365,
+  "se": 0.048489,
+  "ci": [
+    -1.919404,
+    -1.729326
+  ],
+  "n": 11230,
+  "family": "poisson",
+  "elasticity_without_controls": -2.155104,
+  "promo_effect": {
+    "promo_flag": 0.136658,
+    "display_flag": 0.096716
+  },
+  "_tolerance": {
+    "rtol": 0.01,
+    "atol": 0.005
+  },
+  "optimal_price_over_cost": 2.213055,
+  "optimal_vs_list": 0.476108
+}

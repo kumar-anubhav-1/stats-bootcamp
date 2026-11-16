@@ -1,0 +1,16 @@
+# L3.4 reference (finance): is the 12-month default rate different for unverified vs verified income?
+recipe: rcp_two_group_test
+dataset:
+  name: meridian_accounts
+  path: data/finance/accounts.parquet
+columns:
+  group: income_verified_flag
+  target: default_12m
+  id: account_id
+filters: []
+params:
+  groups: [false, true]
+  alpha: 0.05
+  seed: 42
+output:
+  folder: outputs/{recipe}/{date}_finance_default_by_verification

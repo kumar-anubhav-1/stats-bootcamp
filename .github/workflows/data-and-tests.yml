@@ -1,0 +1,30 @@
+name: data-and-tests
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install -e .
+      - name: Generate data with truth pack (+ exam/transfer when instructor files are present)
+        run: |
+          EXTRA=""
+          [ -f instructor/exam_config.py ] && EXTRA="$EXTRA --exam"
+          [ -f instructor/transfer_gen.py ] && EXTRA="$EXTRA --transfer"
+          python -m datagen.generate --with-truth $EXTRA
+      - name: Prove every planted anomaly (42) + schema + reproducibility
+        run: python -m pytest -q
+      - name: Anomaly register within bands
+        run: python -m validator.register
+      - name: Toolkit regression checks
+        run: |
+          for b in toolkit/baselines/*.metrics.json; do
+            c=$(basename "$b" .metrics.json)
+            python -m toolkit.run toolkit/configs/$c.yaml --check-baseline
+          done
+      - name: Build site sources (computed numbers, question-bank validation)
+        run: python -m tools.build_site
+      - name: Build site (strict)
+        run: mkdocs build --strict

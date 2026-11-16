@@ -1,0 +1,9 @@
+# L9.6 (F11, F12): 2023 vintages (reference) vs 2025Q2–Q3 (current) — population and concept drift of the application score.
+recipe: rcp_drift
+dataset: {name: meridian_accounts, path: data/finance/accounts.parquet}
+columns: {period: vintage, target: default_12m, score: app_score}
+filters: []
+params: {reference: "vintage.str.startswith('2023')", current: "vintage in ['2025Q2', '2025Q3']",
+         features: [app_score, bureau_score, dti, utilisation, digital_share, income_annual, acquisition_channel, product_type],
+         bins: 10, thresholds: [0.10, 0.25], score_higher_is_riskier: false}
+output: {folder: "outputs/{recipe}/{date}_finance_drift_vintage"}

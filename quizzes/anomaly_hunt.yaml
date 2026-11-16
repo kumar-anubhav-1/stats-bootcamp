@@ -1,0 +1,44 @@
+# Anomaly Hunt clue cards. The accepted value is the register's measured value ± tolerance.
+items:
+  - {id: R01, clue: "Some sales lines move stock in the wrong direction — yet they are not flagged as returns.", ask: "how many lines?", tol_abs: 0, hint: "Validity rules: quantity sign vs return flag."}
+  - {id: R02, clue: "A few lines were rung up at a price wildly above the shelf price. A decimal point slipped.", ask: "how many lines?", tol_abs: 0, hint: "Compare unit_price with list_price."}
+  - {id: R03, clue: "The same line appears more than once. Someone loaded part of a file twice.", ask: "duplicated line_ids", tol_abs: 0, hint: "Is line_id unique?"}
+  - {id: R04, clue: "Weather is sometimes missing — but does the gap depend on anything?", ask: "share missing (0-1)", tol_abs: 0.004, hint: "Missingness by region/store/date."}
+  - {id: R05, clue: "Age is missing far more often for one type of customer than another.", ask: "missing rate among non-members (0-1)", tol_abs: 0.01, hint: "Missingness rate by loyalty flag (customers table)."}
+  - {id: R06, clue: "Customers who did not report household size seem to shop differently from those who did.", ask: "lines per basket ratio, missing ÷ known", tol_abs: 0.05, hint: "Compare baskets of customers with and without household_size."}
+  - {id: R07, clue: "A small group of shoppers buys like a business, not a family.", ask: "revenue share of the top 25 customers (0-1)", tol_abs: 0.01, hint: "Concentration: rank customers by revenue (clean errors first)."}
+  - {id: R08, clue: "One store's share of chain sales stepped down and never recovered.", ask: "week of the change", tol_abs: 1, hint: "Change-point on weekly_store share."}
+  - {id: R09, clue: "A store-level experiment hides a real effect — if you analyse at the right unit.", ask: "lift as a fraction (e.g. 0.05)", tol_abs: 0.005, hint: "weekly_store_category, store growth vs own baseline."}
+  - {id: R10, clue: "When the big pack of a shampoo goes on promotion, its little sibling suffers.", ask: "relative change in the small pack's category share (e.g. -0.10)", tol_abs: 0.03, hint: "Lustra Shampoo 200ml vs 400ml in weekly_sku_chain."}
+  - {id: R11, clue: "Shoppers prefer certain days of the week.", ask: "Fri–Sat ÷ Mon–Thu baskets per day", tol_abs: 0.03, hint: "Day-of-week profile of baskets."}
+  - {id: R12, clue: "Empty shelves hide demand. How much demand never became sales? (instructor-verified — ask your facilitator)", ask: "share of demand lost (0-1)", tol_abs: 0.004, hint: "Stockout flags; censored demand."}
+  - {id: R13, clue: "One category is far more price-sensitive than milk and yoghurt.", ask: "Snacks own-price elasticity", tol_abs: 0.3, hint: "price_elasticity_extract, log price with promo/display controls."}
+  - {id: R14, clue: "Promotions look bad for units per line overall — but good in every store format.", ask: "overall relative difference, promo vs non-promo (e.g. -0.10)", tol_abs: 0.03, hint: "Stratify by format."}
+  - {id: R15, clue: "One in-store tactic almost never happens without another, so their effects cannot be separated.", ask: "display rate on promo lines (0-1)", tol_abs: 0.01, hint: "Crosstab promo_flag × display_flag."}
+  - {id: R16, clue: "Snacks look like a growth story — if you only count the products still on the shelf.", ask: "current-range Snacks growth, year 2 vs year 1 (fraction)", tol_abs: 0.02, hint: "Include products_archive."}
+  - {id: R17, clue: "A cluster of customers in two stores returns a startling share of what they buy.", ask: "their return rate (returns ÷ sales lines)", tol_abs: 0.03, hint: "Return rate per customer; who sits far from the rest?"}
+  - {id: R18, clue: "One store's numbers are too round to be true.", ask: "that store's Benford first-digit MAD", tol_abs: 0.008, hint: "Benford by store vs peers; last-digit test."}
+  - {id: R19, clue: "From one week onwards, discount depth for online orders changed scale.", ask: "PSI of discount_pct, online promo lines, before vs after", tol_rel: 0.25, hint: "Compare distributions before/after; what changed?"}
+  - {id: R20, clue: "Loyalty members spend much more per basket. Is the programme responsible?", ask: "naive member uplift in basket value (fraction)", tol_abs: 0.03, hint: "Compare baskets; then think about who joins."}
+  - {id: R21, clue: "Two products are bought together far more often than chance.", ask: "lift of Pasta → Pasta Sauce", tol_abs: 0.15, hint: "Association rules by subcategory."}
+  - {id: R22, clue: "Many SKUs sell nothing in most weeks.", ask: "share of SKUs with ADI > 1.32 (0-1)", tol_abs: 0.01, hint: "Average demand interval per SKU."}
+  - {id: R23, clue: "Shoppers fall into a handful of distinct types. How well does your clustering recover them? (instructor-verified)", ask: "adjusted Rand index vs truth", tol_abs: 0.08, hint: "Customer features, scaled, K-means k=5."}
+  - {id: R24, clue: "A 50/50 online test did not come out 50/50.", ask: "treatment share of users (0-1)", tol_abs: 0.002, hint: "SRM chi-square; split by app_version."}
+  - {id: F01, clue: "Some customers are impossibly young or impossibly old.", ask: "how many impossible ages?", tol_abs: 0, hint: "Validity rules on age."}
+  - {id: F02, clue: "When income is missing, something else is different too.", ask: "default rate ratio, missing ÷ known income", tol_abs: 0.4, hint: "Default rate by income missingness."}
+  - {id: F03, clue: "Bad outcomes are rare — which makes some metrics useless.", ask: "12-month default rate (0-1)", tol_abs: 0.0005, hint: "Base rates."}
+  - {id: F04, clue: "Risk is flat for a while, then climbs steeply with card usage.", ask: "default ratio, util > 90% vs ≤ 50%", tol_abs: 0.6, hint: "Binned default rate by utilisation."}
+  - {id: F05, clue: "Being young is risky; so is high debt-to-income. Together they are worse than the sum.", ask: "interaction odds ratio", tol_abs: 0.3, hint: "Logistic regression with an interaction (age<25 × DTI>0.45)."}
+  - {id: F06, clue: "Two predictors move together so tightly that their coefficients become unstable.", ask: "VIF of income", tol_rel: 0.2, hint: "VIF with income, limit, bureau score, DTI."}
+  - {id: F07, clue: "Some accounts share far more than a household would.", ask: "number of linked groups with ≥ 6 accounts", tol_abs: 0, hint: "Graph of accounts ↔ devices/addresses."}
+  - {id: F08, clue: "Cash deposits pile up just below a round number.", ask: "ratio of deposits 9,000–9,999 to 10,000–10,999", tol_rel: 0.15, hint: "Histogram of cash_deposit_max near 10,000."}
+  - {id: F09, clue: "One branch's transaction amounts do not follow nature's digits.", ask: "that branch's Benford MAD", tol_abs: 0.008, hint: "Benford by branch on txn_amount_3m."}
+  - {id: F10, clue: "A model looks almost perfect — because it can see the future.", ask: "AUC with the leaky fields", tol_abs: 0.015, hint: "Fields recorded after default."}
+  - {id: F11, clue: "Recent applicants do not look like the ones the score was built on.", ask: "PSI of app_score, 2025Q2–Q3 vs 2023", tol_abs: 0.04, hint: "PSI by vintage; channel mix."}
+  - {id: F12, clue: "The score ranks recent customers less well than older ones.", ask: "AUC late minus early vintages", tol_abs: 0.015, hint: "AUC of app_score by vintage group."}
+  - {id: F13, clue: "Most customers have not churned yet — and that matters for 'time to churn'.", ask: "share censored (0-1)", tol_abs: 0.01, hint: "Survival: who has not had the event?"}
+  - {id: F14, clue: "A tiny group holds an outsized share of balances.", ask: "share of balances held by the top 1% (0-1)", tol_abs: 0.01, hint: "Concentration / Lorenz."}
+  - {id: F15, clue: "Approval rates differ by a protected characteristic the model never sees.", ask: "approval rate ratio B ÷ A (incl. declined applications)", tol_abs: 0.02, hint: "Approvals by group; which field is a proxy?"}
+  - {id: F16, clue: "A new collections strategy cures more accounts.", ask: "cure-rate difference, challenger − champion (fraction)", tol_abs: 0.005, hint: "Two-proportion comparison on collections accounts."}
+  - {id: F17, clue: "Claim counts vary more than a Poisson would allow.", ask: "variance ÷ mean of claim counts per policy", tol_abs: 0.05, hint: "Dispersion check on policies/claims."}
+  - {id: F18, clue: "The people we said no to are missing from every performance table.", ask: "booked minus declined mean app_score", tol_abs: 3, hint: "Compare applications_declined with accounts."}

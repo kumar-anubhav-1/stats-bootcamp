@@ -1,0 +1,7 @@
+# L9.6 (R19): online promotional lines before and after week 80 — did discount_pct drift, and why?
+recipe: rcp_drift
+dataset: {name: northstar_transactions, path: data/retail/transactions.parquet}
+columns: {period: week}
+filters: ["channel != 'in-store'", "promo_flag == True", "return_flag == False"]
+params: {reference: "week < 80", current: "week >= 80", features: [discount_pct, unit_price, quantity, category], bins: 10, thresholds: [0.10, 0.25]}
+output: {folder: "outputs/{recipe}/{date}_retail_drift_discount"}

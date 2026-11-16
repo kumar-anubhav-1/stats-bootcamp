@@ -1,0 +1,15 @@
+# Profile the retail transaction lines (Day 0 / L1.2)
+recipe: rcp_profile
+dataset:
+  name: northstar_transactions
+  path: data/retail/transactions.parquet
+  grain: line
+columns:
+  id: line_id
+  date: date
+  target: revenue
+filters: []
+params:
+  max_categories: 15
+output:
+  folder: outputs/{recipe}/{date}_{dataset}

@@ -1,0 +1,41 @@
+{
+  "split": "random stratified: train 17,500, test 7,500",
+  "best_model": "gbm",
+  "n_features": 10,
+  "models": {
+    "logistic": {
+      "auc": 0.979587,
+      "train_auc": 0.977229,
+      "pr_auc": 0.598173,
+      "ks": 0.90375,
+      "brier": 0.023487,
+      "mean_pred": 0.038388,
+      "actual_rate": 0.04,
+      "gini": 0.959173,
+      "precision_at_100": 0.67,
+      "recall_at_100": 0.223333,
+      "precision_at_500": 0.488,
+      "recall_at_500": 0.813333
+    },
+    "gbm": {
+      "auc": 0.985896,
+      "train_auc": 0.994768,
+      "pr_auc": 0.634692,
+      "ks": 0.968333,
+      "brier": 0.017574,
+      "mean_pred": 0.041783,
+      "actual_rate": 0.04,
+      "gini": 0.971792,
+      "precision_at_100": 0.69,
+      "recall_at_100": 0.23,
+      "precision_at_500": 0.57,
+      "recall_at_500": 0.95
+    }
+  },
+  "top_decile_lift": 10.0,
+  "leakage_warnings": 2,
+  "_tolerance": {
+    "rtol": 0.05,
+    "atol": 0.03
+  }
+}

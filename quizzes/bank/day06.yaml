@@ -1,0 +1,2100 @@
+quizzes:
+- id: L6.1-F
+  title: L6.1 Features (Basic → Advanced)
+  lesson: L6.1
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C189
+    prompt: A feature may use information…
+    options:
+    - id: a
+      text: Only up to the observation point (when the prediction is made)
+      correct: true
+      why: Otherwise leakage.
+    - id: b
+      text: From any period
+      why: Leakage.
+    - id: c
+      text: From the outcome window
+      why: Leakage.
+    - id: d
+      text: Only from last week
+      why: Too narrow.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C189
+    prompt: Honest test AUC of the retail repeat-purchase model?
+    answer: "{{ a.d6_r_auc_logit }}"
+    tolerance_abs: 0.03
+    explanation: No signal.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C189
+    prompt: AUC when features are computed over weeks 1–104?
+    answer: "{{ a.d6_r_auc_leaky }}"
+    tolerance_abs: 0.01
+    explanation: Temporal leakage.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C189
+    prompt: Why does recency at week 104 leak?
+    options:
+    - id: a
+      text: It reveals whether the customer shopped after week 78 — the target
+      correct: true
+      why: Outcome-window data.
+    - id: b
+      text: It's correlated with revenue
+      why: Not the issue.
+    - id: c
+      text: It's skewed
+      why: No.
+    - id: d
+      text: It doesn't
+      why: It does.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C189
+    prompt: AUC gain from adding months 1–3 behaviour to the GBM default model?
+    answer: "{{ a.d6_beh_gain }}"
+    tolerance_abs: 0.008
+    explanation: Legitimate signal.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C189
+    prompt: Income missing is associated with higher default (F02). Best handling?
+    options:
+    - id: a
+      text: Impute and add a missing-indicator feature
+      correct: true
+      why: Missingness is informative.
+    - id: b
+      text: Drop missing rows
+      why: Loses signal and biases.
+    - id: c
+      text: Fill with 0
+      why: Distorts.
+    - id: d
+      text: Ignore
+      why: No.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C190
+    prompt: Embedded feature selection means…
+    options:
+    - id: a
+      text: Selection happens during model fitting (lasso, tree importance)
+      correct: true
+      why: Built into training.
+    - id: b
+      text: Univariate tests
+      why: Filter.
+    - id: c
+      text: Trying subsets
+      why: Wrapper.
+    - id: d
+      text: Manual choice
+      why: No.
+  - id: q8
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C189
+    prompt: 'True or false: ''no signal'' is a failed project.'
+    options:
+    - id: a
+      text: False — it is a valid finding that prevents wasted targeting
+      correct: true
+      why: Evidence either way.
+    - id: b
+      text: 'True'
+      why: No.
+    - id: c
+      text: True unless AUC > 0.7
+      why: No.
+- id: L6.1-L
+  title: L6.1 Feature governance (Leader)
+  lesson: L6.1
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C189
+    prompt: A CRM model scores AUC 0.99. First action?
+    options:
+    - id: a
+      text: Leakage audit — draw each feature's window vs the observation point
+      correct: true
+      why: Too good to be true.
+    - id: b
+      text: Deploy
+      why: No.
+    - id: c
+      text: Tune further
+      why: No.
+    - id: d
+      text: Present to board
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C189
+    prompt: A feature specification must include…
+    options:
+    - id: a
+      text: Definition, time window, source/owner, missing handling, leakage check
+      correct: true
+      why: Reviewable and production-ready.
+    - id: b
+      text: Only the name
+      why: No.
+    - id: c
+      text: Its importance
+      why: Insufficient.
+    - id: d
+      text: The SQL only
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C189
+    prompt: Tell CRM what the honest repeat-purchase result means for them.
+    model: Past shopping patterns don't tell us who will come back next half-year (AUC ≈ 0.5), so targeting 'likely returners' from history wouldn't beat random selection. Spend the budget on testing offers (A/B) or on signals we don't yet capture.
+    rubric: 'Full: no signal + implication + alternative. Partial: one.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C189
+    prompt: Behavioural features at month 3 are legitimate because…
+    options:
+    - id: a
+      text: They are known at the observation point (month 3) and precede the outcome window
+      correct: true
+      why: Timeline.
+    - id: b
+      text: They improve AUC
+      why: Leaky ones do too.
+    - id: c
+      text: They are numeric
+      why: No.
+    - id: d
+      text: Regulators like them
+      why: Not the reason.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C190
+    prompt: '500 candidate features: main governance risk?'
+    options:
+    - id: a
+      text: Leakage, unstable sources and monitoring burden
+      correct: true
+      why: Operational.
+    - id: b
+      text: Too much accuracy
+      why: No.
+    - id: c
+      text: None
+      why: No.
+    - id: d
+      text: Storage
+      why: Minor.
+- id: L6.2-F
+  title: L6.2 Trees and ensembles (Basic → Advanced)
+  lesson: L6.2
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C191
+    prompt: Train AUC of the unrestricted decision tree?
+    answer: "{{ a.d6_tree_deep_train_auc }}"
+    tolerance_abs: 0.01
+    explanation: "Test {{ a.d6_models.tree_deep.auc }}."
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C192
+    prompt: A random forest reduces overfitting by…
+    options:
+    - id: a
+      text: Averaging many trees on bootstrap samples with random feature subsets
+      correct: true
+      why: Bagging.
+    - id: b
+      text: Using one deep tree
+      why: No.
+    - id: c
+      text: Sequential correction
+      why: Boosting.
+    - id: d
+      text: Removing features
+      why: No.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C193
+    prompt: Gradient boosting builds…
+    options:
+    - id: a
+      text: Small trees sequentially, each correcting current errors
+      correct: true
+      why: Boosting.
+    - id: b
+      text: Independent deep trees
+      why: Forest.
+    - id: c
+      text: A single linear model
+      why: No.
+    - id: d
+      text: Clusters
+      why: No.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C193
+    prompt: GBM test AUC minus logistic test AUC?
+    answer: "{{ a.d6_gbm_gain }}"
+    tolerance_abs: 0.01
+    explanation: No gain here.
+  - id: q5
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C193
+    prompt: Why doesn't GBM beat logistic on this credit data?
+    options:
+    - id: a
+      text: Signal is mostly additive and monotone; engineered terms capture the rest
+      correct: true
+      why: Logistic + 3 terms ≈ GBM.
+    - id: b
+      text: GBM is broken
+      why: No.
+    - id: c
+      text: Too little data
+      why: 17,500 rows.
+    - id: d
+      text: Wrong metric
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C193
+    prompt: When does boosting typically win?
+    options:
+    - id: a
+      text: Many weak features, unengineered interactions, large data
+      correct: true
+      why: Complex signal.
+    - id: b
+      text: Small clean data
+      why: Logistic fine.
+    - id: c
+      text: When explanations are needed
+      why: Harder.
+    - id: d
+      text: Always
+      why: No.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C191
+    prompt: A depth-4 tree is useful for…
+    options:
+    - id: a
+      text: Readable segmentation rules
+      correct: true
+      why: Interpretability.
+    - id: b
+      text: Best accuracy
+      why: Usually not.
+    - id: c
+      text: Text
+      why: No.
+    - id: d
+      text: Forecasting
+      why: No.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C201
+    prompt: "GBM train AUC {{ a.d6_gbm_train_auc }}, test {{ a.d6_models.gbm.auc }}. This gap indicates…"
+    options:
+    - id: a
+      text: Some overfitting
+      correct: true
+      why: Gap > 0.05.
+    - id: b
+      text: Underfitting
+      why: No.
+    - id: c
+      text: Leakage
+      why: Leakage shows high test AUC.
+    - id: d
+      text: Nothing
+      why: No.
+- id: L6.2-L
+  title: L6.2 Model choice (Leader)
+  lesson: L6.2
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C193
+    prompt: The team proposes replacing the logistic scorecard with GBM. Your requirement?
+    options:
+    - id: a
+      text: Same out-of-time test, money impact, explainability and monitoring plan
+      correct: true
+      why: Complete case.
+    - id: b
+      text: Higher train AUC
+      why: No.
+    - id: c
+      text: Vendor endorsement
+      why: No.
+    - id: d
+      text: None
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C193
+    prompt: Running costs of a GBM vs logistic include…
+    options:
+    - id: a
+      text: Explainability tooling, validation effort, retraining, monitoring
+      correct: true
+      why: Total cost.
+    - id: b
+      text: None
+      why: No.
+    - id: c
+      text: Only compute
+      why: No.
+    - id: d
+      text: Licence fees only
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C193
+    prompt: Write the recommendation on the GBM proposal for the credit committee.
+    model: "Keep the logistic model. On the same test data GBM is no better (AUC {{ a.d6_models.gbm.auc }} vs {{ a.d6_models.logistic.auc }}) and degrades more out of time ({{ a.d6_oot_gbm_auc }} vs {{ a.d6_oot_logistic_auc }}), while adding explainability and monitoring costs. Run GBM as a monitored challenger and revisit when new data sources are added."
+    rubric: 'Full: numbers + OOT + costs + challenger. Partial: 2.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C193
+    prompt: A small AUC gain might still be worth it when…
+    options:
+    - id: a
+      text: The portfolio is large and the gain translates into material losses avoided
+      correct: true
+      why: Money.
+    - id: b
+      text: Never
+      why: Can be.
+    - id: c
+      text: It is statistically significant
+      why: Not enough.
+    - id: d
+      text: The model is new
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C191
+    prompt: Deep trees are acceptable when…
+    options:
+    - id: a
+      text: Inside an ensemble (forest) — not alone
+      correct: true
+      why: Averaging.
+    - id: b
+      text: Always
+      why: Overfit.
+    - id: c
+      text: For transparency
+      why: Unreadable.
+    - id: d
+      text: Never
+      why: In forests yes.
+- id: L6.3-F
+  title: L6.3 Other learners (Basic → Advanced)
+  lesson: L6.3
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C194
+    prompt: An SVM looks for…
+    options:
+    - id: a
+      text: The boundary with the widest margin
+      correct: true
+      why: Max-margin.
+    - id: b
+      text: Nearest neighbours
+      why: KNN.
+    - id: c
+      text: Independent likelihoods
+      why: NB.
+    - id: d
+      text: Tree splits
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C195
+    prompt: KNN requires…
+    options:
+    - id: a
+      text: Scaled features and a distance metric
+      correct: true
+      why: Distances.
+    - id: b
+      text: No preprocessing
+      why: Scaling essential.
+    - id: c
+      text: Labels at prediction
+      why: No.
+    - id: d
+      text: Trees
+      why: No.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C196
+    prompt: Naive Bayes is a strong baseline for…
+    options:
+    - id: a
+      text: Short text classification
+      correct: true
+      why: Fast, works with word counts.
+    - id: b
+      text: Calibrated PDs
+      why: Poor calibration.
+    - id: c
+      text: Forecasting
+      why: No.
+    - id: d
+      text: Images
+      why: No.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C194
+    prompt: SVM test AUC in the bake-off?
+    answer: "{{ a.d6_bake.svm_rbf.auc }}"
+    tolerance_abs: 0.03
+    explanation: "Logistic {{ a.d6_bake.logistic.auc }}."
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C196
+    prompt: Naive Bayes Brier score?
+    answer: "{{ a.d6_bake.naive_bayes.brier }}"
+    tolerance_abs: 0.01
+    explanation: Poorly calibrated.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C197
+    prompt: Stacking helps most when base models are…
+    options:
+    - id: a
+      text: Good and different
+      correct: true
+      why: Complementary errors.
+    - id: b
+      text: Identical
+      why: No gain.
+    - id: c
+      text: Weak and similar
+      why: No.
+    - id: d
+      text: Untrained
+      why: No.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C197
+    prompt: "Averaging three models' ranks scored {{ a.d6_bake.average_of_3_ranks.auc }} vs logistic {{ a.d6_bake.logistic.auc }}. Lesson?"
+    options:
+    - id: a
+      text: Ensembles don't help when one model dominates
+      correct: true
+      why: Diminishing returns.
+    - id: b
+      text: Always ensemble
+      why: No.
+    - id: c
+      text: Logistic is wrong
+      why: No.
+    - id: d
+      text: Bug
+      why: No.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C194
+    prompt: Fair bake-off requirement?
+    options:
+    - id: a
+      text: Same features, same split, same metrics
+      correct: true
+      why: Comparability.
+    - id: b
+      text: Each model its own test set
+      why: Unfair.
+    - id: c
+      text: Vendor's data
+      why: No.
+    - id: d
+      text: Training AUC
+      why: No.
+- id: L6.3-L
+  title: L6.3 Vendor claims (Leader)
+  lesson: L6.3
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C194
+    prompt: A vendor says their SVM is '95% accurate'. Response?
+    options:
+    - id: a
+      text: Ask for AUC/PR-AUC on our data and split vs our baseline
+      correct: true
+      why: Accuracy meaningless at 4%.
+    - id: b
+      text: Buy
+      why: No.
+    - id: c
+      text: Ask for 99%
+      why: No.
+    - id: d
+      text: Ignore
+      why: Test it.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C197
+    prompt: An ensemble of 12 models adds 0.002 AUC. Decision?
+    options:
+    - id: a
+      text: Usually not worth the complexity
+      correct: true
+      why: Diminishing returns.
+    - id: b
+      text: Always deploy
+      why: No.
+    - id: c
+      text: Add more models
+      why: No.
+    - id: d
+      text: Depends on colour
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C195
+    prompt: Where would KNN or embeddings beat GBM in your organisation?
+    model: Similarity problems — 'customers like this', product recommendations, matching complaints to past resolved cases, retrieval for RAG — where the question is 'what is close to this?' rather than predicting a label from tabular features.
+    rubric: 'Full: similarity framing + 2 examples. Partial: 1 example.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C196
+    prompt: Naive Bayes probabilities should be…
+    options:
+    - id: a
+      text: Recalibrated before use as probabilities
+      correct: true
+      why: Poor calibration.
+    - id: b
+      text: Used directly
+      why: No.
+    - id: c
+      text: Ignored
+      why: Ranking may be useful.
+    - id: d
+      text: Squared
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C194
+    prompt: Your vendor-evaluation protocol must fix…
+    options:
+    - id: a
+      text: Data, split, metrics, baseline and acceptance thresholds in advance
+      correct: true
+      why: Pre-registration for models.
+    - id: b
+      text: Only the price
+      why: No.
+    - id: c
+      text: Nothing
+      why: No.
+    - id: d
+      text: The vendor's slides
+      why: No.
+- id: L6.4-F
+  title: L6.4 Validation and leakage (Basic → Advanced)
+  lesson: L6.4
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C202
+    prompt: Test AUC with collections_flag and recovery_amount added?
+    answer: "{{ a.d6_leak_gbm_auc }}"
+    tolerance_abs: 0.01
+    explanation: Leakage.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C202
+    prompt: recovery_amount leaks because…
+    options:
+    - id: a
+      text: It is recorded only after charge-off — after the outcome
+      correct: true
+      why: Post-outcome.
+    - id: b
+      text: It's large
+      why: No.
+    - id: c
+      text: It's skewed
+      why: No.
+    - id: d
+      text: It's missing
+      why: No.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C203
+    prompt: Preprocessing leakage is prevented by…
+    options:
+    - id: a
+      text: Fitting scalers/imputers inside a pipeline on training folds only
+      correct: true
+      why: No test information.
+    - id: b
+      text: Scaling all data first
+      why: Leaks.
+    - id: c
+      text: No scaling
+      why: Not always possible.
+    - id: d
+      text: Bigger test set
+      why: No.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C198
+    prompt: Out-of-time AUC of the logistic model?
+    answer: "{{ a.d6_oot_logistic_auc }}"
+    tolerance_abs: 0.01
+    explanation: "Random split {{ a.d6_models.logistic.auc }}."
+  - id: q5
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C198
+    prompt: "OOT: predicted {{ a.d6_oot_logistic_pred_pct }}% vs actual {{ a.d6_oot_actual_pct }}%. Diagnosis?"
+    options:
+    - id: a
+      text: Calibration failure — the 2025 population is riskier than training data
+      correct: true
+      why: Drift.
+    - id: b
+      text: Leakage
+      why: No.
+    - id: c
+      text: Overfitting only
+      why: Not the main issue.
+    - id: d
+      text: Random noise
+      why: Too large.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C199
+    prompt: Customers appear in several rows. Cross-validation should be…
+    options:
+    - id: a
+      text: Grouped by customer
+      correct: true
+      why: Avoid group leakage.
+    - id: b
+      text: Shuffled rows
+      why: Leaks.
+    - id: c
+      text: Unstratified
+      why: No.
+    - id: d
+      text: Skipped
+      why: No.
+  - id: q7
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C200
+    prompt: Range of CV AUC across the 4 GBM settings?
+    answer: "{{ a.d6_grid_range }}"
+    tolerance_abs: 0.005
+    explanation: Tuning matters little.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C201
+    prompt: High bias, low variance describes…
+    options:
+    - id: a
+      text: Simple models that may miss structure
+      correct: true
+      why: Underfit risk.
+    - id: b
+      text: Deep trees
+      why: Opposite.
+    - id: c
+      text: Leaky models
+      why: No.
+    - id: d
+      text: All models
+      why: No.
+- id: L6.4-L
+  title: L6.4 Approving models (Leader)
+  lesson: L6.4
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C202
+    prompt: "'Explain why this score is suspicious': AUC {{ a.d6_leak_gbm_auc }} for credit default."
+    options:
+    - id: a
+      text: "Far above norms (0.70–0.85); dominant feature {{ a.d6_leak_top }} is post-outcome"
+      correct: true
+      why: Leakage.
+    - id: b
+      text: Great data
+      why: No.
+    - id: c
+      text: Lucky split
+      why: No.
+    - id: d
+      text: It isn't
+      why: It is.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C198
+    prompt: Which validation is mandatory for a risk model?
+    options:
+    - id: a
+      text: Out-of-time, with calibration
+      correct: true
+      why: Deployment reality.
+    - id: b
+      text: Random split only
+      why: Optimistic.
+    - id: c
+      text: Training fit
+      why: No.
+    - id: d
+      text: None
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C198
+    prompt: What is the business impact of the OOT calibration gap and what do you do?
+    model: "The model predicts ~{{ a.d6_oot_logistic_pred_pct }}% default where ~{{ a.d6_oot_actual_pct }}% occur — provisions and prices based on it would be ~40% too low for new business. Recalibrate on recent vintages (segmenting the partner channel), add monitoring of predicted vs actual by vintage, and review the partner channel's economics."
+    rubric: 'Full: impact + recalibrate + monitor + root cause. Partial: 2.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C200
+    prompt: Team wants a week for hyperparameter tuning. Better use?
+    options:
+    - id: a
+      text: Feature work and out-of-time validation
+      correct: true
+      why: Bigger gains.
+    - id: b
+      text: More tuning
+      why: ±0.01.
+    - id: c
+      text: New algorithm
+      why: Little.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C203
+    prompt: Why are pipelines a control, not just tidy code?
+    options:
+    - id: a
+      text: They guarantee preprocessing is fit only on training data and reproduced identically in production
+      correct: true
+      why: Leakage and consistency.
+    - id: b
+      text: Speed
+      why: No.
+    - id: c
+      text: Style
+      why: No.
+    - id: d
+      text: They aren't
+      why: They are.
+- id: L6.5-F
+  title: L6.5 Imbalance (Basic → Advanced)
+  lesson: L6.5
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 1
+    concepts:
+    - C204
+    prompt: Accuracy (%) of predicting 'no fraud' for everyone?
+    answer: "{{ a.d6_allzero_acc }}"
+    tolerance_abs: 0.1
+    unit: '%'
+    explanation: And zero detection.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C207
+    prompt: Precision (%) in the top 100 for the logistic fraud model?
+    answer: "{{ a.d6_fraud.logistic.prec_at[100] }}"
+    tolerance_abs: 5
+    unit: '%'
+    explanation: "vs {{ a.d6_fraud_rate }}% base."
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C207
+    prompt: Why is PR-AUC much lower than ROC-AUC here?
+    options:
+    - id: a
+      text: PR-AUC is judged against the tiny base rate; ROC-AUC counts the huge true-negative pool
+      correct: true
+      why: Rare events.
+    - id: b
+      text: Bug
+      why: No.
+    - id: c
+      text: Model is bad
+      why: It's useful.
+    - id: d
+      text: Overfitting
+      why: No.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C204
+    prompt: Class weights change…
+    options:
+    - id: a
+      text: Training emphasis and the probability scale, not much the ranking
+      correct: true
+      why: Same precision@k.
+    - id: b
+      text: Ranking dramatically
+      why: Little.
+    - id: c
+      text: Nothing
+      why: Probabilities change.
+    - id: d
+      text: The data
+      why: No.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C204
+    prompt: Accounts flagged at p ≥ 0.5 by the weighted model?
+    answer: "{{ a.d6_fraud.logistic_weighted.flagged_at_05 }}"
+    tolerance_abs: 150
+    explanation: "Unweighted {{ a.d6_fraud.logistic.flagged_at_05 }}."
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C204
+    prompt: SMOTE must be applied…
+    options:
+    - id: a
+      text: Inside each training fold only
+      correct: true
+      why: Otherwise leakage.
+    - id: b
+      text: Before splitting
+      why: Leaks.
+    - id: c
+      text: On test data
+      why: No.
+    - id: d
+      text: Never
+      why: Can be used carefully.
+  - id: q7
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C204
+    prompt: Fraud rate (%) among accounts sharing a device with ≥ 5 others?
+    answer: "{{ a.d6_ring_fraud_rate }}"
+    tolerance_abs: 3
+    unit: '%'
+    explanation: Rings (F07).
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C204
+    prompt: Biggest lever for rare-event models?
+    options:
+    - id: a
+      text: Better features (device, network, velocity)
+      correct: true
+      why: Signal.
+    - id: b
+      text: Oversampling
+      why: Secondary.
+    - id: c
+      text: Bigger forests
+      why: Secondary.
+    - id: d
+      text: Higher threshold
+      why: Decisions only.
+- id: L6.5-L
+  title: L6.5 Fraud operations (Leader)
+  lesson: L6.5
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C207
+    prompt: Fraud team can work 100 cases. Which number do you report?
+    options:
+    - id: a
+      text: Precision and recall at 100
+      correct: true
+      why: Capacity metric.
+    - id: b
+      text: Accuracy
+      why: Meaningless.
+    - id: c
+      text: ROC-AUC only
+      why: Flattering.
+    - id: d
+      text: Training loss
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C204
+    prompt: A weighted model says 40% fraud probability for a customer. Concern?
+    options:
+    - id: a
+      text: Probabilities are inflated by weighting — recalibrate
+      correct: true
+      why: "Mean predicted {{ a.d6_fraud.logistic_weighted.mean_p }}% vs {{ a.d6_fraud_rate }}%."
+    - id: b
+      text: None
+      why: No.
+    - id: c
+      text: Block the customer
+      why: No.
+    - id: d
+      text: Raise to 80%
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C207
+    prompt: Explain the fraud model's value to the head of fraud in two sentences.
+    model: "If investigators work the model's top 100 accounts a month, about {{ a.d6_fraud.logistic.prec_at[100] }}% are fraud versus {{ a.d6_fraud_rate }}% at random, catching ~{{ a.d6_fraud.logistic.recall_at100 }}% of all fraud. Adding device-sharing data, which flags rings where most accounts are fraudulent, should raise that hit rate further."
+    rubric: 'Full: precision + recall at capacity + next step. Partial: one.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C204
+    prompt: Where should investment go first?
+    options:
+    - id: a
+      text: Network/device features
+      correct: true
+      why: Ring signal.
+    - id: b
+      text: More algorithms
+      why: Less.
+    - id: c
+      text: SMOTE
+      why: Less.
+    - id: d
+      text: Bigger thresholds
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C204
+    prompt: Device data raises which governance question?
+    options:
+    - id: a
+      text: Privacy, consent and fair use
+      correct: true
+      why: Sensitive data.
+    - id: b
+      text: None
+      why: No.
+    - id: c
+      text: Storage cost only
+      why: No.
+    - id: d
+      text: Colour scheme
+      why: No.
+- id: L6.6-F
+  title: L6.6 Evaluation (Basic → Advanced)
+  lesson: L6.6
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C206
+    prompt: Gini of the engineered logistic default model?
+    answer: "{{ a.d6_gini }}"
+    tolerance_abs: 0.02
+    explanation: 2·AUC − 1.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C209
+    prompt: Share (%) of defaults captured in the riskiest decile?
+    answer: "{{ a.d6_top_decile_capture }}"
+    tolerance_abs: 2
+    unit: '%'
+    explanation: "Lift {{ a.d6_lift_deciles[0] }}."
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C208
+    prompt: KS is…
+    options:
+    - id: a
+      text: The maximum gap between cumulative bad and good distributions
+      correct: true
+      why: Separation.
+    - id: b
+      text: AUC × 2
+      why: No.
+    - id: c
+      text: A calibration test
+      why: No.
+    - id: d
+      text: Kurtosis
+      why: No.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C211
+    prompt: Cost-optimal PD threshold?
+    answer: "{{ a.d6_thr_best.t }}"
+    tolerance_abs: 0.02
+    explanation: Not 0.5.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C211
+    prompt: With miss cost C_FN and false-alarm cost C_FP, decline when p >…
+    options:
+    - id: a
+      text: C_FP ÷ (C_FP + C_FN)
+      correct: true
+      why: Expected-cost rule.
+    - id: b
+      text: '0.5'
+      why: Only if costs equal.
+    - id: c
+      text: C_FN ÷ C_FP
+      why: No.
+    - id: d
+      text: Base rate
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C210
+    prompt: Brier score measures…
+    options:
+    - id: a
+      text: Mean squared error of predicted probabilities
+      correct: true
+      why: Calibration + sharpness.
+    - id: b
+      text: Ranking
+      why: AUC.
+    - id: c
+      text: Lift
+      why: No.
+    - id: d
+      text: Recall
+      why: No.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C205
+    prompt: Recall is…
+    options:
+    - id: a
+      text: TP ÷ (TP + FN)
+      correct: true
+      why: Share of positives caught.
+    - id: b
+      text: TP ÷ (TP + FP)
+      why: Precision.
+    - id: c
+      text: TN ÷ (TN + FP)
+      why: Specificity.
+    - id: d
+      text: Accuracy
+      why: No.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C210
+    prompt: High AUC implies good calibration?
+    options:
+    - id: a
+      text: No — ranking and calibration are separate
+      correct: true
+      why: OOT example.
+    - id: b
+      text: 'Yes'
+      why: No.
+    - id: c
+      text: Only for logistic
+      why: No.
+    - id: d
+      text: Only above 0.9
+      why: No.
+- id: L6.6-L
+  title: L6.6 Cut-offs (Leader)
+  lesson: L6.6
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C211
+    prompt: Expected cost is nearly flat between PD 0.08 and 0.20. How do you choose?
+    options:
+    - id: a
+      text: Within the band, by risk appetite and growth strategy
+      correct: true
+      why: Economics + strategy.
+    - id: b
+      text: Exactly the minimum
+      why: False precision.
+    - id: c
+      text: '0.5'
+      why: No.
+    - id: d
+      text: Coin toss
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C210
+    prompt: Finance needs PDs for provisions. Key property?
+    options:
+    - id: a
+      text: Calibration
+      correct: true
+      why: Levels matter.
+    - id: b
+      text: AUC
+      why: Ranking only.
+    - id: c
+      text: Lift
+      why: No.
+    - id: d
+      text: F1
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C211
+    prompt: Recommend an approval cut-off in three sentences.
+    model: "Expected cost is lowest around PD {{ a.d6_thr_best.t }} (declining ~{{ a.d6_thr_best.decline_pct }}% of applicants), cutting expected losses from {{ a.d6_thr_cost_none }}m to {{ a.d6_thr_best.cost }}m on the test portfolio. The curve is flat between ~0.08 and 0.20, so choose within that band by appetite. Re-run with recalibrated PDs before applying to the 2025 partner population."
+    rubric: 'Full: number + band + caveat. Partial: 2.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C206
+    prompt: Gini 0.95 for an application scorecard suggests…
+    options:
+    - id: a
+      text: Leakage
+      correct: true
+      why: Implausible.
+    - id: b
+      text: Excellent model
+      why: Too good.
+    - id: c
+      text: Small sample
+      why: Not alone.
+    - id: d
+      text: Normal
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C209
+    prompt: Which chart sells a response model to marketing?
+    options:
+    - id: a
+      text: Gains/lift by decile
+      correct: true
+      why: Campaign depth vs capture.
+    - id: b
+      text: ROC curve
+      why: Abstract.
+    - id: c
+      text: Confusion matrix at 0.5
+      why: No.
+    - id: d
+      text: Residual plot
+      why: No.
+- id: L6.7-F
+  title: L6.7 Explainability (Basic → Advanced)
+  lesson: L6.7
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C213
+    prompt: Permutation importance measures…
+    options:
+    - id: a
+      text: How much performance drops when a feature is shuffled
+      correct: true
+      why: Model reliance.
+    - id: b
+      text: Correlation with target
+      why: No.
+    - id: c
+      text: Split counts
+      why: Impurity.
+    - id: d
+      text: Causality
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C213
+    prompt: Most important feature in the GBM default model?
+    options:
+    - id: a
+      text: bureau_score
+      correct: true
+      why: "{{ a.d6_perm_imp.bureau_score }} AUC drop."
+    - id: b
+      text: age
+      why: No.
+    - id: c
+      text: tenure
+      why: No.
+    - id: d
+      text: online
+      why: No.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C213
+    prompt: Impurity importance is biased toward…
+    options:
+    - id: a
+      text: High-cardinality/continuous features, and it uses training data
+      correct: true
+      why: Prefer permutation.
+    - id: b
+      text: Binary features
+      why: Opposite.
+    - id: c
+      text: Nothing
+      why: Biased.
+    - id: d
+      text: Test data
+      why: Training.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C215
+    prompt: A partial-dependence plot shows…
+    options:
+    - id: a
+      text: Average prediction as one feature varies
+      correct: true
+      why: Global shape.
+    - id: b
+      text: Individual explanations
+      why: ICE/SHAP.
+    - id: c
+      text: Causal effects
+      why: No.
+    - id: d
+      text: Residuals
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C214
+    prompt: SHAP values…
+    options:
+    - id: a
+      text: Split each prediction into additive feature contributions
+      correct: true
+      why: Shapley.
+    - id: b
+      text: Prove causality
+      why: No.
+    - id: c
+      text: Replace validation
+      why: No.
+    - id: d
+      text: Only for linear models
+      why: Any model.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C214
+    prompt: Top reasons for the highest-PD applicant?
+    options:
+    - id: a
+      text: "{{ a.d6_case_reasons | join(', ') }}"
+      correct: true
+      why: Largest contributions.
+    - id: b
+      text: age, tenure, online
+      why: No.
+    - id: c
+      text: None
+      why: No.
+    - id: d
+      text: customer_id
+      why: Never.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C213
+    prompt: Correlated features in importance charts…
+    options:
+    - id: a
+      text: Share or mask each other's importance
+      correct: true
+      why: Shuffling one leaves the other.
+    - id: b
+      text: Double importance
+      why: No.
+    - id: c
+      text: Have no effect
+      why: They do.
+    - id: d
+      text: Must be removed
+      why: Not necessarily.
+  - id: q8
+    type: tf_reason
+    difficulty: 2
+    concepts:
+    - C214
+    prompt: 'True or false: explanations show what causes default.'
+    options:
+    - id: a
+      text: False — they explain the model's predictions
+      correct: true
+      why: Not causal.
+    - id: b
+      text: 'True'
+      why: No.
+    - id: c
+      text: True for SHAP
+      why: No.
+- id: L6.7-L
+  title: L6.7 Explanations for customers and regulators (Leader)
+  lesson: L6.7
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C214
+    prompt: A GBM's adverse-action reasons change between monthly refits. Concern?
+    options:
+    - id: a
+      text: Unstable reasons fail explainability requirements; fix stability or use a scorecard
+      correct: true
+      why: Specific, accurate, stable.
+    - id: b
+      text: Normal
+      why: Not acceptable.
+    - id: c
+      text: Retrain daily
+      why: Worse.
+    - id: d
+      text: Hide reasons
+      why: Non-compliant.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C213
+    prompt: Using explanations as a control means…
+    options:
+    - id: a
+      text: Checking for leakage, proxies and implausible directions
+      correct: true
+      why: Review tool.
+    - id: b
+      text: Decorating reports
+      why: No.
+    - id: c
+      text: Proving causality
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C214
+    prompt: The partner channel appears as a decline reason. What do you check?
+    model: Whether channel is a permissible and meaningful reason (customers can't change it), whether it proxies for a protected characteristic (L9.5), and whether the reason wording is specific and accurate. Consider expressing the underlying risk drivers instead.
+    rubric: 'Full: permissibility + proxy + wording. Partial: 1–2.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C215
+    prompt: PDP shows risk rising steeply above utilisation 0.7. Use?
+    options:
+    - id: a
+      text: Inform limit-management and collections triggers
+      correct: true
+      why: Shape informs policy.
+    - id: b
+      text: Prove utilisation causes default
+      why: No.
+    - id: c
+      text: Remove utilisation
+      why: No.
+    - id: d
+      text: Nothing
+      why: Useful.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C214
+    prompt: Explaining a leaky model gives…
+    options:
+    - id: a
+      text: Faithful explanations of a useless model
+      correct: true
+      why: Garbage in.
+    - id: b
+      text: A fix
+      why: No.
+    - id: c
+      text: Causal insight
+      why: No.
+    - id: d
+      text: Regulatory approval
+      why: No.
+- id: L6.8-F
+  title: L6.8 The ML ladder (Basic → Advanced)
+  lesson: L6.8
+  track: F
+  questions:
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: Which algorithm predicts from the k most similar past cases?
+    options:
+    - id: a
+      text: K-nearest neighbours
+      correct: true
+      why: KNN = similarity.
+    - id: b
+      text: Naive Bayes
+      why: Uses likelihoods.
+    - id: c
+      text: PCA
+      why: Unsupervised compression.
+    - id: d
+      text: Gradient boosting
+      why: Sequential trees.
+    concepts: &id001
+    - C190
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: Naive Bayes is fast and useful for routing complaints because it…
+    options:
+    - id: a
+      text: Multiplies per-word likelihoods assuming independence
+      correct: true
+      why: Simple, fast text classifier.
+    - id: b
+      text: Builds deep trees
+      why: No.
+    - id: c
+      text: Learns attention weights
+      why: That's a transformer.
+    - id: d
+      text: Finds clusters
+      why: That's k-means.
+    concepts: *id001
+  - id: t3
+    type: mcq
+    difficulty: 2
+    prompt: 'Random forest vs gradient boosting:'
+    options:
+    - id: a
+      text: Forest averages independent trees; boosting adds trees that fix earlier errors
+      correct: true
+      why: Bagging vs boosting.
+    - id: b
+      text: They are the same
+      why: Different ensembles.
+    - id: c
+      text: Boosting uses one tree
+      why: Many.
+    - id: d
+      text: Forest is unsupervised
+      why: Supervised.
+    concepts: *id001
+  - id: t4
+    type: numeric
+    difficulty: 2
+    prompt: Test AUC of the logistic model in the credit bake-off?
+    answer: "{{ a.d6l_credit['Logistic regression'].auc }}"
+    tolerance_abs: 0.01
+    explanation: Ties or beats the complex models.
+    concepts: *id001
+  - id: t5
+    type: mcq
+    difficulty: 2
+    prompt: Why were KNN and SVM trained on fewer rows?
+    options:
+    - id: a
+      text: They slow down sharply as the number of rows grows
+      correct: true
+      why: A real scalability cost.
+    - id: b
+      text: Bug
+      why: Deliberate.
+    - id: c
+      text: They need fewer rows to be accurate
+      why: No.
+    - id: d
+      text: Regulation
+      why: No.
+    concepts: *id001
+  - id: t6
+    type: mcq
+    difficulty: 2
+    prompt: Which pair are unsupervised?
+    options:
+    - id: a
+      text: K-means and PCA
+      correct: true
+      why: No target variable.
+    - id: b
+      text: Logistic and SVM
+      why: Supervised.
+    - id: c
+      text: Random forest and GBM
+      why: Supervised.
+    - id: d
+      text: Transformer and KNN
+      why: No.
+    concepts: *id001
+  - id: t7
+    type: mcq
+    difficulty: 2
+    prompt: Diffusion models are used to…
+    options:
+    - id: a
+      text: Generate images or synthetic data by reversing a noising process
+      correct: true
+      why: Generative top of the ladder.
+    - id: b
+      text: Forecast demand
+      why: Not their purpose.
+    - id: c
+      text: Score credit risk
+      why: No.
+    - id: d
+      text: Cluster customers
+      why: No.
+    concepts: *id001
+  - id: t8
+    type: mcq
+    difficulty: 2
+    prompt: Every learner beat 'same week last year' on Beverages demand. What does that tell you?
+    options:
+    - id: a
+      text: The features carry real predictive signal
+      correct: true
+      why: Beat naive first, then compare.
+    - id: b
+      text: Seasonal naive is broken
+      why: It's a benchmark.
+    - id: c
+      text: Use the most complex model
+      why: Gain over linear is small.
+    - id: d
+      text: Nothing
+      why: It's the key sanity check.
+    concepts: *id001
+- id: L6.8-L
+  title: L6.8 Choosing the rung (Leader)
+  lesson: L6.8
+  track: L
+  questions:
+  - id: t1
+    type: mcq
+    difficulty: 2
+    prompt: The data-science team wants an MLP for default because 'AI is better'. Your first ask?
+    options:
+    - id: a
+      text: The same-split bake-off table including logistic and a business metric
+      correct: true
+      why: Evidence before complexity.
+    - id: b
+      text: Approve
+      why: No evidence.
+    - id: c
+      text: Ask for more layers
+      why: No.
+    - id: d
+      text: Ask for a demo
+      why: Demos aren't evidence.
+    concepts: &id002
+    - C282
+  - id: t2
+    type: mcq
+    difficulty: 2
+    prompt: "The best demand model beats linear regression by {{ a.d6l_demand_gain_vs_linear }}%. Decision?"
+    options:
+    - id: a
+      text: Adopt only if that accuracy saves more than the cost of running and explaining it
+      correct: true
+      why: Translate accuracy into money.
+    - id: b
+      text: Always adopt the best
+      why: Ignores cost.
+    - id: c
+      text: Never change
+      why: Too rigid.
+    - id: d
+      text: Use both at random
+      why: No.
+    concepts: *id002
+  - id: t3
+    type: mcq
+    difficulty: 2
+    prompt: Where is a transformer the right rung?
+    options:
+    - id: a
+      text: Reading complaint text or summarising reviews
+      correct: true
+      why: Text and sequences.
+    - id: b
+      text: Credit scorecard
+      why: Tabular and regulated.
+    - id: c
+      text: Safety stock
+      why: Formula.
+    - id: d
+      text: Store A/B test
+      why: Statistics.
+    concepts: *id002
+  - id: t4
+    type: open
+    difficulty: 3
+    prompt: Explain the ML ladder to a board member in two sentences.
+    model: Algorithms range from simple, explainable ones (linear, logistic, trees) to powerful, opaque ones (boosting, neural networks, transformers, diffusion). We start simple and only climb when a fair test shows a material, explainable gain.
+    rubric: 'Full: ladder + climbing rule. Partial: one.'
+    concepts: *id002
+  - id: t5
+    type: mcq
+    difficulty: 2
+    prompt: Which proposal most needs explainability?
+    options:
+    - id: a
+      text: Automated credit declines
+      correct: true
+      why: Adverse-action reasons are required.
+    - id: b
+      text: Product image tagging
+      why: Lower stakes.
+    - id: c
+      text: Review summaries for staff
+      why: Lower stakes.
+    - id: d
+      text: Demand forecasts
+      why: Lower stakes.
+    concepts: *id002
+- id: D6-GATE
+  title: Day 6 gate (pass 75%)
+  lesson: D6
+  track: Mixed
+  pass_mark: 75
+  questions:
+  - id: g01
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C189
+    prompt: Features must be available…
+    options:
+    - id: a
+      text: At the observation point
+      correct: true
+      why: No leakage.
+    - id: b
+      text: At any time
+      why: No.
+    - id: c
+      text: After the outcome
+      why: Leakage.
+    - id: d
+      text: Only in training
+      why: Must exist in production.
+  - id: g02
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C193
+    prompt: On well-engineered credit data GBM vs logistic…
+    options:
+    - id: a
+      text: Often similar — always compare
+      correct: true
+      why: Baseline.
+    - id: b
+      text: GBM always wins
+      why: No.
+    - id: c
+      text: Logistic always wins
+      why: No.
+    - id: d
+      text: Can't compare
+      why: Can.
+  - id: g03
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C202
+    prompt: AUC 0.98 for credit default →
+    options:
+    - id: a
+      text: Suspect leakage
+      correct: true
+      why: Above norms.
+    - id: b
+      text: Deploy
+      why: No.
+    - id: c
+      text: Tune
+      why: No.
+    - id: d
+      text: Normal
+      why: No.
+  - id: g04
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C198
+    prompt: Risk models must be validated…
+    options:
+    - id: a
+      text: Out of time, including calibration
+      correct: true
+      why: Deployment.
+    - id: b
+      text: On training data
+      why: No.
+    - id: c
+      text: Random split only
+      why: No.
+    - id: d
+      text: By the vendor
+      why: No.
+  - id: g05
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C204
+    prompt: For a 0.7% event rate, report…
+    options:
+    - id: a
+      text: PR-AUC and precision@capacity
+      correct: true
+      why: Rare events.
+    - id: b
+      text: Accuracy
+      why: No.
+    - id: c
+      text: R²
+      why: No.
+    - id: d
+      text: F-test
+      why: No.
+  - id: g06
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C204
+    prompt: Class weights mainly change…
+    options:
+    - id: a
+      text: Probabilities (inflated), less the ranking
+      correct: true
+      why: Recalibrate.
+    - id: b
+      text: The data
+      why: No.
+    - id: c
+      text: Nothing
+      why: No.
+    - id: d
+      text: AUC massively
+      why: No.
+  - id: g07
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C211
+    prompt: Threshold should come from…
+    options:
+    - id: a
+      text: Costs or capacity
+      correct: true
+      why: Economics.
+    - id: b
+      text: '0.5'
+      why: No.
+    - id: c
+      text: Base rate
+      why: No.
+    - id: d
+      text: AUC
+      why: No.
+  - id: g08
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C210
+    prompt: Calibration answers…
+    options:
+    - id: a
+      text: Do predicted probabilities match observed rates?
+      correct: true
+      why: Levels.
+    - id: b
+      text: Does the model rank well?
+      why: AUC.
+    - id: c
+      text: Is it causal?
+      why: No.
+    - id: d
+      text: Is it fast?
+      why: No.
+  - id: g09
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C209
+    prompt: Lift of 4.7 in the top decile means…
+    options:
+    - id: a
+      text: Event rate there is 4.7× the average
+      correct: true
+      why: Lift.
+    - id: b
+      text: 47% captured
+      why: That's capture.
+    - id: c
+      text: AUC 0.47
+      why: No.
+    - id: d
+      text: 4.7% events
+      why: No.
+  - id: g10
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C213
+    prompt: Prefer which importance?
+    options:
+    - id: a
+      text: Permutation on held-out data
+      correct: true
+      why: Unbiased.
+    - id: b
+      text: Impurity on training data
+      why: Biased.
+    - id: c
+      text: Coefficient size unscaled
+      why: Scale-dependent.
+    - id: d
+      text: Alphabetical
+      why: No.
+  - id: g11
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C203
+    prompt: Scaling before splitting causes…
+    options:
+    - id: a
+      text: Preprocessing leakage
+      correct: true
+      why: Test info in training.
+    - id: b
+      text: Nothing
+      why: Leaks.
+    - id: c
+      text: Underfitting
+      why: No.
+    - id: d
+      text: Faster training
+      why: Irrelevant.
+  - id: g12
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C214
+    prompt: SHAP explanations are…
+    options:
+    - id: a
+      text: Explanations of the model, not causes
+      correct: true
+      why: Model-level.
+    - id: b
+      text: Causal effects
+      why: No.
+    - id: c
+      text: Validation results
+      why: No.
+    - id: d
+      text: Only global
+      why: Local too.

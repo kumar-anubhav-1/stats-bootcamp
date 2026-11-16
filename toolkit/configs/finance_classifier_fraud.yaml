@@ -1,0 +1,9 @@
+# L6.5: fraud (0.7%) — precision at investigator capacity, PR-AUC, class weights. Shared-device counts come from a join.
+recipe: rcp_classifier
+dataset:
+  name: meridian_accounts
+  path: data/finance/accounts.parquet
+columns: {target: fraud_flag, features: [inquiries_6m, tenure_months_with_bank, acquisition_channel, digital_share, bureau_score]}
+filters: []
+params: {split: random, test_size: 0.4, models: [logistic, gbm], class_weight: none, capacity_k: [50, 100, 200], seed: 1}
+output: {folder: "outputs/{recipe}/{date}_finance_classifier_fraud"}

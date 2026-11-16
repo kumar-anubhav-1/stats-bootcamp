@@ -1,0 +1,41 @@
+{
+  "split": "out-of-time: train `vintage` \u2264 2024Q4 (17,457), test > 2024Q4 (7,543)",
+  "best_model": "logistic",
+  "n_features": 19,
+  "models": {
+    "logistic": {
+      "auc": 0.805727,
+      "train_auc": 0.82327,
+      "pr_auc": 0.226765,
+      "ks": 0.48849,
+      "brier": 0.063658,
+      "mean_pred": 0.042284,
+      "actual_rate": 0.073313,
+      "gini": 0.611454,
+      "precision_at_100": 0.31,
+      "recall_at_100": 0.056058,
+      "precision_at_500": 0.28,
+      "recall_at_500": 0.253165
+    },
+    "gbm": {
+      "auc": 0.784786,
+      "train_auc": 0.895964,
+      "pr_auc": 0.197108,
+      "ks": 0.450287,
+      "brier": 0.065366,
+      "mean_pred": 0.035535,
+      "actual_rate": 0.073313,
+      "gini": 0.569572,
+      "precision_at_100": 0.23,
+      "recall_at_100": 0.041591,
+      "precision_at_500": 0.24,
+      "recall_at_500": 0.216998
+    }
+  },
+  "top_decile_lift": 3.559084,
+  "leakage_warnings": 0,
+  "_tolerance": {
+    "rtol": 0.05,
+    "atol": 0.03
+  }
+}

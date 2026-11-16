@@ -1,0 +1,53 @@
+{
+  "family": "logit",
+  "formula": "default_12m ~ I(bureau_score/50) + dti + income_verified_flag + C(acquisition_channel) + C(product_type)",
+  "n": 25000,
+  "robust": "none",
+  "coefficients": {
+    "C(acquisition_channel)[T.online]": {
+      "coef": -0.05429,
+      "se": 0.082898,
+      "p": 0.512531,
+      "effect": 0.947157
+    },
+    "C(acquisition_channel)[T.partner]": {
+      "coef": 0.98314,
+      "se": 0.085278,
+      "p": 0.0,
+      "effect": 2.672837
+    },
+    "C(product_type)[T.personal_loan]": {
+      "coef": 0.177793,
+      "se": 0.068331,
+      "p": 0.00927,
+      "effect": 1.194578
+    },
+    "I(bureau_score / 50)": {
+      "coef": -0.995847,
+      "se": 0.036174,
+      "p": 0.0,
+      "effect": 0.36941
+    },
+    "dti": {
+      "coef": 1.305838,
+      "se": 0.227897,
+      "p": 0.0,
+      "effect": 3.690781
+    },
+    "income_verified_flag": {
+      "coef": -0.337882,
+      "se": 0.075814,
+      "p": 8e-06,
+      "effect": 0.71328
+    }
+  },
+  "auc": 0.827077,
+  "pseudo_r2": 0.17192,
+  "aic": 6967.563173,
+  "bic": 7024.449591,
+  "event_rate": 0.04,
+  "vif": {
+    "I(bureau_score / 50)": 1.000312,
+    "dti": 1.000312
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "n": 689,
+  "kind": "continuous",
+  "mean": 3440.278999,
+  "var": 12900140.959086,
+  "skew": 2.784891,
+  "q0.9_empirical": 7556.854,
+  "q0.99_empirical": 16343.6096,
+  "fits": {
+    "gamma": {
+      "aic": 12590.709858,
+      "ks_distance": 0.04386,
+      "q0.9_fitted": 7584.137985,
+      "q0.99_fitted": 14516.729185,
+      "delta_aic": 0.0
+    },
+    "weibull": {
+      "aic": 12598.065336,
+      "ks_distance": 0.045739,
+      "q0.9_fitted": 7719.006268,
+      "q0.99_fitted": 14757.609673,
+      "delta_aic": 7.355478
+    },
+    "lognormal": {
+      "aic": 12598.45286,
+      "ks_distance": 0.048405,
+      "q0.9_fitted": 8255.688117,
+      "q0.99_fitted": 24813.859141,
+      "delta_aic": 7.743002
+    },
+    "exponential": {
+      "aic": 12601.478219,
+      "ks_distance": 0.047767,
+      "q0.9_fitted": 7921.535138,
+      "q0.99_fitted": 15843.070276,
+      "delta_aic": 10.768361
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "domain": "retail",
+    "seed": 20261115
+  },
+  "tables": [
+    {
+      "table": "transactions",
+      "rows": 25000,
+      "columns": 38,
+      "hash": "19e47ee6a6f8f834"
+    },
+    {
+      "table": "products",
+      "rows": 390,
+      "columns": 13,
+      "hash": "48f795c8cca0272d"
+    },
+    {
+      "table": "products_archive",
+      "rows": 30,
+      "columns": 13,
+      "hash": "837e93c3e9cfc5b6"
+    },
+    {
+      "table": "stores",
+      "rows": 40,
+      "columns": 7,
+      "hash": "0eac0da91519f3ca"
+    },
+    {
+      "table": "customers",
+      "rows": 1500,
+      "columns": 8,
+      "hash": "6925ca3e851ed91b"
+    },
+    {
+      "table": "calendar",
+      "rows": 728,
+      "columns": 9,
+      "hash": "ca0cd24e14b99ac1"
+    },
+    {
+      "table": "weekly_store",
+      "rows": 4160,
+      "columns": 8,
+      "hash": "c1f2fe706e489d62"
+    },
+    {
+      "table": "weekly_store_category",
+      "rows": 49920,
+      "columns": 8,
+      "hash": "2086633c8f5da915"
+    },
+    {
+      "table": "weekly_region_category",
+      "rows": 4992,
+      "columns": 5,
+      "hash": "511335cd8b621da6"
+    },
+    {
+      "table": "weekly_sku_chain",
+      "rows": 42120,
+      "columns": 9,
+      "hash": "a1f832a26ea8f3e4"
+    },
+    {
+      "table": "price_elasticity_extract",
+      "rows": 26208,
+      "columns": 10,
+      "hash": "389f4098e3671e7d"
+    },
+    {
+      "table": "ecoupon_ab",
+      "rows": 11421,
+      "columns": 8,
+      "hash": "fc9ab7e8f26edbe4"
+    }
+  ]
+}

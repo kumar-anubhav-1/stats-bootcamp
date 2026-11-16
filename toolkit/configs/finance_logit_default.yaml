@@ -1,0 +1,10 @@
+# L5.3: logistic regression of 12-month default — odds ratios with CIs.
+recipe: rcp_regression
+dataset: {name: meridian_accounts, path: data/finance/accounts.parquet}
+columns: {target: default_12m, features: [bureau_score, dti, income_verified_flag, acquisition_channel, product_type]}
+filters: []
+params:
+  family: logit
+  formula: "default_12m ~ I(bureau_score/50) + dti + income_verified_flag + C(acquisition_channel) + C(product_type)"
+  robust: none
+output: {folder: "outputs/{recipe}/{date}_finance_logit_default"}

@@ -1,0 +1,13 @@
+# L4.5: collections champion/challenger readout (F16). Planned split 80/20; guardrail = complaints.
+recipe: rcp_ab_test
+dataset: {name: meridian_accounts, path: data/finance/accounts.parquet}
+columns: {arm: strategy_group, outcome: cured_within_3m}
+filters:
+  - "strategy_group != 'none'"
+params:
+  arms: [challenger, champion]
+  planned_split: {challenger: 0.2, champion: 0.8}
+  segments: [product_type, region]
+  guardrails: [{metric: complaints_12m, direction: higher_is_worse}]
+  practical_threshold: 0.02
+output: {folder: "outputs/{recipe}/{date}_finance_challenger_ab"}

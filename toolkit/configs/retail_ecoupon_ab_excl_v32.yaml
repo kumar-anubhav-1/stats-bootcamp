@@ -1,0 +1,15 @@
+# L4.1: after diagnosing the SRM (control users on app 3.2 who did not convert were not logged), re-read the test
+# without app 3.2. This is a sensitivity analysis — the real fix is to repair logging and re-run.
+recipe: rcp_ab_test
+dataset: {name: northstar_ecoupon_ab, path: data/retail/ecoupon_ab.parquet}
+columns: {arm: assigned_arm, outcome: converted_14d, covariate: pre_period_spend_30d, date: assignment_date}
+filters:
+  - "app_version != '3.2'"
+params:
+  arms: [treatment, control]
+  planned_split: {treatment: 0.5, control: 0.5}
+  segments: [app_version, platform]
+  log_covariate: true
+  guardrails: [{metric: revenue_14d, direction: lower_is_worse}]
+  practical_threshold: 0.01
+output: {folder: "outputs/{recipe}/{date}_retail_ecoupon_ab_excl_v32"}

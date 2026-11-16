@@ -1,0 +1,65 @@
+{
+  "n_reference": 7672,
+  "n_current": 4767,
+  "psi": {
+    "app_score": 0.2695,
+    "bureau_score": 0.1531,
+    "dti": 0.0821,
+    "utilisation": 0.1047,
+    "digital_share": 0.2886,
+    "income_annual": 0.0041,
+    "acquisition_channel": 5.4021,
+    "product_type": 0.0
+  },
+  "bands": {
+    "app_score": "act",
+    "bureau_score": "monitor",
+    "dti": "stable",
+    "utilisation": "monitor",
+    "digital_share": "act",
+    "income_annual": "stable",
+    "acquisition_channel": "act",
+    "product_type": "stable"
+  },
+  "unit_flags": [],
+  "categorical_shares": {
+    "acquisition_channel": {
+      "branch": [
+        0.5464,
+        0.2398
+      ],
+      "online": [
+        0.4536,
+        0.1909
+      ],
+      "partner": [
+        0.0001,
+        0.5693
+      ]
+    },
+    "product_type": {
+      "credit_card": [
+        0.6017,
+        0.5987
+      ],
+      "personal_loan": [
+        0.3983,
+        0.4013
+      ]
+    }
+  },
+  "performance": {
+    "reference": {
+      "auc": 0.8308,
+      "event_rate": 0.0276,
+      "n": 7672
+    },
+    "current": {
+      "auc": 0.7748,
+      "event_rate": 0.0992,
+      "n": 4767
+    },
+    "auc_change": -0.056,
+    "score_psi": 0.2695
+  }
+}

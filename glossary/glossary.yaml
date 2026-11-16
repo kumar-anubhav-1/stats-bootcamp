@@ -1,0 +1,466 @@
+# Glossary (v1: terms used in Day 0 and L3.4 plus core vocabulary; completed with each day in Step 3)
+- {term: Alpha, symbol: "α", plain: "The false-positive rate you accept when declaring a result significant.", use: "Set before a test.", range: "0.05 by convention; 0.01 or lower for high-stakes claims (rule of thumb)", watch: "A convention, not a law.", lessons: [L3.3, L3.4]}
+- {term: Alternative hypothesis, symbol: "H1", plain: "The claim that there is a difference or effect.", use: "Paired with the null hypothesis.", lessons: [L3.3, L3.4]}
+- {term: Anonymisation, plain: "Transforming data so individuals cannot reasonably be re-identified.", use: "Before sharing or analysing outside secure environments.", watch: "Removing names is not enough.", lessons: [L0.5]}
+- {term: Assumption check, plain: "A diagnostic confirming a method's conditions hold (e.g. independence, distribution shape).", use: "Before interpreting any test or model.", lessons: [L0.2, L3.4]}
+- {term: AUC (ROC-AUC), symbol: "AUC", plain: "Probability that a model ranks a random positive above a random negative.", use: "Ranking quality of credit/fraud models.", range: "0.5 random; application scorecards often 0.70–0.85 (rule of thumb)", watch: "Insensitive to calibration and rare-event precision.", lessons: [L6.6]}
+- {term: Base rate, plain: "How common an outcome is before any other information.", use: "Interpreting alerts, accuracy, risk ratios.", range: "Default ~4% and fraud ~0.7% in the course bank data", watch: "Ignoring it causes the base-rate fallacy.", lessons: [L2.1, L3.4]}
+- {term: Benford's law, plain: "In many natural datasets, leading digit 1 appears ~30% of the time, 9 under 5%.", use: "Screening for fabricated figures.", watch: "Needs data spanning several orders of magnitude; compare with peers.", lessons: [L2.6]}
+- {term: Bootstrap, plain: "Estimating uncertainty by resampling your data with replacement many times.", use: "CIs for medians, ratios, small or skewed samples.", watch: "Resample the right unit (stores, not lines).", lessons: [L3.2, L3.4]}
+- {term: Cluster (unit of randomisation), plain: "A group (store, branch) assigned to treatment as a whole.", use: "Store-level tests.", watch: "Analyse at cluster level or account for clustering.", lessons: [L3.4, L4.1]}
+- {term: Cohen's d, symbol: "d", plain: "Difference between means in standard-deviation units.", use: "Comparable effect size across outcomes.", range: "0.2 small, 0.5 medium, 0.8 large (Cohen's rough benchmarks)", watch: "Benchmarks are context-free; judge in business units.", lessons: [L3.4, L3.6]}
+- {term: Confidence interval, symbol: "CI", plain: "Range of effect sizes compatible with the data at a chosen confidence level.", use: "Report with every estimate.", watch: "Not the range containing 95% of individuals.", lessons: [L3.1, L3.4]}
+- {term: Confounder, plain: "A variable that influences both the 'treatment' and the outcome, distorting their apparent relationship.", use: "Observational comparisons.", watch: "Stratify or adjust; better, randomise.", lessons: [L2.4, L3.4, L4.4]}
+- {term: Config (toolkit), plain: "A YAML file mapping a recipe's roles to a dataset's columns, plus filters and parameters.", use: "Reusing recipes without code changes.", lessons: [L0.4]}
+- {term: CUPED, plain: "Variance reduction using a pre-experiment covariate.", use: "Shorter or more sensitive experiments.", watch: "Covariate must be measured before treatment.", lessons: [L4.2]}
+- {term: Data leakage, plain: "Using information in a model or comparison that would not be available at decision time.", use: "Model validation.", watch: "Suspect when performance is too good to be true.", lessons: [L0.2, L6.4]}
+- {term: Data card, plain: "A short document describing a dataset's purpose, origin, contents and limitations.", lessons: [L0.3]}
+- {term: Data dictionary, plain: "Field-by-field description of a table: type, meaning, allowed values, nulls.", lessons: [L0.3]}
+- {term: Design effect, symbol: "DEFF", plain: "Inflation of variance caused by clustering, relative to independent sampling.", use: "Store/branch tests.", range: "1 + (cluster size − 1) × ICC", lessons: [L3.4, L3.6]}
+- {term: Duplicate, plain: "The same record appearing more than once.", use: "Data quality checks.", watch: "Distinguish duplicate keys from legitimate repeats.", lessons: [L0.3, L1.2]}
+- {term: Effect size, plain: "How big a difference or relationship is, in business or standardised units.", use: "Always alongside p-values.", lessons: [L3.4, L3.6]}
+- {term: Expected cell count, plain: "Count a 2×2 table cell would have if there were no association.", use: "Checking validity of chi-square / z-tests.", range: "≥ 5 rule of thumb; else Fisher's exact", lessons: [L3.4, L3.5]}
+- {term: Fisher's exact test, plain: "Exact test of association in a 2×2 table.", use: "Small counts.", lessons: [L3.4, L3.5]}
+- {term: Grain, plain: "What one row of a table represents.", use: "Before any aggregation or join.", watch: "Wrong grain → wrong averages and join explosions.", lessons: [L0.3, L1.1]}
+- {term: Growth index, plain: "A unit's outcome in a test window divided by its own baseline-period average.", use: "Removing size differences between stores.", lessons: [L3.4]}
+- {term: Hedges' g, symbol: "g", plain: "Cohen's d with a small-sample bias correction.", use: "Effect size with small groups.", lessons: [L3.4]}
+- {term: Heavy tail, plain: "More extreme values than a normal distribution would produce.", use: "Spend, balances, claims.", watch: "Means unstable; use medians and robust methods.", lessons: [L1.4, L3.4]}
+- {term: Hypothesis test, plain: "Procedure to judge whether data are compatible with 'no effect'.", lessons: [L3.3, L3.4]}
+- {term: ICC (intra-class correlation), symbol: "ρ", plain: "Share of variation that lies between clusters rather than within them.", use: "Planning and analysing cluster tests.", lessons: [L3.4, L3.6]}
+- {term: Imputation, plain: "Filling in missing values with estimates.", watch: "Can mislead when data are MNAR.", lessons: [L1.3]}
+- {term: k-anonymity, plain: "Every combination of quasi-identifiers is shared by at least k records.", use: "Re-identification risk check.", lessons: [L0.5]}
+- {term: Levene's test, plain: "Test of equal variances across groups.", use: "Informative check; Welch's t does not need equal variances.", lessons: [L3.4, L3.5]}
+- {term: Lift (promotion), plain: "Relative increase in an outcome caused by a promotion versus a baseline/control.", lessons: [L3.4, L8.4]}
+- {term: Mann-Whitney U test, plain: "Rank-based comparison of two independent groups.", use: "Skewed outcomes, small samples.", watch: "Tests 'tends to be larger', not equality of means.", lessons: [L3.4]}
+- {term: MAR (missing at random), plain: "Missingness depends on observed data but not on the missing value itself.", lessons: [L1.3]}
+- {term: MCAR (missing completely at random), plain: "Missingness unrelated to any data.", lessons: [L1.3]}
+- {term: Median, plain: "Middle value when data are sorted.", use: "Typical value for skewed data.", lessons: [L1.4]}
+- {term: MDE (minimum detectable effect), symbol: "MDE", plain: "Smallest true effect a design detects with the chosen power and α.", use: "Planning tests; interpreting null results.", range: "Power 80%, α 0.05 by convention", lessons: [L3.4, L3.6]}
+- {term: MNAR (missing not at random), plain: "Missingness depends on the unobserved value itself.", watch: "Simple imputation biases results; flag and run sensitivity analysis.", lessons: [L1.3]}
+- {term: Null hypothesis, symbol: "H0", plain: "The claim of no difference or no effect that a test tries to reject.", lessons: [L3.3, L3.4]}
+- {term: Odds ratio, symbol: "OR", plain: "Ratio of the odds of an outcome between two groups.", use: "Logistic regression, case-control data.", watch: "Approximates relative risk only when outcomes are rare.", lessons: [L3.4, L5.3]}
+- {term: Output anatomy, plain: "A table explaining every number in an analysis output: meaning, range, good/bad/suspicious values.", lessons: [L3.4]}
+- {term: p-value, symbol: "p", plain: "Probability of data at least this extreme if the null hypothesis were true.", watch: "Not the probability H0 is true; not an effect size.", lessons: [L3.3, L3.4]}
+- {term: Paired test, plain: "Comparison of two measurements on the same units.", use: "Before/after on the same stores or customers.", lessons: [L3.4]}
+- {term: Permutation test, plain: "Builds the null distribution by shuffling group labels.", use: "Minimal-assumption check, small samples.", lessons: [L3.2, L3.4]}
+- {term: Power, symbol: "1 − β", plain: "Probability a test detects a true effect of a given size.", range: "80% conventional target", lessons: [L3.6]}
+- {term: Practical significance, plain: "Whether an effect is big enough to matter for the decision.", use: "Compare the CI with the minimum worthwhile effect.", lessons: [L3.4]}
+- {term: Prompt card, plain: "Weak, better and expert versions of a request to Claude Code, with what to verify.", lessons: [L0.2]}
+- {term: Pseudonymisation, plain: "Replacing identifiers with codes (e.g. salted hashes); reversible with a key.", watch: "Still personal data in most laws.", lessons: [L0.5]}
+- {term: PSI (population stability index), symbol: "PSI", plain: "Measure of shift between two distributions (e.g. score at build vs now).", range: "< 0.10 stable · 0.10–0.25 investigate · > 0.25 significant (rule of thumb)", lessons: [L9.6]}
+- {term: Randomisation, plain: "Assigning units to groups by chance so groups are comparable on average.", lessons: [L3.4, L4.1]}
+- {term: Recipe (toolkit), plain: "A tested, documented, configuration-driven analysis that asks for roles, not column names.", lessons: [L0.4]}
+- {term: Regression check, plain: "Re-running an analysis after a change to confirm original results are unchanged.", lessons: [L0.4]}
+- {term: Relative risk, symbol: "RR", plain: "Ratio of event rates between two groups.", watch: "Always quote with the base rate.", lessons: [L3.4]}
+- {term: Reproducibility, plain: "Getting identical results from the same data, code, config and seed.", lessons: [L0.1, L0.4]}
+- {term: Risk difference, plain: "Difference in event rates, usually in percentage points.", use: "Extra events per 100 or 1,000.", lessons: [L3.4]}
+- {term: Row accounting, plain: "Record of rows in, removed at each step and why, and rows analysed.", lessons: [L0.2, L0.4]}
+- {term: Sample ratio mismatch, symbol: "SRM", plain: "Observed group sizes differ from the planned split by more than chance.", watch: "Signals broken assignment or logging; do not trust the results.", lessons: [L4.1]}
+- {term: Schema check, plain: "Verifying that a dataset has the columns, types and grain a recipe needs.", lessons: [L0.4]}
+- {term: Shapiro-Wilk test, plain: "Test of normality.", watch: "Rejects trivially at large n; look at Q-Q plots.", lessons: [L3.4]}
+- {term: Simpson's paradox, plain: "A trend in aggregated data reverses within subgroups.", lessons: [L2.4]}
+- {term: Skewness, plain: "Asymmetry of a distribution; positive = long right tail.", range: "|skew| > 1 notably skewed (rule of thumb)", lessons: [L1.4]}
+- {term: Standard error, symbol: "SE", plain: "Standard deviation of an estimate across repeated samples.", use: "Builds CIs and test statistics.", lessons: [L2.5, L3.4]}
+- {term: Survivorship bias, plain: "Drawing conclusions only from units that 'survived' a selection process.", lessons: [L2.4]}
+- {term: Two-proportion z-test, plain: "Test comparing two rates.", use: "Default rate, conversion rate.", watch: "Use Fisher if expected cells < 5.", lessons: [L3.4]}
+- {term: Type I error, plain: "Declaring an effect that is not there (false positive).", lessons: [L3.3]}
+- {term: Type II error, plain: "Missing an effect that is there (false negative).", lessons: [L3.3]}
+- {term: Unit of analysis, plain: "The entity each observation in a test represents.", watch: "Must match the unit of randomisation.", lessons: [L3.4]}
+- {term: Validation report, plain: "Row count, schema, grain, coverage, completeness, validity and reconciliation checks for a dataset.", lessons: [L0.3]}
+- {term: Vibe coding, plain: "Doing analysis by instructing an AI assistant in plain English, then verifying its work.", lessons: [L0.2]}
+- {term: Welch's t-test, plain: "Two-sample test of means that does not assume equal variances.", use: "Default two-group test for continuous outcomes.", lessons: [L3.4]}
+# ---- Day 1 additions ----
+- {term: Box-Cox transform, symbol: "λ", plain: "Power transform that makes positive data more symmetric; λ = 0 is the log.", use: "Preparing skewed amounts for models.", watch: "Prefer the log when λ ≈ 0 — easier to explain.", lessons: [L1.6]}
+- {term: Box plot, plain: "Median, IQR box, whiskers and points beyond them.", use: "Comparing many groups.", watch: "Hides bimodality.", lessons: [L1.5]}
+- {term: Coefficient of variation, symbol: "CV", plain: "Standard deviation divided by the mean.", use: "Comparing variability across different scales.", range: "Spend often 0.8–1.5 (rule of thumb)", lessons: [L1.4]}
+- {term: Covariance, plain: "Average joint deviation of two variables from their means, in original units.", watch: "Not comparable across scales — use correlation.", lessons: [L1.7]}
+- {term: Cramér's V, symbol: "V", plain: "Strength of association between two categorical variables (0–1).", range: "0.1 weak, 0.3 moderate, 0.5 strong (rough)", lessons: [L1.7]}
+- {term: Data-quality dimensions, plain: "Completeness, validity, accuracy, consistency, uniqueness, timeliness.", lessons: [L1.2]}
+- {term: ECDF, plain: "Empirical cumulative distribution: share of values at or below each x.", use: "Comparing distributions; reading percentiles.", lessons: [L1.5]}
+- {term: Geometric mean, plain: "exp(mean of logs); the typical value of multiplicative or log-normal data.", lessons: [L1.4]}
+- {term: Gini coefficient, plain: "Concentration measure from the Lorenz curve: 0 equal, 1 maximal concentration.", use: "Revenue or exposure concentration.", lessons: [L1.4]}
+- {term: Histogram, plain: "Counts of values in bins.", watch: "Bin width changes the story; use a log scale for skewed data.", lessons: [L1.5]}
+- {term: Interquartile range, symbol: "IQR", plain: "Q3 minus Q1: the spread of the middle 50%.", use: "Robust spread for skewed data.", lessons: [L1.4]}
+- {term: Join explosion, plain: "Row multiplication caused by joining on a key that is not unique.", watch: "Check row counts before and after every join.", lessons: [L1.1]}
+- {term: Kendall's tau, symbol: "τ", plain: "Rank correlation based on concordant and discordant pairs.", use: "Small samples, many ties.", lessons: [L1.7]}
+- {term: Kurtosis, plain: "Heaviness of a distribution's tails (excess kurtosis: relative to normal).", watch: "High kurtosis → unstable means and SDs.", lessons: [L1.4]}
+- {term: Listwise deletion, plain: "Dropping every row with any missing value in the variables used.", watch: "Silent row loss and bias unless data are MCAR.", lessons: [L1.3]}
+- {term: Log transform, plain: "Taking logarithms to compress a right tail.", use: "Spend, income, balances; coefficients become % effects.", watch: "Cannot handle zeros — report them separately.", lessons: [L1.5, L1.6]}
+- {term: Lorenz curve, plain: "Cumulative share of a total against cumulative share of units, sorted from smallest.", lessons: [L1.4]}
+- {term: MAD (median absolute deviation), symbol: "MAD", plain: "Median of absolute deviations from the median; robust spread.", use: "Robust z-scores (× 1.4826 ≈ SD for normal data).", lessons: [L1.4, L1.6]}
+- {term: Masking, plain: "Extreme values inflating the mean and SD so that a z-score fails to flag them.", lessons: [L1.6]}
+- {term: Mean, symbol: "x̄", plain: "Sum divided by count.", use: "Totals and symmetric data.", watch: "Pulled by extremes.", lessons: [L1.4]}
+- {term: Measurement scale, plain: "Nominal, ordinal, interval or ratio — decides which summaries are meaningful.", lessons: [L1.1]}
+- {term: Mode, plain: "Most frequent value.", use: "Categories.", lessons: [L1.4]}
+- {term: One-hot encoding, plain: "One 0/1 column per category.", use: "Few categories.", lessons: [L1.6]}
+- {term: Pearson correlation, symbol: "r", plain: "Strength of linear association (−1 to 1).", watch: "Sensitive to outliers; misses curves.", lessons: [L1.7]}
+- {term: Percentile, plain: "Value below which a given percentage of observations fall (P90, P99).", lessons: [L1.4]}
+- {term: Point-biserial correlation, plain: "Pearson correlation between a numeric and a binary variable.", watch: "Small for rare outcomes even when risk gradients are steep.", lessons: [L1.7]}
+- {term: Q-Q plot, plain: "Plot of data quantiles against a reference distribution's quantiles.", use: "Checking normality or a fitted distribution.", lessons: [L1.5]}
+- {term: Range, plain: "Maximum minus minimum.", watch: "Determined by two extreme values.", lessons: [L1.4]}
+- {term: Robust z-score, plain: "0.6745 × (x − median) ÷ MAD.", use: "Outlier flagging in skewed data.", range: "|z| > 3.5 common threshold", lessons: [L1.6]}
+- {term: Spearman correlation, symbol: "ρ", plain: "Correlation of ranks; captures monotone relationships.", lessons: [L1.7]}
+- {term: Standard deviation, symbol: "SD, s", plain: "Typical distance from the mean (square root of the variance, n − 1 denominator).", watch: "Misleading for skewed amounts.", lessons: [L1.4]}
+- {term: Standardisation, plain: "Rescaling to mean 0 and SD 1 (z-scores).", use: "Distance-based and penalised methods.", lessons: [L1.6]}
+- {term: Structural missingness, plain: "A field that does not apply to some rows (utilisation for loans).", watch: "Treat as not applicable, not as missing.", lessons: [L1.3]}
+- {term: Target encoding, plain: "Replacing each category with the average outcome for that category.", watch: "Leaks the label unless fitted out-of-fold.", lessons: [L1.6]}
+- {term: Tidy data, plain: "One row per observation, one column per variable, one table per unit type.", lessons: [L1.1]}
+- {term: Trimmed mean, plain: "Mean after removing a fixed share of the smallest and largest values.", lessons: [L1.4]}
+- {term: Tukey fences, plain: "Q1 − k·IQR and Q3 + k·IQR (k = 1.5 or 3).", watch: "k = 1.5 over-flags skewed data.", lessons: [L1.6]}
+- {term: Violin plot, plain: "Box plot combined with a density shape.", lessons: [L1.5]}
+- {term: Winsorising, plain: "Replacing values beyond chosen percentiles with those percentiles.", lessons: [L1.6]}
+# Day 2 terms
+- {term: Conditional probability, symbol: "P(A | B)", plain: "Probability of A among only the cases where B is true.", use: "Default rate given channel; fraud given alert.", watch: "P(A | B) ≠ P(B | A).", lessons: [L2.1]}
+- {term: Independence, plain: "Two events are independent when knowing one does not change the probability of the other: P(A and B) = P(A) × P(B).", use: "Checking whether drivers can be separated.", watch: "Promotions and displays in the course data are strongly dependent.", lessons: [L2.1]}
+- {term: Bayes' rule, plain: "Turns P(evidence | cause) into P(cause | evidence) using the base rate.", use: "Alert precision, diagnostic tests.", range: "P(A|B) = P(B|A)P(A) ÷ P(B)", lessons: [L2.1]}
+- {term: Law of total probability, plain: "An overall rate is the share-weighted average of group rates.", use: "Combining segments; checking mix effects.", lessons: [L2.1]}
+- {term: Odds, plain: "p ÷ (1 − p): chance of an event relative to its absence.", use: "Logistic regression, credit scoring.", watch: "Close to p only when p is small.", lessons: [L2.1, L6.1]}
+- {term: Log-odds, symbol: "logit", plain: "Natural log of the odds; the scale logistic regression is linear on.", lessons: [L2.1, L6.1]}
+- {term: Natural frequencies, plain: "Stating probabilities as counts out of a round number (e.g. per 10,000 accounts).", use: "Explaining alerts and tests to non-specialists.", lessons: [L2.1]}
+- {term: Precision (PPV), symbol: "PPV", plain: "Share of flagged cases that are truly positive.", use: "Alert queues, fraud rules.", watch: "Falls sharply when the base rate is low.", lessons: [L2.1, L6.6]}
+- {term: Expected value, symbol: "E[X]", plain: "Probability-weighted average outcome.", use: "Expected loss, expected P&L.", watch: "Says nothing about downside risk.", lessons: [L2.1, L2.5]}
+- {term: Bernoulli distribution, plain: "A single yes/no trial with success probability p.", lessons: [L2.2]}
+- {term: Binomial distribution, plain: "Number of successes in n independent trials with the same p.", use: "Defaults in a pool, conversions.", range: "mean np, variance np(1 − p)", lessons: [L2.2]}
+- {term: Geometric distribution, plain: "Number of trials until the first success.", range: "mean 1/p", lessons: [L2.2]}
+- {term: Poisson distribution, plain: "Count of events in a fixed window at a constant rate.", use: "Claims, arrivals.", watch: "Variance = mean; real counts are often over-dispersed.", lessons: [L2.2]}
+- {term: Negative binomial distribution, plain: "Count model allowing variance larger than the mean.", use: "Retail demand, claim counts with heterogeneous risk.", lessons: [L2.2, L6.3]}
+- {term: Hypergeometric distribution, plain: "Successes when sampling without replacement from a finite population.", use: "Audit sample sizing.", lessons: [L2.2]}
+- {term: Beta-binomial, plain: "Binomial whose success rate itself varies between groups.", use: "Store or branch rates with extra variation.", lessons: [L2.2]}
+- {term: Dispersion (count data), plain: "Variance divided by mean of a count.", range: "≈ 1 Poisson; > 1 over-dispersed", lessons: [L2.2]}
+- {term: Normal distribution, plain: "Symmetric bell curve described by mean and SD.", range: "~68% within 1 SD, ~95% within 2", watch: "Understates extreme events in most business data.", lessons: [L2.3]}
+- {term: Lognormal distribution, plain: "A variable whose logarithm is normal: positive and right-skewed.", use: "Spend, basket value, income.", lessons: [L2.3]}
+- {term: Gamma distribution, plain: "Flexible positive, right-skewed distribution.", use: "Claim severity, durations.", lessons: [L2.3]}
+- {term: Weibull distribution, plain: "Time-to-event distribution whose hazard can rise, fall or stay constant (shape k).", range: "k < 1 falling risk; k = 1 exponential; k > 1 rising", lessons: [L2.3, L7.4]}
+- {term: Exponential distribution, plain: "Waiting time with a constant hazard.", lessons: [L2.3]}
+- {term: Beta distribution, plain: "Distribution on 0–1, used for rates and proportions.", lessons: [L2.3]}
+- {term: Laplace distribution, plain: "Sharp-peaked, fat-tailed symmetric distribution.", use: "Price changes, returns.", lessons: [L2.3]}
+- {term: Cauchy distribution, plain: "Distribution with tails so heavy it has no mean.", watch: "The law of large numbers fails.", lessons: [L2.3]}
+- {term: t distribution, plain: "Like the normal but heavier-tailed; used when the SD is estimated.", range: "95% critical 2.57 at df 5 vs 1.96 normal", lessons: [L2.3, L3.1]}
+- {term: Chi-square distribution, symbol: "χ²", plain: "Distribution of sums of squared standard normals; basis of count and variance tests.", lessons: [L2.3, L3.5]}
+- {term: F distribution, plain: "Ratio of two variance estimates; basis of ANOVA.", lessons: [L2.3, L3.6]}
+- {term: AIC, plain: "Akaike information criterion: fit penalised by complexity; lower is better.", range: "ΔAIC < 2 tie; > 10 decisive (rule of thumb)", lessons: [L2.3, L5.4]}
+- {term: KS distance, plain: "Largest gap between a fitted and empirical cumulative distribution.", watch: "Insensitive in the far tail; also compare P99.", lessons: [L2.3]}
+- {term: Law of large numbers, symbol: "LLN", plain: "Sample averages approach the true mean as n grows.", watch: "Slow for heavy tails; fails with no mean.", lessons: [L2.5]}
+- {term: Central limit theorem, symbol: "CLT", plain: "Averages of many independent values are approximately normal.", watch: "n ≥ 30 is not enough for very skewed data.", lessons: [L2.5]}
+- {term: Sampling distribution, plain: "Distribution of a statistic across repeated samples.", use: "Basis of standard errors and intervals.", lessons: [L2.5, L3.1]}
+- {term: Monte Carlo simulation, plain: "Repeatedly sampling uncertain inputs to get a distribution of outcomes.", use: "P(loss), risk ranges, capital.", watch: "Fix the seed; model correlations between inputs.", lessons: [L2.5]}
+- {term: Simple random sample, symbol: "SRS", plain: "Every unit has the same chance of selection.", lessons: [L2.4]}
+- {term: Stratified sampling, plain: "Sampling separately within groups (strata).", use: "Guaranteeing small subgroups; reducing variance when strata differ.", lessons: [L2.4]}
+- {term: Cluster sampling, plain: "Sampling whole groups (stores, branches) rather than individuals.", watch: "Larger variance than SRS of the same size.", lessons: [L2.4]}
+- {term: Systematic sampling, plain: "Selecting every k-th unit from an ordered list.", watch: "Biased if the list has a cycle of length k.", lessons: [L2.4]}
+- {term: Convenience sample, plain: "Units that were easy to get rather than randomly chosen.", watch: "Usually biased.", lessons: [L2.4]}
+- {term: Selection bias, plain: "Systematic difference between the units observed and the population of interest.", use: "Booked-only credit data, loyalty members.", lessons: [L2.4]}
+- {term: Benford MAD, plain: "Mean absolute deviation of first-digit shares from Benford's expected shares.", range: "Nigrini first-digit: < 0.006 close; 0.006–0.012 acceptable; 0.012–0.015 marginal; > 0.015 nonconformity", watch: "Expected MAD grows as sample size shrinks; compare with peers.", lessons: [L2.6]}
+- {term: Cosine similarity, plain: "Cosine of the angle between two vectors; direction similarity ignoring length.", range: "−1 to 1", use: "Product affinity, embeddings, RAG retrieval.", lessons: [L2.7]}
+- {term: Eigenvalue, symbol: "λ", plain: "Variance along a principal direction of a correlation matrix.", watch: "Near-zero eigenvalue → collinear predictors.", lessons: [L2.7, L5.2]}
+- {term: Determinant, plain: "Single number summarising a square matrix; zero means singular.", lessons: [L2.7]}
+- {term: Matrix rank, plain: "Number of linearly independent columns.", watch: "Rank-deficient design → coefficients not identifiable.", lessons: [L2.7]}
+- {term: SVD, plain: "Singular value decomposition: factorising a matrix into directions ordered by importance.", use: "PCA, recommendations, compression.", lessons: [L2.7, L8.1]}
+- {term: Projection, plain: "Closest point in a subspace; least squares projects y onto the predictors' columns.", watch: "Residuals are orthogonal to every predictor.", lessons: [L2.7, L5.1]}
+# Day 3 terms
+- {term: Point estimate, plain: "A single best guess of a population value from a sample (e.g. the sample mean).", watch: "Always pair with an interval.", lessons: [L3.1]}
+- {term: Estimator properties, plain: "Unbiased (right on average), consistent (closer as n grows), efficient (small spread), robust (insensitive to outliers).", lessons: [L3.1]}
+- {term: Maximum likelihood, symbol: "MLE", plain: "Choosing parameter values that make the observed data most probable.", use: "Distribution fits, logistic regression.", lessons: [L3.1, L5.3]}
+- {term: Coverage, plain: "How often an interval method actually contains the true value.", watch: "Heavy tails and rare events make '95%' intervals cover less.", lessons: [L3.1]}
+- {term: Wald interval, plain: "Proportion ± 1.96 × √(p(1 − p)/n).", watch: "Fails for rare events and small n (can give 0–0).", lessons: [L3.1]}
+- {term: Wilson interval, plain: "A confidence interval for a proportion with good coverage even for rare events.", use: "Default for rates.", lessons: [L3.1]}
+- {term: Prediction interval, plain: "Range likely to contain a new individual observation — much wider than a CI for the mean.", lessons: [L3.1, L7.3]}
+- {term: Percentile bootstrap, plain: "Bootstrap CI from the 2.5th and 97.5th percentiles of resampled statistics.", lessons: [L3.2]}
+- {term: BCa bootstrap, plain: "Bias-corrected and accelerated bootstrap interval; better for skewed statistics.", lessons: [L3.2]}
+- {term: Cluster bootstrap, plain: "Resampling whole clusters (stores, customers) rather than rows.", use: "Data with repeated rows per unit.", lessons: [L3.2]}
+- {term: Pseudo-replication, plain: "Treating repeated, correlated rows (lines in baskets, months in accounts) as independent observations.", watch: "Gives falsely small p-values and narrow intervals.", lessons: [L3.2, L3.3]}
+- {term: One-sided test, plain: "Test of a difference in one pre-specified direction.", watch: "Choose before seeing data; otherwise it halves the p-value dishonestly.", lessons: [L3.3]}
+- {term: Test statistic, plain: "Number measuring how far the data are from H0, usually in standard-error units.", lessons: [L3.3]}
+- {term: A/A test, plain: "An experiment where both arms receive the same treatment; checks that the platform and analysis give ~5% false positives.", lessons: [L3.3, L4.1]}
+- {term: Statistical significance, plain: "p below the chosen α.", watch: "Says nothing about size or importance.", lessons: [L3.3]}
+- {term: ANOVA, plain: "Analysis of variance: tests whether means differ across three or more groups.", watch: "Assumes equal variances; use Welch ANOVA otherwise.", lessons: [L3.5]}
+- {term: Welch ANOVA, plain: "ANOVA that does not assume equal variances.", use: "Default for comparing means across groups.", lessons: [L3.5]}
+- {term: Kruskal-Wallis test, plain: "Rank-based comparison of three or more groups; robust to skew.", lessons: [L3.5]}
+- {term: Post-hoc test, plain: "Pairwise comparisons after a significant omnibus test, corrected for multiplicity (Tukey HSD, Games-Howell, Dunn).", lessons: [L3.5]}
+- {term: Eta-squared, symbol: "η²", plain: "Share of outcome variation explained by group membership.", range: "0.01 small, 0.06 medium, 0.14 large (rough benchmarks)", lessons: [L3.5, L3.6]}
+- {term: Chi-square test of independence, symbol: "χ²", plain: "Tests whether two categorical variables are associated.", watch: "Expected counts ≥ 5; else Fisher's exact.", lessons: [L3.5]}
+- {term: Standardised residual, plain: "(observed − expected) ÷ √expected for a table cell.", range: "|r| > 2 marks cells that drive an association", lessons: [L3.5]}
+- {term: McNemar's test, plain: "Test for paired binary outcomes using only the units that changed.", use: "Same accounts measured twice.", lessons: [L3.5]}
+- {term: Number needed to treat, symbol: "NNT", plain: "Units that must receive a treatment for one extra success: 1 ÷ risk difference.", lessons: [L3.6]}
+- {term: Cohen's h, symbol: "h", plain: "Effect size for a difference between two proportions (arcsine scale).", lessons: [L3.6]}
+- {term: Post-hoc power, plain: "'Observed power' computed from the observed effect after a test.", watch: "Uninformative — a restatement of the p-value. Report the MDE instead.", lessons: [L3.6]}
+- {term: Family-wise error rate, symbol: "FWER", plain: "Probability of at least one false positive among a family of tests.", lessons: [L3.7]}
+- {term: Bonferroni correction, plain: "Test each of m hypotheses at α/m (or multiply p by m).", watch: "Conservative; Holm is uniformly better.", lessons: [L3.7]}
+- {term: Holm correction, plain: "Step-down version of Bonferroni: same FWER control, more power.", lessons: [L3.5, L3.7]}
+- {term: Benjamini-Hochberg, symbol: "BH", plain: "Procedure controlling the false discovery rate.", use: "Screens of features, segments, KPIs.", lessons: [L3.7]}
+- {term: False discovery rate, symbol: "FDR", plain: "Expected share of false positives among results declared significant.", lessons: [L3.7]}
+- {term: p-hacking, plain: "Trying analyses until something is significant.", lessons: [L3.7]}
+- {term: HARKing, plain: "Hypothesising After the Results are Known — presenting exploratory findings as if predicted.", lessons: [L3.7]}
+- {term: Garden of forking paths, plain: "Many reasonable analysis choices (outcome, subgroup, window, exclusions) that inflate false positives even without intent.", lessons: [L3.7]}
+- {term: Optional stopping, plain: "Stopping a test when results look significant.", watch: "Inflates false positives; use a fixed horizon or alpha spending.", lessons: [L3.7, L4.2]}
+- {term: Pre-registration, plain: "Writing hypothesis, outcome, unit, test, sample size and stopping rule before seeing data.", lessons: [L3.7, L4.1]}
+# Day 4 terms
+- {term: Unit of randomisation, plain: "The entity assigned to treatment or control (user, customer, store, agent team).", watch: "Analyse at this unit.", lessons: [L4.1]}
+- {term: Primary metric, plain: "The single pre-registered outcome that decides a test.", lessons: [L4.1]}
+- {term: Guardrail metric, plain: "A metric that must not get worse (complaints, margin, delinquency); can veto a launch.", lessons: [L4.1, L4.5]}
+- {term: Novelty effect, plain: "Temporary response to something new that fades with exposure.", watch: "Run tests ≥ 2 weeks; plot effect by exposure week.", lessons: [L4.1]}
+- {term: Primacy effect, plain: "Initial resistance to change that fades as users adapt.", lessons: [L4.1]}
+- {term: Interference, plain: "Treatment of one unit affecting another unit's outcome (shared stock, social effects, agents).", watch: "Use cluster randomisation.", lessons: [L4.1]}
+- {term: Contamination, plain: "Control units receiving some of the treatment.", lessons: [L4.1]}
+- {term: Stratified randomisation, plain: "Randomising within strata (format, risk band) so arms are balanced on them.", lessons: [L4.1]}
+- {term: Standardised mean difference, symbol: "SMD", plain: "Difference in group means divided by the pooled SD; used to check balance.", range: "< 0.1 good balance (rule of thumb)", lessons: [L4.5, L9.1]}
+- {term: Covariate adjustment, plain: "Using pre-treatment variables to reduce noise in an experiment's effect estimate (CUPED, ANCOVA).", lessons: [L4.2]}
+- {term: ANCOVA, plain: "Regression of outcome on treatment plus a pre-period covariate.", lessons: [L4.2, L5.1]}
+- {term: Sequential testing, plain: "Planned interim analyses with boundaries that keep the overall false-positive rate at α.", lessons: [L4.2]}
+- {term: O'Brien-Fleming boundary, plain: "Interim-analysis boundary that is very strict early and close to 1.96 at the end.", lessons: [L4.2]}
+- {term: Pocock boundary, plain: "Interim-analysis boundary that is constant across looks.", lessons: [L4.2]}
+- {term: Alpha spending, plain: "Allocating the overall α across interim looks (Lan-DeMets), allowing unplanned look times.", lessons: [L4.2]}
+- {term: mSPRT, plain: "Mixture sequential probability ratio test giving always-valid p-values for continuous monitoring.", lessons: [L4.2]}
+- {term: Winner's curse, plain: "Effects that were selected for being large (or stopped early) tend to be overestimates.", lessons: [L4.2, L4.3]}
+- {term: Prior, plain: "Probability distribution expressing belief about a parameter before seeing the data.", watch: "State and justify in advance; show sensitivity.", lessons: [L4.3]}
+- {term: Likelihood, plain: "How probable the observed data are for each possible parameter value.", lessons: [L4.3]}
+- {term: Posterior, plain: "Updated belief about a parameter after combining prior and data.", lessons: [L4.3]}
+- {term: Beta-Binomial update, plain: "Beta(α, β) prior + k successes in n → Beta(α + k, β + n − k) posterior.", lessons: [L4.3]}
+- {term: Credible interval, plain: "Range containing the parameter with a stated posterior probability.", watch: "Different interpretation from a confidence interval.", lessons: [L4.3]}
+- {term: Expected loss, plain: "Average shortfall of a decision if it turns out wrong, weighted by posterior probability.", use: "Bayesian ship/no-ship rules.", lessons: [L4.3]}
+- {term: Shrinkage, plain: "Pulling noisy small-group estimates toward a broader average.", use: "New segments, small branches.", lessons: [L4.3, L5.6]}
+- {term: MCMC, plain: "Markov chain Monte Carlo: simulation methods that draw from posterior distributions (PyMC, Stan).", watch: "Check R-hat and effective sample size.", lessons: [L4.3]}
+- {term: DAG, plain: "Directed acyclic graph: a diagram of assumed causal relationships.", lessons: [L4.4]}
+- {term: Mediator, plain: "A variable on the causal path from treatment to outcome.", watch: "Adjust only for a direct effect.", lessons: [L4.4]}
+- {term: Collider, plain: "A variable caused by two others; conditioning on it creates a spurious association.", lessons: [L4.4]}
+- {term: Backdoor path, plain: "A non-causal path from treatment to outcome through a common cause; block it by adjusting for confounders.", lessons: [L4.4]}
+- {term: Selection bias (collider), plain: "Bias from analysing only units selected on variables related to the outcome (approved, retained).", lessons: [L4.4, L8.7]}
+- {term: Total effect, plain: "Effect of a treatment including all paths (direct and via mediators).", lessons: [L4.4]}
+- {term: Direct effect, plain: "Effect of a treatment not passing through a specified mediator.", lessons: [L4.4]}
+- {term: Holdout, plain: "Units kept on the old treatment after a rollout to keep measuring the effect.", lessons: [L4.5]}
+- {term: Decision memo, plain: "One-page recommendation: decision, evidence with CI, hygiene, guardrails, value, plan.", lessons: [L4.5, L9.7]}
+# Day 5 terms
+- {term: OLS (ordinary least squares), plain: "Fits a linear model by minimising the sum of squared residuals.", lessons: [L5.1]}
+- {term: Coefficient, symbol: "β", plain: "Expected change in the outcome per unit of a predictor, holding the other predictors fixed.", watch: "An adjusted association, not automatically causal.", lessons: [L5.1]}
+- {term: Fixed effects, plain: "One indicator per unit (store, branch) so each unit is compared with itself.", lessons: [L5.1, L9.1]}
+- {term: Dummy variable, plain: "0/1 indicator for a category level; coefficients compare with a reference level.", lessons: [L5.1]}
+- {term: Adjusted R², plain: "R² penalised for the number of predictors.", lessons: [L5.1]}
+- {term: RMSE, plain: "Root mean squared error: typical prediction error in outcome units.", lessons: [L5.1, L7.3]}
+- {term: Residual, plain: "Observed minus fitted value.", lessons: [L5.2]}
+- {term: Heteroscedasticity, plain: "Residual variance that changes with the fitted value or a predictor.", watch: "Wrong SEs; use robust SEs or transform.", lessons: [L5.2]}
+- {term: Breusch-Pagan test, plain: "Test for heteroscedasticity in a regression.", lessons: [L5.2]}
+- {term: Robust standard errors, symbol: "HC3", plain: "Standard errors valid under unequal variance (heteroscedasticity-consistent).", lessons: [L5.2]}
+- {term: Cluster-robust standard errors, plain: "Standard errors allowing correlation within groups (stores, accounts).", lessons: [L5.2, L9.1]}
+- {term: VIF (variance inflation factor), symbol: "VIF", plain: "How much a coefficient's variance is inflated by correlation with other predictors.", range: "> 5 (or 10) signals problematic collinearity", lessons: [L5.2]}
+- {term: Leverage, plain: "How unusual a row's predictor values are.", lessons: [L5.2]}
+- {term: Cook's distance, plain: "How much the fitted model changes when a row is removed.", range: "> 4/n flags rows to inspect", lessons: [L5.2]}
+- {term: Durbin-Watson statistic, plain: "Test statistic for first-order autocorrelation in residuals (≈ 2 none).", lessons: [L5.2]}
+- {term: Logistic regression, plain: "Model of the log-odds of a yes/no outcome as a linear function of predictors.", lessons: [L5.3]}
+- {term: Marginal effect, plain: "Change in predicted probability for a change in a predictor, averaged over observations.", use: "Translating odds ratios into percentage points.", lessons: [L5.3]}
+- {term: Pseudo-R², plain: "Fit measure for logistic models (e.g. McFadden); not comparable with OLS R².", range: "0.2–0.4 considered good", lessons: [L5.3]}
+- {term: Deviance, plain: "Measure of lack of fit for likelihood-based models; differences compare nested models.", lessons: [L5.3, L5.5]}
+- {term: Calibration, plain: "Agreement between predicted probabilities and observed frequencies.", lessons: [L5.3, L6.6]}
+- {term: Overfitting, plain: "A model that fits noise in the training data and performs worse on new data.", lessons: [L5.4, L6.4]}
+- {term: Ridge regression, symbol: "L2", plain: "Regression with a penalty on squared coefficients; shrinks all toward zero.", lessons: [L5.4]}
+- {term: Lasso, symbol: "L1", plain: "Regression with a penalty on absolute coefficients; can set some exactly to zero.", lessons: [L5.4]}
+- {term: Elastic net, plain: "Mix of ridge and lasso penalties.", lessons: [L5.4]}
+- {term: Cross-validation, symbol: "CV", plain: "Estimating out-of-sample performance by repeatedly training on part of the data and testing on the rest.", watch: "Shuffle folds unless data are time-ordered.", lessons: [L5.4, L6.4]}
+- {term: 1-SE rule, plain: "Choose the simplest model whose CV score is within one standard error of the best.", lessons: [L5.4]}
+- {term: BIC, plain: "Bayesian information criterion: like AIC with a heavier penalty (log n per parameter).", lessons: [L5.4]}
+- {term: GLM, plain: "Generalised linear model: a family (Poisson, binomial, Gamma…), a link function and a linear predictor.", lessons: [L5.5]}
+- {term: Link function, plain: "Transformation connecting the mean outcome to the linear predictor (log, logit).", lessons: [L5.5]}
+- {term: Exposure offset, plain: "log(exposure) added to a count model so it describes a rate per unit of exposure.", lessons: [L5.5]}
+- {term: Over-dispersion, plain: "Variance larger than a model (usually Poisson) assumes.", watch: "Use negative binomial or robust SEs.", lessons: [L5.5]}
+- {term: Rate ratio, plain: "Multiplicative change in an event rate per unit of a predictor (exp of a log-link coefficient).", lessons: [L5.5]}
+- {term: Tweedie regression, plain: "GLM for outcomes with many zeros plus positive continuous values.", lessons: [L5.5]}
+- {term: Quantile regression, plain: "Regression for a chosen percentile of the outcome rather than its mean.", lessons: [L5.5]}
+- {term: Pure premium, plain: "Expected claims cost per unit of exposure: frequency × severity.", lessons: [L5.5, L9.4]}
+- {term: Loss ratio, plain: "Claims paid ÷ premiums earned.", range: "> 1 means claims exceed premiums", lessons: [L5.5, L9.4]}
+- {term: Large-loss loading, plain: "Separate premium charge for rare very large claims excluded from attritional models.", lessons: [L5.5, L9.4]}
+- {term: Spline, plain: "Flexible smooth curve built from pieces joined at knots.", lessons: [L5.6]}
+- {term: Interaction term, plain: "Product of two predictors, letting one's effect depend on the other.", lessons: [L5.6]}
+- {term: Mixed model, plain: "Regression with random effects (e.g. a random intercept per store) as well as fixed effects.", lessons: [L5.6]}
+- {term: Random intercept, plain: "A group-specific baseline drawn from a common distribution, estimated with shrinkage.", lessons: [L5.6]}
+- {term: Mix vs rate decomposition, plain: "Splitting a change in an overall rate into changes in segment composition (mix) and within-segment rates (rate).", lessons: [L5.7]}
+# Day 6 terms
+- {term: Observation point, plain: "The moment a prediction would be made; features may only use data up to it.", lessons: [L6.1, L6.4]}
+- {term: Feature engineering, plain: "Creating model inputs from raw data: aggregates, ratios, recency, lags, flags.", lessons: [L6.1]}
+- {term: Behavioural score, plain: "Risk score updated from recent account behaviour (arrears, utilisation, payments).", lessons: [L6.1, L8.7]}
+- {term: Decision tree, plain: "Model that splits data by successive questions on features.", watch: "Overfits when deep.", lessons: [L6.2]}
+- {term: Random forest, plain: "Average of many trees trained on bootstrap samples with random feature subsets.", lessons: [L6.2]}
+- {term: Gradient boosting, symbol: "GBM", plain: "Ensemble that adds small trees sequentially to correct remaining errors (LightGBM, XGBoost).", lessons: [L6.2]}
+- {term: Bagging, plain: "Bootstrap aggregating: averaging models trained on resampled data.", lessons: [L6.2, L6.3]}
+- {term: Stacking, plain: "Combining models with a meta-model trained on their out-of-fold predictions.", lessons: [L6.3]}
+- {term: SVM, plain: "Support vector machine: classifier that maximises the margin between classes, optionally with kernels.", lessons: [L6.3]}
+- {term: KNN, plain: "k-nearest neighbours: predicts from the most similar training cases.", lessons: [L6.3]}
+- {term: Naive Bayes, plain: "Classifier combining per-feature likelihoods under an independence assumption.", watch: "Poorly calibrated probabilities.", lessons: [L6.3]}
+- {term: Out-of-time validation, plain: "Testing a model on a later period than it was trained on.", lessons: [L6.4]}
+- {term: Data leakage (target), plain: "Using a feature recorded after, or because of, the outcome.", lessons: [L6.4]}
+- {term: Preprocessing leakage, plain: "Fitting scalers, imputers or encoders on data that includes the test set.", lessons: [L6.4]}
+- {term: Grouped cross-validation, plain: "CV where all rows of the same entity (customer) stay in the same fold.", lessons: [L6.4]}
+- {term: Hyperparameter, plain: "A model setting chosen before training (depth, learning rate, penalty).", lessons: [L6.4]}
+- {term: Bias-variance trade-off, plain: "Simple models err systematically (bias); flexible models vary with the sample (variance).", lessons: [L6.4]}
+- {term: Pipeline, plain: "Chained preprocessing and model steps fitted together so no information leaks across folds.", lessons: [L6.4]}
+- {term: Class imbalance, plain: "One outcome is much rarer than the other (fraud, default).", lessons: [L6.5]}
+- {term: Class weights, plain: "Training weights that up-weight the rare class.", watch: "Inflate predicted probabilities.", lessons: [L6.5]}
+- {term: SMOTE, plain: "Synthetic minority over-sampling: creates synthetic rare-class points between neighbours.", watch: "Only inside training folds.", lessons: [L6.5]}
+- {term: Threshold moving, plain: "Choosing a decision cut-off other than 0.5, from costs or capacity.", lessons: [L6.5, L6.6]}
+- {term: Precision at k, plain: "Share of positives among the k highest-scored cases.", use: "Alert queues with fixed capacity.", lessons: [L6.5]}
+- {term: Confusion matrix, plain: "Table of true/false positives and negatives at a threshold.", lessons: [L6.6]}
+- {term: Recall, plain: "Share of actual positives the model flags: TP ÷ (TP + FN).", lessons: [L6.6]}
+- {term: Specificity, plain: "Share of actual negatives correctly not flagged: TN ÷ (TN + FP).", lessons: [L6.6]}
+- {term: F1 score, plain: "Harmonic mean of precision and recall.", lessons: [L6.6]}
+- {term: Gini (model), plain: "2 × AUC − 1; credit-industry ranking metric.", range: "0.4–0.7 typical for application scorecards", lessons: [L6.6, L8.7]}
+- {term: KS statistic, plain: "Maximum gap between cumulative distributions of scores for positives and negatives.", lessons: [L6.6, L8.7]}
+- {term: PR-AUC, plain: "Area under the precision-recall curve; baseline equals the event rate.", lessons: [L6.5, L6.6]}
+- {term: Lift chart, plain: "Event rate by score decile relative to the average.", lessons: [L6.6]}
+- {term: Gains chart, plain: "Cumulative share of positives captured as more of the population is targeted.", lessons: [L6.6]}
+- {term: Brier score, plain: "Mean squared error of predicted probabilities.", lessons: [L6.6]}
+- {term: Platt scaling, plain: "Recalibrating scores with a logistic fit on a validation set.", lessons: [L6.6]}
+- {term: Isotonic regression (calibration), plain: "Non-parametric monotone recalibration of scores.", lessons: [L6.6]}
+- {term: Permutation importance, plain: "Drop in model performance when a feature's values are shuffled.", lessons: [L6.7]}
+- {term: Partial dependence plot, symbol: "PDP", plain: "Average model prediction as one feature varies.", lessons: [L6.7]}
+- {term: ICE plot, plain: "Individual conditional expectation: one prediction curve per case.", lessons: [L6.7]}
+- {term: SHAP values, plain: "Additive per-feature contributions to an individual prediction (Shapley values).", lessons: [L6.7]}
+- {term: Reason codes, plain: "Top factors behind an individual credit decision (adverse-action reasons).", lessons: [L6.7, L8.7]}
+# Day 7 terms
+- {term: STL decomposition, plain: "Seasonal-Trend decomposition using Loess: splits a series into trend, seasonal and remainder.", lessons: [L7.1]}
+- {term: Seasonality, plain: "Regular repeating pattern tied to the calendar (week, year, holidays).", lessons: [L7.1]}
+- {term: Stationarity, plain: "Constant mean, variance and autocorrelation over time.", lessons: [L7.1]}
+- {term: ADF test, plain: "Augmented Dickey-Fuller test; null hypothesis = unit root (non-stationary).", lessons: [L7.1]}
+- {term: KPSS test, plain: "Test whose null hypothesis is stationarity (complements ADF).", lessons: [L7.1]}
+- {term: Differencing, plain: "Replacing a series by its period-to-period changes to remove trend.", lessons: [L7.1]}
+- {term: ACF, plain: "Autocorrelation function: correlation of a series with its own lags.", lessons: [L7.1]}
+- {term: PACF, plain: "Partial autocorrelation: correlation at a lag after removing shorter lags.", lessons: [L7.1]}
+- {term: Seasonal naive forecast, plain: "Forecast equal to the value in the same period last season.", lessons: [L7.2, L7.3]}
+- {term: Exponential smoothing, symbol: "ETS", plain: "Forecasts as weighted averages of past values with exponentially decaying weights (level, trend, season).", lessons: [L7.2]}
+- {term: Holt-Winters, plain: "Exponential smoothing with trend and seasonality.", watch: "Needs at least two seasonal cycles.", lessons: [L7.2]}
+- {term: ARIMA, plain: "Model combining autoregression, differencing and moving-average error terms.", lessons: [L7.2]}
+- {term: SARIMAX, plain: "Seasonal ARIMA with external regressors.", lessons: [L7.2]}
+- {term: Fourier terms, plain: "Sine/cosine pairs that model smooth seasonality in a regression.", lessons: [L7.2]}
+- {term: Rolling-origin backtest, plain: "Re-fitting and forecasting from several successive origins to evaluate a method.", lessons: [L7.3]}
+- {term: WAPE, plain: "Weighted absolute percentage error: Σ|error| ÷ Σ actual.", lessons: [L7.3]}
+- {term: MASE, plain: "Mean absolute scaled error: MAE divided by in-sample naive MAE (< 1 beats naive).", lessons: [L7.3]}
+- {term: MAPE, plain: "Mean absolute percentage error.", watch: "Undefined at zero; favours under-forecasts.", lessons: [L7.3]}
+- {term: Forecast bias, plain: "Σ(forecast − actual) ÷ Σ actual — systematic over- or under-forecasting.", lessons: [L7.3]}
+- {term: Intermittent demand, plain: "Demand with many zero periods (ADI > 1.32).", lessons: [L7.4]}
+- {term: ADI and CV², plain: "Average demand interval and squared coefficient of variation of non-zero demand; classify demand patterns.", lessons: [L7.4]}
+- {term: Croston's method, plain: "Forecasts intermittent demand by smoothing sizes and intervals separately.", lessons: [L7.4]}
+- {term: SBA, plain: "Syntetos-Boylan approximation: bias-corrected Croston.", lessons: [L7.4]}
+- {term: Hierarchical forecasting, plain: "Forecasting at several aggregation levels and reconciling them (bottom-up, top-down, MinT).", lessons: [L7.4]}
+- {term: Forecast reconciliation, plain: "Adjusting forecasts so lower levels add up to higher levels.", lessons: [L7.4]}
+- {term: Change-point, plain: "A time where a series' level (or other property) shifts persistently.", lessons: [L7.5]}
+- {term: CUSUM, plain: "Cumulative-sum control chart that accumulates deviations to detect shifts.", lessons: [L7.5]}
+- {term: Binary segmentation, plain: "Recursively splitting a series at the point that most reduces within-segment variance.", lessons: [L7.5]}
+- {term: Censored demand, plain: "Observed sales below true demand because stock ran out.", lessons: [L7.5, L7.6]}
+- {term: Safety stock, plain: "Extra stock held to cover demand variability over the lead time: z × σ × √L.", lessons: [L7.6]}
+- {term: Reorder point, plain: "Stock level that triggers an order: mean lead-time demand + safety stock.", lessons: [L7.6]}
+- {term: Cycle service level, plain: "Probability of no stock-out during a replenishment cycle.", lessons: [L7.6]}
+- {term: Fill rate, plain: "Share of demand served directly from stock.", lessons: [L7.6]}
+- {term: ABC classification, plain: "Ranking items by value contribution (A = top ~80% of value).", lessons: [L7.6]}
+- {term: XYZ classification, plain: "Ranking items by demand variability (X stable, Z erratic).", lessons: [L7.6]}
+- {term: Newsvendor model, plain: "Single-period order quantity at the critical ratio (p − c) ÷ (p − s) of the demand distribution.", lessons: [L7.6]}
+- {term: K-Means, plain: "Clustering that assigns points to the nearest of k centres and updates the centres until stable.", lessons: [L8.1]}
+- {term: Silhouette score, plain: "How much closer a point is to its own cluster than the next one; −1 to 1, above 0.5 is strong.", lessons: [L8.1]}
+- {term: Adjusted Rand index, plain: "Agreement between two clusterings corrected for chance; 0 random, 1 identical.", lessons: [L8.1]}
+- {term: PCA, plain: "Principal component analysis: rotating features into uncorrelated directions ordered by variance explained.", lessons: [L8.1]}
+- {term: DBSCAN, plain: "Density-based clustering that finds arbitrarily shaped clusters and labels sparse points as noise.", lessons: [L8.1]}
+- {term: RFM, plain: "Recency, frequency, monetary scoring of customers.", lessons: [L8.2]}
+- {term: Customer lifetime value, plain: "Discounted future margin expected from a customer.", lessons: [L8.2]}
+- {term: Cohort analysis, plain: "Tracking groups that started at the same time across their age.", lessons: [L8.2, L8.7]}
+- {term: Support, plain: "Share of baskets containing an itemset.", lessons: [L8.3]}
+- {term: Confidence, plain: "P(B | A): share of baskets with A that also contain B.", lessons: [L8.3]}
+- {term: Lift, plain: "Confidence ÷ base rate of B; above 1 means bought together more than chance.", lessons: [L8.3]}
+- {term: Price elasticity, plain: "Percentage change in units for a 1% change in price; the slope of a log–log model.", lessons: [L8.4]}
+- {term: Cannibalisation, plain: "Sales a promoted product takes from its own siblings.", lessons: [L8.4]}
+- {term: Promotion ROI, plain: "Incremental margin ÷ promotion cost (discount given away).", lessons: [L8.4]}
+- {term: Adstock, plain: "Carry-over of advertising effect into later weeks with geometric decay.", lessons: [L8.4]}
+- {term: Robust z-score, plain: "(x − median) ÷ (1.4826 × MAD); not masked by the outliers it hunts.", lessons: [L8.5]}
+- {term: Isolation Forest, plain: "Anomaly score from how few random splits isolate a point.", lessons: [L8.5]}
+- {term: Contamination, plain: "Assumed share of anomalies; in practice set by review capacity.", lessons: [L8.5]}
+- {term: Alert budget, plain: "Number of cases the review team can handle per period.", lessons: [L8.5]}
+- {term: Connected component, plain: "Group of nodes linked by any path in a graph.", lessons: [L8.6]}
+- {term: Structuring, plain: "Keeping transactions just under a reporting threshold to avoid reporting.", lessons: [L8.6]}
+- {term: Bunching, plain: "Excess mass of a distribution just below a threshold.", lessons: [L8.6]}
+- {term: Weight of evidence, plain: "ln(% of goods ÷ % of bads) in a bin.", lessons: [L8.7]}
+- {term: Information value, plain: "Sum over bins of (% goods − % bads) × WoE; above 0.3 is strong, above 0.5 suspicious.", lessons: [L8.7]}
+- {term: Points to double the odds, plain: "Scorecard scaling: score points that double the good:bad odds (PDO).", lessons: [L8.7]}
+- {term: Gini coefficient, plain: "2 × AUC − 1; ranking power of a credit score.", lessons: [L8.7]}
+- {term: KS statistic, plain: "Maximum gap between cumulative good and bad distributions over the score.", lessons: [L8.7]}
+- {term: Expected loss, plain: "PD × LGD × EAD.", lessons: [L8.7]}
+- {term: Vintage curve, plain: "Cumulative bad rate of a cohort by months on book.", lessons: [L8.7]}
+- {term: Roll rate, plain: "Share of balances moving from one delinquency bucket to the next.", lessons: [L8.7]}
+- {term: Reject inference, plain: "Methods for the unobserved outcomes of declined applicants.", lessons: [L8.7]}
+- {term: Difference-in-differences, plain: "Effect = change in the treated group minus change in a control group over the same period.", lessons: [L9.1]}
+- {term: Parallel trends, plain: "DiD assumption that treated and control would have moved together without treatment.", lessons: [L9.1]}
+- {term: Two-way fixed effects, plain: "Regression with unit and time effects, removing fixed differences between units and common shocks.", lessons: [L9.1]}
+- {term: Event study, plain: "Plot of the treated–control gap by period relative to treatment, used to check pre-trends.", lessons: [L9.1]}
+- {term: Placebo test, plain: "Applying the method where no effect should exist to check it finds none.", lessons: [L9.1]}
+- {term: Self-selection, plain: "Units choosing their treatment for reasons related to the outcome.", lessons: [L9.1]}
+- {term: Propensity score, plain: "Probability of treatment given covariates; used to match or weight comparable units.", lessons: [L9.1]}
+- {term: Regression discontinuity, plain: "Comparing units just above and below an eligibility cut-off.", lessons: [L9.1]}
+- {term: Synthetic control, plain: "A weighted combination of untreated units built to track one treated unit before treatment.", lessons: [L9.1]}
+- {term: Uplift model, plain: "Model predicting the change in outcome caused by treatment for each customer.", lessons: [L9.1]}
+- {term: Censoring, plain: "Knowing only that an event has not happened by the end of observation.", lessons: [L9.2]}
+- {term: Kaplan–Meier estimator, plain: "Survival curve multiplying period-by-period survival among those still at risk.", lessons: [L9.2]}
+- {term: Restricted mean survival time, plain: "Area under the survival curve up to a horizon; average time survived within it.", lessons: [L9.2]}
+- {term: Log-rank test, plain: "Test of whether survival curves differ between groups.", lessons: [L9.2]}
+- {term: Cox proportional hazards, plain: "Regression of the hazard on drivers; coefficients exponentiate to hazard ratios.", lessons: [L9.2]}
+- {term: Hazard ratio, plain: "Multiplicative change in the instantaneous event rate.", lessons: [L9.2]}
+- {term: Multilayer perceptron, plain: "Neural network of fully connected layers with non-linear activations.", lessons: [L9.3]}
+- {term: Activation function, plain: "Non-linear function (e.g. ReLU) applied inside a neural network.", lessons: [L9.3]}
+- {term: Embedding, plain: "Dense vector representation where distance reflects similarity.", lessons: [L9.3]}
+- {term: Transformer, plain: "Neural architecture using attention; the basis of modern LLMs.", lessons: [L9.3]}
+- {term: Retrieval-augmented generation, plain: "Giving an LLM retrieved documents so answers are grounded and citable.", lessons: [L9.3]}
+- {term: Hallucination, plain: "Fluent but false output from a generative model.", lessons: [L9.3]}
+- {term: Exposure offset, plain: "log(exposure) added to a count GLM so it models a rate.", lessons: [L9.4]}
+- {term: Large-loss loading, plain: "Premium add-on covering rare catastrophic claims excluded from attritional pricing.", lessons: [L9.4]}
+- {term: Value at Risk, plain: "Loss not exceeded with a given probability over a horizon (e.g. 99.5%, one year).", lessons: [L9.4]}
+- {term: Expected shortfall, plain: "Average loss in the worst (1 − α) of outcomes; at least as large as VaR.", lessons: [L9.4]}
+- {term: Economic capital, plain: "Capital held for unexpected loss: VaR minus expected loss.", lessons: [L9.4]}
+- {term: Vasicek model, plain: "One-factor credit model where defaults correlate through a common economic factor.", lessons: [L9.4]}
+- {term: Stress test, plain: "Estimating outcomes under a specified severe scenario.", lessons: [L9.4]}
+- {term: Disparate impact, plain: "Ratio of favourable-outcome rates between groups; below 0.8 is a common flag.", lessons: [L9.5]}
+- {term: Proxy variable, plain: "A feature that carries information about a protected attribute.", lessons: [L9.5]}
+- {term: Equal opportunity, plain: "Fairness criterion: equal true positive rates across groups.", lessons: [L9.5]}
+- {term: Conformal prediction, plain: "Distribution-free prediction sets/intervals with guaranteed average coverage.", lessons: [L9.5]}
+- {term: Mondrian conformal, plain: "Conformal prediction calibrated separately within classes or groups.", lessons: [L9.5]}
+- {term: Model risk management, plain: "Governance of models: inventory, validation, monitoring, change control, ownership.", lessons: [L9.5]}
+- {term: Population stability index, plain: "Σ (actual% − expected%) × ln(actual% ÷ expected%) across bins; drift measure.", lessons: [L9.6]}
+- {term: Characteristic stability index, plain: "PSI applied to a model input.", lessons: [L9.6]}
+- {term: Concept drift, plain: "Change in the relationship between inputs and outcome.", lessons: [L9.6]}
+- {term: Recalibration, plain: "Adjusting a model's intercept/slope so predicted rates match observed rates.", lessons: [L9.6]}
+- {term: Pyramid principle, plain: "Structure that leads with the answer, then supporting points, then evidence.", lessons: [L9.7]}
+- {term: Transfer test, plain: "Applying the toolkit to an unseen dataset in a new domain using configuration only.", lessons: [L10.1]}
+- {term: Minor currency units, plain: "Amounts stored in cents/pence (×100); a common unit trap.", lessons: [L10.1]}
+- {term: Mix–rate decomposition, plain: "Splitting a change in an average into the part due to segment mix and the part due to within-segment rates.", lessons: [L10.2]}
+- {term: Challenge panel, plain: "Reviewers who probe a readout's evidence, uncertainty and actions.", lessons: [L10.2]}
+- {term: Held-out data, plain: "Data not seen during learning, used to test transfer (exam seeds 7001/7002).", lessons: [L10.4]}
+- {term: Code review, plain: "Systematic critique of an analysis for data, method, inference and interpretation flaws.", lessons: [L10.4]}
+- {term: Cross-entropy (log-loss), plain: "Classification loss −Σ y log ŷ: heavily penalises confident wrong probabilities.", lessons: [L9.8]}
+- {term: Backpropagation, plain: "Using the chain rule to compute how much each weight contributed to the error, layer by layer backwards.", lessons: [L9.8]}
+- {term: Gradient descent, plain: "Repeatedly stepping the parameters against the gradient of the loss: θ ← θ − η∇L.", lessons: [L9.8]}
+- {term: Learning rate, plain: "Step size η in gradient descent; too large diverges, too small crawls.", lessons: [L9.8]}
+- {term: Adam optimiser, plain: "Gradient descent with momentum and per-parameter adaptive step sizes.", lessons: [L9.8]}
+- {term: Dropout, plain: "Randomly switching off neurons during training so the network does not rely on any one of them.", lessons: [L9.8]}
+- {term: Early stopping, plain: "Stopping training when validation loss stops improving.", lessons: [L9.8]}
+- {term: Epoch, plain: "One full pass over the training data.", lessons: [L9.8]}
+- {term: Convolutional neural network, plain: "Network using sliding filters (convolutions) and pooling; built for images.", lessons: [L9.8]}
+- {term: Recurrent neural network, plain: "Network that processes sequences step by step with a memory (LSTM, GRU).", lessons: [L9.8]}
+- {term: Positional encoding, plain: "Information added to tokens so a transformer knows word order.", lessons: [L9.8]}
+- {term: Diffusion model, plain: "Generative model trained to remove noise step by step; generates by denoising random noise.", lessons: [L9.8, L6.8]}
+- {term: Supervised fine-tuning, plain: "Training a pre-trained model on example prompts and ideal answers.", lessons: [L9.8]}
+- {term: RLHF, plain: "Reinforcement learning from human feedback: optimising a model toward answers people prefer.", lessons: [L9.8]}
+- {term: K-nearest neighbours, plain: "Predicts from the k most similar past cases.", lessons: [L6.3, L6.8]}
+- {term: Naive Bayes, plain: "Classifier that multiplies per-feature likelihoods assuming independence.", lessons: [L6.3, L6.8]}
+- {term: Support vector machine, plain: "Finds the boundary with the widest margin; kernels allow curved boundaries.", lessons: [L6.3, L6.8]}
+- {term: ML ladder, plain: "The progression of algorithms from simple and explainable to complex and opaque; climb only when a fair test justifies it.", lessons: [L6.8]}
+- {term: Mental map, plain: "A diagram that shows which family of techniques fits which business question.", lessons: [L0.2]}
+- {term: Pixel, plain: "One point of an image; in colour it holds three numbers (red, green, blue), each 0–255.", lessons: [L11.1]}
+- {term: Colour channel, plain: "One of the red, green or blue layers of a colour image.", lessons: [L11.1]}
+- {term: Filter (kernel), plain: "Small grid of weights slid across an image; its weighted sums highlight a pattern such as an edge.", lessons: [L11.1]}
+- {term: Convolution, plain: "Sliding a filter across an image and computing a weighted sum at each position.", lessons: [L11.1]}
+- {term: Data augmentation, plain: "Creating extra training images by changing things that should not change the label (brightness, small shifts).", lessons: [L11.2]}
+- {term: Transfer learning, plain: "Starting from a model pretrained on millions of images and fine-tuning it for your task.", lessons: [L11.2]}
+- {term: Fine-tuning, plain: "Continuing to train a pretrained model on your own labelled data.", lessons: [L11.2]}
+- {term: Object detection, plain: "Finding objects in an image and drawing a box around each.", lessons: [L11.3]}
+- {term: Intersection over union (IoU), plain: "Overlap of a predicted and a true box divided by the area they cover together; 1 = perfect.", lessons: [L11.3]}
+- {term: Average precision (AP / mAP), plain: "Summary of the precision–recall curve for detections; mAP averages it over classes and IoU levels.", lessons: [L11.3]}
+- {term: Non-maximum suppression, plain: "Removing overlapping duplicate detections, keeping the highest-scoring one.", lessons: [L11.3]}
+- {term: On-shelf availability (OSA), plain: "Share of shelf space where product is present; the key retail KPI for gaps.", lessons: [L11.3]}
+- {term: OCR, plain: "Optical character recognition: reading text from images.", lessons: [L11.4]}
+- {term: Field accuracy, plain: "Share of whole fields (e.g. a 6-digit amount) read completely correctly.", lessons: [L11.4]}
+- {term: Confidence routing, plain: "Automating only predictions above a confidence threshold and sending the rest to people.", lessons: [L11.4]}
+- {term: Human-in-the-loop, plain: "A process where people review the cases a model is unsure about.", lessons: [L11.4, L11.5]}
+- {term: Cohen's kappa, plain: "Agreement between two labellers corrected for agreement expected by chance.", lessons: [L11.5]}
+- {term: Label noise, plain: "Errors in training labels; random noise averages out, systematic noise misleads the model.", lessons: [L11.5]}

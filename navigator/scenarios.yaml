@@ -1,0 +1,45 @@
+# Scenario atlas: realistic situations mapped to Navigator leaf nodes. Full worked pages are added in Step 3.
+- {id: S01, ind: Retail, text: "Did the store-level Hair Care feature promotion lift sales?", path: [N-EXP-SRM, N-TEST-2G-MEAN], lesson: L3.4}
+- {id: S02, ind: Retail, text: "Promotion looks harmful overall but helpful in every store format", path: [N-DESC-STRATIFY], lesson: L2.4}
+- {id: S03, ind: Retail, text: "Average basket jumped because of a few bulk buyers", path: [N-DESC-SKEW, N-DESC-OUTLIER], lesson: L1.4}
+- {id: S04, ind: Retail, text: "Which of four regions has a different basket value?", path: [N-TEST-KG], lesson: L3.5}
+- {id: S05, ind: Retail, text: "Is promo uptake independent of loyalty tier?", path: [N-TEST-CHI], lesson: L3.5}
+- {id: S06, ind: Retail, text: "Display and promotion always run together — what drove sales?", path: [N-CAUSAL-DAG], lesson: L4.4}
+- {id: S07, ind: Retail, text: "How price-sensitive is the Snacks category?", path: [N-REG-LOGLOG], lesson: L8.4}
+- {id: S08, ind: Retail, text: "Promo on the 400 ml shampoo; the 200 ml fell", path: [N-OPT-PROMO], lesson: L8.4}
+- {id: S09, ind: Retail, text: "Forecast weekly category sales for the next 13 weeks", path: [N-FCST-SEASON, N-METRIC-REG], lesson: L7.2}
+- {id: S10, ind: Retail, text: "Long-tail SKUs sell zero most weeks", path: [N-FCST-INTERMITTENT], lesson: L7.4}
+- {id: S11, ind: Retail, text: "One store's sales stepped down mid-year", path: [N-FCST-BREAK], lesson: L7.5}
+- {id: S12, ind: Retail, text: "Lost sales during stockouts", path: [N-FCST-CENSOR, N-OPT-INVENTORY], lesson: L7.5}
+- {id: S13, ind: Retail, text: "Which SKUs deserve deeper stock?", path: [N-OPT-INVENTORY], lesson: L7.6}
+- {id: S14, ind: Retail, text: "Segment loyalty customers for CRM", path: [N-SEG-RFM, N-CLUST-KMEANS], lesson: L8.1}
+- {id: S15, ind: Retail, text: "What sells with what?", path: [N-SEG-BASKET], lesson: L8.3}
+- {id: S16, ind: Retail, text: "A group of customers returns 40% of what they buy", path: [N-ANOM-MULTI], lesson: L8.5}
+- {id: S17, ind: Retail, text: "One store's numbers look too neat", path: [N-ANOM-BENFORD], lesson: L2.6}
+- {id: S18, ind: Retail, text: "Loyalty members spend more — is the programme causing it?", path: [N-CAUSAL-DAG, N-CAUSAL-PSM], lesson: L9.1}
+- {id: S19, ind: Retail, text: "'Delisted SKUs never mattered' analysis", path: [N-DESC-BIAS], lesson: L2.4}
+- {id: S20, ind: Retail, text: "How to split marketing budget across media", path: [N-OPT-MC], lesson: L8.4}
+- {id: S21, ind: Retail, text: "How many stores for the next promo test?", path: [N-EXP-POWER, N-EXP-CUPED], lesson: L3.6}
+- {id: S22, ind: Retail, text: "Daily dashboard: did this week's dip matter?", path: [N-FCST-BREAK, N-EXP-SEQ], lesson: L7.5}
+- {id: S23, ind: Finance, text: "Is the default rate different for unverified-income customers?", path: [N-TEST-2G-PROP, N-DESC-STRATIFY], lesson: L3.4}
+- {id: S24, ind: Finance, text: "Build an application scorecard", path: [N-ML-SCORECARD, N-METRIC-CLASS, N-METRIC-CALIB], lesson: L8.7}
+- {id: S25, ind: Finance, text: "Gradient boosting beats the scorecard by 3 Gini points", path: [N-ML-GBM, N-MON-FAIR], lesson: L6.7}
+- {id: S26, ind: Finance, text: "Model AUC is 0.98 on day one", path: [N-ML-LEAK], lesson: L6.4}
+- {id: S27, ind: Finance, text: "Fraud is 0.7% and the model is '99% accurate'", path: [N-ML-IMBALANCE, N-METRIC-RARE], lesson: L6.5}
+- {id: S28, ind: Finance, text: "Where to set the fraud alert threshold?", path: [N-METRIC-COST], lesson: L6.6}
+- {id: S29, ind: Finance, text: "Accounts share devices and addresses", path: [N-ANOM-GRAPH], lesson: L8.6}
+- {id: S30, ind: Finance, text: "Cash deposits cluster just under the reporting limit", path: [N-ANOM-STRUCT], lesson: L8.6}
+- {id: S31, ind: Finance, text: "The latest vintage defaults more", path: [N-MON-PSI, N-MON-CONCEPT], lesson: L9.6}
+- {id: S32, ind: Finance, text: "PSI is stable but AUC dropped", path: [N-MON-CONCEPT], lesson: L9.6}
+- {id: S33, ind: Finance, text: "Income is missing more often for risky applicants", path: [N-DESC-MISSING], lesson: L1.3}
+- {id: S34, ind: Finance, text: "Risk jumps above 80% utilisation; young customers with high DTI look worse", path: [N-REG-NONLINEAR, N-REG-INTERACT], lesson: L5.6}
+- {id: S35, ind: Finance, text: "Income and limit both in the model; signs flip", path: [N-REG-VIF], lesson: L5.2}
+- {id: S36, ind: Finance, text: "Approval rates differ by group; region looks innocent", path: [N-MON-FAIR], lesson: L9.5}
+- {id: S37, ind: Finance, text: "When do customers churn?", path: [N-TEST-SURV, N-DIST-TIME], lesson: L9.2}
+- {id: S38, ind: Finance, text: "Champion vs challenger collections strategy", path: [N-EXP-SRM, N-TEST-2G-PROP], lesson: L4.5}
+- {id: S39, ind: Finance, text: "Expected loss for a portfolio", path: [N-OPT-MC], lesson: L8.7}
+- {id: S40, ind: Finance, text: "Claims frequency and severity pricing", path: [N-REG-GLM-INS], lesson: L9.4}
+- {id: S41, ind: Finance, text: "1-day 99% VaR for a card book", path: [N-OPT-MC], lesson: L9.4}
+- {id: S42, ind: Finance, text: "Is an audit sample of 50 files enough?", path: [N-DIST-HYPER], lesson: L2.2}
+- {id: S43, ind: Both, text: "A junior ran 40 segment tests and found 3 'wins'", path: [N-TEST-MULTI], lesson: L3.7}
+- {id: S44, ind: Both, text: "Claude Code reports a number you cannot reproduce", path: [N-DESC-PROFILE], lesson: L0.2}

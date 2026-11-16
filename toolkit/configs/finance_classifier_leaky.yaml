@@ -1,0 +1,7 @@
+# L6.4 (F10): the same model with two post-outcome fields added. Watch for the leakage alert.
+recipe: rcp_classifier
+dataset: {name: meridian_accounts, path: data/finance/accounts.parquet}
+columns: {target: default_12m, features: [bureau_score, dti, inquiries_6m, delinq_2y, utilisation, acquisition_channel, collections_flag, recovery_amount]}
+filters: []
+params: {split: random, models: [logistic, gbm], seed: 42}
+output: {folder: "outputs/{recipe}/{date}_finance_classifier_leaky"}

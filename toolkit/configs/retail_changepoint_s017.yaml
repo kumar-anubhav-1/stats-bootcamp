@@ -1,0 +1,7 @@
+# L7.5 (R08): store S017's revenue share of the rest of the chain — when did it shift?
+recipe: rcp_changepoint
+dataset: {name: northstar_weekly_store, path: data/retail/weekly_store.parquet}
+columns: {time: week, target: revenue, group: store_id}
+filters: []
+params: {unit: S017, share_of_total: true, max_breaks: 2, min_segment: 8, penalty: 3.0, cusum: {baseline_periods: 40, k: 0.5, h: 8}}
+output: {folder: "outputs/{recipe}/{date}_retail_changepoint_s017"}

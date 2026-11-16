@@ -1,0 +1,43 @@
+{
+  "family": "logit",
+  "formula": "default_12m ~ I(income_annual/1e4) + I(limit_or_loan_amount/1e4) + bureau_score + dti",
+  "n": 14573,
+  "robust": "none",
+  "coefficients": {
+    "I(income_annual / 1e4)": {
+      "coef": 0.056059,
+      "se": 0.065611,
+      "p": 0.392878,
+      "effect": 1.05766
+    },
+    "I(limit_or_loan_amount / 1e4)": {
+      "coef": -0.227351,
+      "se": 0.267096,
+      "p": 0.394661,
+      "effect": 0.796641
+    },
+    "bureau_score": {
+      "coef": -0.022361,
+      "se": 0.001037,
+      "p": 0.0,
+      "effect": 0.977887
+    },
+    "dti": {
+      "coef": 1.927858,
+      "se": 0.309171,
+      "p": 0.0,
+      "effect": 6.87477
+    }
+  },
+  "auc": 0.809243,
+  "pseudo_r2": 0.145761,
+  "aic": 3592.298557,
+  "bic": 3630.233186,
+  "event_rate": 0.032663,
+  "vif": {
+    "I(income_annual / 1e4)": 141.596895,
+    "I(limit_or_loan_amount / 1e4)": 141.595548,
+    "bureau_score": 1.0006,
+    "dti": 1.000464
+  }
+}

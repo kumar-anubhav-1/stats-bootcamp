@@ -1,0 +1,88 @@
+{
+  "arms": [
+    "challenger",
+    "champion"
+  ],
+  "unit": "row",
+  "binary": true,
+  "counts": {
+    "challenger": 860,
+    "champion": 3335
+  },
+  "planned_split": {
+    "challenger": 0.2,
+    "champion": 0.8
+  },
+  "srm_p": 0.41761,
+  "srm_fail": false,
+  "srm_by_segment": {
+    "product_type=credit_card": {
+      "n_t": 495,
+      "n_c": 1886,
+      "share_t": 0.207896,
+      "p": 0.335445
+    },
+    "product_type=personal_loan": {
+      "n_t": 365,
+      "n_c": 1449,
+      "share_t": 0.201213,
+      "p": 0.897251
+    },
+    "region=R1": {
+      "n_t": 278,
+      "n_c": 1139,
+      "share_t": 0.196189,
+      "p": 0.719871
+    },
+    "region=R2": {
+      "n_t": 266,
+      "n_c": 1067,
+      "share_t": 0.19955,
+      "p": 0.967229
+    },
+    "region=R3": {
+      "n_t": 255,
+      "n_c": 948,
+      "share_t": 0.21197,
+      "p": 0.299301
+    },
+    "region=R4": {
+      "n_t": 61,
+      "n_c": 181,
+      "share_t": 0.252066,
+      "p": 0.042878
+    }
+  },
+  "primary": {
+    "t_mean": 0.410465,
+    "c_mean": 0.349925,
+    "diff": 0.06054,
+    "se": 0.018707,
+    "ci_low": 0.023876,
+    "ci_high": 0.097204,
+    "p": 0.00099,
+    "rel_lift": 0.173009,
+    "n_t": 860,
+    "n_c": 3335
+  },
+  "bayes": {
+    "p_treatment_better": 0.99947,
+    "ci_low": 0.024233,
+    "ci_high": 0.097268,
+    "expected_loss_if_ship": 3e-06,
+    "expected_loss_if_keep": 0.060607
+  },
+  "guardrails": {
+    "complaints_12m": {
+      "t": 0.654651,
+      "c": 0.685157,
+      "diff": -0.030506,
+      "ci_low": -0.095409,
+      "ci_high": 0.034396,
+      "p": 0.356643,
+      "direction": "higher_is_worse",
+      "breach": false
+    }
+  },
+  "decision": "SHIP \u2014 the whole CI is above the practical threshold (0.02)."
+}

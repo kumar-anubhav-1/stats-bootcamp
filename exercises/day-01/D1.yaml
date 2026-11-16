@@ -1,0 +1,333 @@
+# Day 1 exercises (15 retail + 15 finance). `lesson` places each exercise in its lesson page.
+retail:
+  - id: R1-1
+    lesson: L1.1
+    tier: Basic
+    title: What does one row represent?
+    framing: The category team wants "average basket value" and "baskets per customer".
+    deliverable: Grain of `transactions`; lines per basket; baskets per customer (sales lines, de-duplicated).
+    expected: "One row = one transaction line. {{ a.d1_lines_per_basket }} lines per basket; {{ a.d1_baskets_per_customer }} baskets per customer."
+    tolerance: "± 0.05"
+    model: Basket and customer metrics need aggregation from line grain first. Averaging line revenue ({{ a.d1_mean_line_rev }}) instead of basket revenue ({{ a.d1_mean_basket_rev }}) understates basket value several-fold.
+    wrong: "Reporting the mean of `revenue` as average basket value."
+    leader: A dashboard tile shows 'average basket' ≈ {{ a.d1_mean_line_rev }}. What question exposes the error in one sentence?
+  - id: R1-2
+    lesson: L1.1
+    tier: Applied
+    title: The join explosion
+    framing: An analyst adds weekly store-category sales to each transaction line, joining on store and category only.
+    deliverable: Row count after the join on (store_id, category) vs (store_id, category, week).
+    expected: "{{ a.d1_join_rows_bad | n }} rows vs {{ a.d1_join_rows_good | n }} — a {{ a.d1_join_factor }}× explosion."
+    tolerance: exact
+    model: The weekly table has one row per store-category-week, so a key without `week` matches every week (104 rows per line). Any sum after this join is wildly inflated. Always state the grain of both tables and check row counts before and after a join.
+    wrong: "Not noticing because the code ran without error."
+    leader: Write the one-line review rule that would have caught this.
+  - id: R1-3
+    lesson: L1.2
+    tier: Basic
+    title: Run the data-quality recipe
+    framing: Produce the issue log before any analysis.
+    deliverable: "Run `retail_quality_transactions.yaml`. Rows flagged per rule; duplicates."
+    expected: "Duplicated ids {{ a.d1_dup_ids }}; negative qty on non-return lines {{ a.d1_neg_nonreturn }}; price > 20× list {{ a.d1_price100 }}; revenue ≠ qty × price {{ a.d1_rev_mismatch }} (unique lines); discount stored as a fraction {{ a.d1_frac_disc_lines }}."
+    tolerance: exact
+    model: Each rule is a question for the data owner. Errors (negative non-return quantities, decimal shifts) are quarantined; warnings (revenue mismatch, fractional discounts) need investigation — both turn out to be planted issues.
+    wrong: "Deleting all flagged rows, including warnings, without investigation."
+    leader: Classify each finding as error, investigate, or acceptable — and say who you would ask.
+  - id: R1-4
+    lesson: L1.2
+    tier: Applied
+    title: How much do the errors inflate revenue?
+    framing: Finance asks how wrong a naive revenue total would be.
+    deliverable: Sales revenue total raw vs after removing duplicates, negative non-return lines and decimal-shift lines.
+    expected: "Raw {{ a.d1_rev_total_raw | n }} vs clean {{ a.d1_rev_total_clean | n }}: raw overstates by {{ a.d1_rev_inflation_pct }}%."
+    tolerance: "± 0.2 pp"
+    model: A handful of decimal-shift lines and 150 duplicates move the total by about a tenth — far more than most business effects you will later try to measure.
+    wrong: "Assuming errors 'average out'."
+    leader: How would you present this to the CFO without undermining trust in all analytics?
+  - id: R1-5
+    lesson: L1.2
+    tier: Stretch
+    title: A rule that only fires in one store
+    framing: Look at where `revenue ≠ quantity × unit_price` occurs.
+    deliverable: Count of mismatched lines overall and in the store with most mismatches; hypothesis.
+    expected: "{{ a.d1_rev_mismatch }} mismatched lines, {{ a.d1_rev_mismatch_s033 }} of them in S033."
+    tolerance: exact
+    model: An error concentrated in one store is not random entry noise — it points to a process problem or manipulation in that store. Day 2 (Benford) tests this formally (R18).
+    wrong: "Recomputing revenue from qty × price everywhere and moving on."
+    leader: What would you ask the store-operations team before escalating?
+  - id: R1-6
+    lesson: L1.3
+    tier: Basic
+    title: Who is missing an age?
+    framing: Marketing wants an age profile of shoppers.
+    deliverable: "% missing age_band for loyalty members vs non-members (customers table); test."
+    expected: "Members {{ a.d1_age_miss_member_pct }}% vs non-members {{ a.d1_age_miss_nonmember_pct }}% (p ≈ {{ a.d1_age_miss_p }})."
+    tolerance: "± 0.2 pp"
+    model: Missingness depends on an observed field (loyalty) → MAR. A profile built from complete cases over-represents members; report by loyalty status or reweight.
+    wrong: "Dropping missing ages and presenting the result as 'our shoppers'."
+    leader: What do you allow marketing to say about shopper age?
+  - id: R1-7
+    lesson: L1.3
+    tier: Applied
+    title: Testing at the right unit
+    framing: Is missing temperature related to region?
+    deliverable: Chi-square of missingness vs region at line level and at region-day level.
+    expected: "Line level p ≈ {{ a.d1_temp_miss_region_p_line }}; region-day level p = {{ a.d1_temp_miss_region_p }} ({{ a.d1_temp_regiondays | n }} region-days, {{ a.d1_temp_miss_rd_pct }}% missing)."
+    tolerance: "± 0.05"
+    model: Temperature goes missing for a whole region-day, so all lines that day share it. Treating lines as independent makes a chance difference look 'highly significant'. At the right unit the data are consistent with MCAR, so simple imputation is acceptable.
+    wrong: "Concluding temperature is MNAR from the line-level test."
+    leader: Where else in your organisation are tests run on clustered rows?
+  - id: R1-8
+    lesson: L1.3
+    tier: Stretch
+    title: Missing, but not at random
+    framing: Household size is missing for {{ a.d1_hh_miss_pct }}% of customers. Missingness tests against loyalty, region, channel and format all pass at customer level.
+    deliverable: Compare baskets of customers with and without household size.
+    expected: "Lines per basket {{ a.d1_hh_lines_ratio }}× higher when missing; median basket {{ a.d1_hh_rev_med_missing }} vs {{ a.d1_hh_rev_med_known }}."
+    tolerance: "± 0.05"
+    model: Passing MCAR tests does not prove MCAR. People with big households (big baskets) skipped the question — MNAR. Keep a 'not stated' category and run analyses with and without it; never mean-impute.
+    wrong: "Mean-imputing household size because 'the tests showed MCAR'."
+    leader: A junior says 'Little's test passed, so it is MCAR'. Coach them.
+  - id: R1-9
+    lesson: L1.4
+    tier: Basic
+    title: Describe basket value
+    framing: The commercial director wants one number for the 'typical basket'.
+    deliverable: Mean, median, SD, IQR, MAD, P90, P99, skewness, CV of basket revenue (clean sales).
+    expected: "Mean {{ a.d1_b_mean }}, median {{ a.d1_b_median }}, SD {{ a.d1_b_sd }}, IQR {{ a.d1_b_iqr }}, MAD {{ a.d1_b_mad }}, P90 {{ a.d1_b_p90 }}, P99 {{ a.d1_b_p99 }}, skew {{ a.d1_b_skew }}, CV {{ a.d1_b_cv }}."
+    tolerance: "± 0.1"
+    model: The mean sits above {{ a.d1_b_share_below_mean }}% of baskets, so it is not 'typical'. Quote the median with the IQR; use the mean only when you need totals (mean × number of baskets).
+    wrong: "Quoting mean ± SD (a negative lower bound is a giveaway)."
+    leader: Which number goes on the slide, and which in the footnote?
+  - id: R1-10
+    lesson: L1.4
+    tier: Applied
+    title: Who drives revenue?
+    framing: How concentrated is spend across customers?
+    deliverable: Revenue share of top 25 customers and top 10%; Gini of customer revenue.
+    expected: "Top 25: {{ a.d1_top25_share_pct }}%; top 10%: {{ a.d1_top10pct_share_pct }}%; Gini {{ a.d1_cust_gini }}."
+    tolerance: "± 0.3 pp"
+    model: A small group carries a large share; any average is sensitive to them. These are the bulk buyers (R07) — a separate segment, not 'outliers to delete'.
+    wrong: "Removing the top customers to 'clean' the data."
+    leader: Decide how CRM should treat the top 25.
+  - id: R1-11
+    lesson: L1.5
+    tier: Applied
+    title: How many bins?
+    framing: Plot the basket-value histogram.
+    deliverable: Bin counts suggested by Sturges and Freedman-Diaconis; skewness on the log scale.
+    expected: "Sturges {{ a.d1_sturges_bins }} bins vs Freedman-Diaconis {{ a.d1_fd_bins }}; log-scale skew {{ a.d1_logb_skew }} (raw {{ a.d1_b_skew }})."
+    tolerance: "± 1 bin; ± 0.05"
+    model: On heavy-tailed data both rules misbehave on the raw scale — one hides the shape, the other creates hundreds of near-empty bins because of the long tail. Plot on a log scale (or clip the axis and say so) and add an ECDF.
+    wrong: "Accepting the default histogram where everything sits in the first bar."
+    leader: What two charts would you require for any spend distribution?
+  - id: R1-12
+    lesson: L1.6
+    tier: Basic
+    title: How many outliers?
+    framing: Flag unusual baskets.
+    deliverable: "Run `retail_outliers_baskets.yaml` on raw data; then count on clean baskets: Tukey 1.5 / 3 × IQR, z > 3, robust z > 3.5."
+    expected: "Clean baskets: Tukey 1.5 → {{ a.d1_n_tukey }}, Tukey 3 → {{ a.d1_n_tukey_far }}, z > 3 → {{ a.d1_n_z3 }}, robust z > 3.5 → {{ a.d1_n_mz35 }} (of {{ a.d1_b_n | n }})."
+    tolerance: exact
+    model: Different rules, very different counts. On skewed data Tukey's 1.5 × IQR flags many ordinary large baskets; the plain z-score is diluted by the inflated SD. 'Outlier' is a decision, not a property.
+    wrong: "Picking whichever rule gives the answer you wanted."
+    leader: Which rule would you standardise on for basket monitoring, and why?
+  - id: R1-13
+    lesson: L1.6
+    tier: Applied
+    title: Can a z-score find the decimal-shift errors?
+    framing: Before cleaning, the 25 decimal-shift lines sit in {{ a.d1_err_baskets }} baskets.
+    deliverable: How many of those baskets each rule catches on raw basket values.
+    expected: "Plain z > 3 catches {{ a.d1_err_caught_z3 }} of {{ a.d1_err_baskets }}; robust z > 3.5 catches {{ a.d1_err_caught_mz }}. SD raw {{ a.d1_sd_raw }} vs clean {{ a.d1_sd_clean }}."
+    tolerance: exact
+    model: The errors inflate the SD, which raises the z-score bar and hides some of them (masking). Median and MAD are not moved by a few extremes, so the robust score catches them all.
+    wrong: "Concluding the data are clean because z-scores flagged little."
+    leader: Why is 'mean ± 3 SD' a poor default in finance and retail data?
+  - id: R1-14
+    lesson: L1.6
+    tier: Stretch
+    title: Choose a treatment
+    framing: Decide how basket outliers should be handled for a pricing analysis.
+    deliverable: Mean basket under keep, cap at P99, exclude robust outliers, trimmed 10%; share of robust-flagged baskets from the planted bulk buyers.
+    expected: "Keep {{ a.d1_b_mean }}, cap P99 {{ a.d1_mean_capped99 }}, exclude {{ a.d1_mean_excl_outliers }}, trimmed {{ a.d1_b_trim10 }}; about {{ a.d1_flagged_bulk_share_pct }}% of flagged baskets come from 25 bulk-buying customers."
+    tolerance: "± 0.1"
+    model: The answer moves by over 15% depending on the treatment. Because a large share of extremes are one identifiable segment, the best treatment is to model bulk buyers separately rather than delete or cap them.
+    wrong: "Silently capping everything at P99."
+    leader: Write the one-sentence methods note you expect in the appendix.
+  - id: R1-15
+    lesson: L1.7
+    tier: Applied
+    title: Correlations that mislead
+    framing: Two quick claims — "price barely affects quantity" and "warm weather sells beverages".
+    deliverable: Pearson/Spearman of unit price vs quantity (lines, excl. bulk buyers); correlation of regional weekly temperature with Beverages, Frozen and Hair Care units.
+    expected: "Price–quantity Pearson {{ a.d1_pq_pearson }}, Spearman {{ a.d1_pq_spearman }}. Temperature r: Beverages {{ a.d1_temp_bev_r }}, Frozen {{ a.d1_temp_frozen_r }}, Hair Care {{ a.d1_temp_hair_r }}."
+    tolerance: "± 0.02"
+    model: Across all products, price and quantity are confounded by product type (expensive items are bought one at a time), so a near-zero correlation says nothing about elasticity (Day 8 measures it properly). Temperature correlates with Hair Care even though the data contain no temperature effect on it — shared seasonality and region size.
+    wrong: "'Price doesn't matter' and 'heat sells shampoo'."
+    leader: What design would you ask for before believing a weather effect?
+finance:
+  - id: F1-1
+    lesson: L1.1
+    tier: Basic
+    title: The grain of the performance panel
+    framing: Risk wants monthly delinquency figures.
+    deliverable: Is (account_id, month_on_book) unique? Months observed per account on average.
+    expected: "Unique = {{ a.d1_panel_key_unique }}; {{ a.d1_months_per_account }} months per account."
+    tolerance: "± 0.1"
+    model: One row per account per month. Counting rows counts account-months, not accounts.
+    wrong: "Counting rows in the panel as 'number of accounts'."
+    leader: Which KPIs on the risk dashboard are at account grain and which at account-month?
+  - id: F1-2
+    lesson: L1.1
+    tier: Applied
+    title: Two 'average balances'
+    framing: Two teams report different average balances.
+    deliverable: Mean balance from `accounts` (snapshot) vs `performance_monthly` (all months).
+    expected: "Accounts: {{ a.d1_bal_mean_account | n }}; panel: {{ a.d1_bal_mean_panel | n }}."
+    tolerance: "± 50"
+    model: Different grain and time window — snapshot per account vs an average over account-months (which weights long-lived accounts more and includes balances before pay-down or charge-off). Both are 'right'; the question decides which.
+    wrong: "Declaring one team wrong."
+    leader: Write the definition you would publish for 'average balance'.
+  - id: F1-3
+    lesson: L1.2
+    tier: Basic
+    title: Impossible values
+    framing: Validate customer attributes.
+    deliverable: "Run `finance_quality_accounts.yaml`. Impossible ages, negative incomes, utilisation above 100%."
+    expected: "{{ a.d1_bad_age }} impossible ages, {{ a.d1_neg_income }} negative incomes, {{ a.d1_util_over_1 }} accounts above 100% utilisation."
+    tolerance: exact
+    model: Ages and negative incomes are errors (quarantine, ask the source). Over-limit utilisation can be genuine (fees, interest) — a warning, not an error.
+    wrong: "Treating every rule hit as an error."
+    leader: Which of the three do you escalate to the data owner?
+  - id: F1-4
+    lesson: L1.2
+    tier: Applied
+    title: Error or real? Over-limit cards
+    framing: Some cards show utilisation above 1.
+    deliverable: Default rate of over-limit cards vs others; decision.
+    expected: "{{ a.d1_util_over_1 }} accounts; default {{ a.d1_def_over1_pct }}% vs {{ a.d1_def_notover1_pct }}% for other cards."
+    tolerance: "—"
+    model: If over-limit accounts default far more, the field is informative and almost certainly genuine. Validity rules must reflect how the business works, not a textbook range.
+    wrong: "Capping utilisation at 1 and losing a risk signal."
+    leader: Who should define validity rules — data teams or the business?
+  - id: F1-5
+    lesson: L1.3
+    tier: Basic
+    title: Missing income and risk
+    framing: Income is missing for {{ a.d1_inc_miss_pct }}% of accounts.
+    deliverable: Default rate and mean bureau score with and without income.
+    expected: "Default {{ a.d1_def_inc_missing_pct }}% (missing) vs {{ a.d1_def_inc_known_pct }}% (known); bureau {{ a.d1_bureau_inc_missing }} vs {{ a.d1_bureau_inc_known }}."
+    tolerance: "± 0.1"
+    model: "Missing income is itself a strong risk signal (MNAR, F02). Keep a 'missing' category (in scorecards: its own WoE bin) rather than deleting or imputing."
+    wrong: "Dropping accounts without income from the model."
+    leader: What would happen to the model's risk estimates if those rows were dropped?
+  - id: F1-6
+    lesson: L1.3
+    tier: Applied
+    title: The silent row loss
+    framing: A junior builds a model with `income_annual` and `utilisation` and drops incomplete rows.
+    deliverable: Rows remaining, % dropped, default rate of the remaining sample.
+    expected: "{{ a.d1_listwise_rows | n }} rows ({{ a.d1_listwise_drop_pct }}% dropped); default rate {{ a.d1_listwise_default_pct }}% vs {{ a.fi_default_pct }}% overall."
+    tolerance: "± 0.1"
+    model: Utilisation is structurally missing for every loan ({{ a.d1_util_na_loans_pct }}%), so listwise deletion silently removed all personal loans and the risky missing-income accounts. The model now describes a different, safer population.
+    wrong: "Not reporting the row loss."
+    leader: Which row-accounting line would have revealed this in your review?
+  - id: F1-7
+    lesson: L1.3
+    tier: Stretch
+    title: Deletion biases the risk estimate
+    framing: Restrict to credit cards and drop missing income.
+    deliverable: Default rate of cards before and after listwise deletion.
+    expected: "{{ a.d1_cards_default_pct }}% → {{ a.d1_cards_listwise_default_pct }}%."
+    tolerance: "± 0.05"
+    model: Because missingness is related to risk, deletion understates default — a provisioning model built this way would under-reserve.
+    wrong: "Calling a ~0.5 pp change 'small' at a ~4% base rate (it is >10% relative)."
+    leader: Translate the bias into extra provision for a 100,000-card book (assume an average loss of 3,000 per default).
+  - id: F1-8
+    lesson: L1.4
+    tier: Basic
+    title: Describe balances
+    framing: Portfolio reporting.
+    deliverable: Mean, median, skewness, share held by top 1%, Gini, share at zero.
+    expected: "Mean {{ a.d1_bal_mean | n }}, median {{ a.d1_bal_median | n }}, skew {{ a.d1_bal_skew }}, top 1% hold {{ a.d1_bal_top1_pct }}%, Gini {{ a.d1_bal_gini }}, {{ a.d1_bal_zero_pct }}% at zero."
+    tolerance: "± 0.2"
+    model: Heavy tail plus a spike at zero (closed, paid-off or charged-off accounts). Describe the two parts separately — 'share at zero' and the distribution of positive balances.
+    wrong: "Reporting the mean balance as a typical customer's."
+    leader: Which concentration figure belongs in a risk-appetite statement?
+  - id: F1-9
+    lesson: L1.4
+    tier: Applied
+    title: Comparing spread across groups
+    framing: Is income more variable among self-employed customers?
+    deliverable: Median income and coefficient of variation by employment type.
+    expected: "Medians — {{ a.d1_inc_med_by_emp | kv }}. CVs — {{ a.d1_inc_cv_by_emp | kv }}."
+    tolerance: "± 0.02"
+    model: CV compares spread relative to the mean, so groups with very different incomes can be compared. All groups are highly variable because of the heavy tail; robust spread (IQR/median) is a useful companion.
+    wrong: "Comparing raw SDs across groups with different scales."
+    leader: Would you set different verification rules by employment type based on this?
+  - id: F1-10
+    lesson: L1.5
+    tier: Basic
+    title: ECDFs compare vintages at a glance
+    framing: Have recent applicants got weaker bureau scores?
+    deliverable: Median, P25 and share below 650 for early vs late (2025Q2–Q3) vintages; ECDF plot.
+    expected: "Median {{ a.d1_bureau_med_early }} → {{ a.d1_bureau_med_late }}; P25 {{ a.d1_bureau_p25_early }} → {{ a.d1_bureau_p25_late }}; below 650: {{ a.d1_share_below_650_early }}% → {{ a.d1_share_below_650_late }}%."
+    tolerance: "± 1"
+    model: The late ECDF sits to the left everywhere — the whole distribution shifted, not just the tail. This previews population drift (F11, Day 9).
+    wrong: "Comparing two overlapping histograms with different bin widths."
+    leader: Which single number from the ECDF would you monitor monthly?
+  - id: F1-11
+    lesson: L1.6
+    tier: Applied
+    title: Transforming income
+    framing: Income will enter a regression.
+    deliverable: Skewness raw, after log, and after Box-Cox (with λ).
+    expected: "Raw {{ a.d1_inc_skew }}, log {{ a.d1_loginc_skew }}, Box-Cox {{ a.d1_boxcox_skew }} (λ = {{ a.d1_boxcox_lambda }})."
+    tolerance: "± 0.05"
+    model: λ close to 0 means Box-Cox is essentially a log transform — choose the log, which is easier to explain (coefficients become % effects).
+    wrong: "Using Box-Cox with an unexplainable λ when log does the job."
+    leader: When is a transformation worth the loss of interpretability?
+  - id: F1-12
+    lesson: L1.6
+    tier: Stretch
+    title: Target encoding can leak
+    framing: A junior target-encodes a 2,000-level code that contains no information about default.
+    deliverable: AUC of the encoded feature computed on all data vs out-of-fold.
+    expected: "In-sample AUC {{ a.d1_te_auc_leaky }} vs out-of-fold {{ a.d1_te_auc_oof }}."
+    tolerance: "± 0.01"
+    model: Encoding each row with the default rate of its own category (including itself) leaks the label; with small categories the feature looks highly predictive. Fit encoders inside cross-validation folds.
+    wrong: "Celebrating a new 'strong' feature."
+    leader: What question about feature engineering do you add to model reviews?
+  - id: F1-13
+    lesson: L1.7
+    tier: Basic
+    title: Income and limit
+    framing: How closely does the bank tie limits to income?
+    deliverable: Pearson and Spearman correlation of income with limit/loan amount.
+    expected: "Pearson {{ a.d1_il_pearson }}, Spearman {{ a.d1_il_spearman }}."
+    tolerance: "± 0.01"
+    model: Very strong — limits are set from income. Expect multicollinearity if both enter a model (F06, Day 5).
+    wrong: "Concluding income causes default via limit without a model."
+    leader: Which of the two would you keep in a scorecard, and why?
+  - id: F1-14
+    lesson: L1.7
+    tier: Applied
+    title: Weak correlation, strong risk
+    framing: "Utilisation hardly correlates with default, so we can drop it."
+    deliverable: Point-biserial correlation of utilisation with default; default ratio for >90% vs ≤50% utilisation.
+    expected: "r = {{ a.d1_util_def_pearson }}; default ratio {{ a.d1_util_def_ratio }}×."
+    tolerance: "± 0.02"
+    model: Correlation measures linear association with a rare binary outcome — it is small even when risk is six times higher in one band. Look at binned rates.
+    wrong: "Dropping a feature because |r| is small."
+    leader: Write the coaching note for the junior who proposed dropping it.
+  - id: F1-15
+    lesson: L1.5
+    tier: Stretch
+    title: A spike at zero
+    framing: Plot the distribution of current balances.
+    deliverable: Share of balances at exactly zero; linear vs log-scale histogram; what the spike means.
+    expected: "{{ a.d1_bal_zero_pct }}% at zero."
+    tolerance: "± 0.2 pp"
+    model: A log axis drops zeros silently, so report them separately. The spike mixes closed, paid-off and charged-off accounts — three different stories that should not be averaged together.
+    wrong: "Plotting log(balance) and losing a tenth of accounts without comment."
+    leader: How should zero balances appear in the monthly portfolio pack?

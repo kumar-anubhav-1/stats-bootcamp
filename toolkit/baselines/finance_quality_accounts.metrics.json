@@ -1,0 +1,47 @@
+{
+  "rows": 25000,
+  "duplicate_rows": 0,
+  "duplicate_ids": 0,
+  "rules": {
+    "impossible_age": 12,
+    "negative_income": 20,
+    "utilisation_over_100pct": 35,
+    "dti_over_1": 0
+  },
+  "missing_pct": {
+    "income_annual": 3.76,
+    "term_months": 60.41,
+    "utilisation": 39.59,
+    "churn_month": 71.93,
+    "cured_within_3m": 83.22
+  },
+  "missing_tests": {
+    "income_annual|employment_type|row": 0.002696,
+    "income_annual|acquisition_channel|row": 0.0,
+    "income_annual|income_verified_flag|row": 0.0,
+    "income_annual|product_type|row": 0.001168,
+    "income_annual|bureau_score|row": 0.0,
+    "term_months|employment_type|row": 0.563682,
+    "term_months|acquisition_channel|row": 0.639162,
+    "term_months|income_verified_flag|row": 0.699916,
+    "term_months|product_type|row": 0.0,
+    "term_months|bureau_score|row": 0.305235,
+    "utilisation|employment_type|row": 0.563682,
+    "utilisation|acquisition_channel|row": 0.639162,
+    "utilisation|income_verified_flag|row": 0.699916,
+    "utilisation|product_type|row": 0.0,
+    "utilisation|bureau_score|row": 0.305235,
+    "churn_month|employment_type|row": 0.595898,
+    "churn_month|acquisition_channel|row": 0.0,
+    "churn_month|income_verified_flag|row": 0.02294,
+    "churn_month|product_type|row": 0.000493,
+    "churn_month|bureau_score|row": 3e-05,
+    "cured_within_3m|employment_type|row": 0.0,
+    "cured_within_3m|acquisition_channel|row": 0.0,
+    "cured_within_3m|income_verified_flag|row": 0.0,
+    "cured_within_3m|product_type|row": 0.0,
+    "cured_within_3m|bureau_score|row": 0.0
+  },
+  "reconciliation": null,
+  "clean_rows": null
+}

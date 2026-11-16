@@ -1,0 +1,1850 @@
+quizzes:
+- id: L5.1-F
+  title: L5.1 Linear regression (Basic → Advanced)
+  lesson: L5.1
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C166
+    prompt: A multiple-regression coefficient is…
+    options:
+    - id: a
+      text: The expected change in y per unit of x, holding the other predictors fixed
+      correct: true
+      why: Adjusted association.
+    - id: b
+      text: The correlation of x and y
+      why: No.
+    - id: c
+      text: A causal effect
+      why: Only with a design.
+    - id: d
+      text: The share of variance explained
+      why: That's R².
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C167
+    prompt: "Temperature coefficient in the log-units model is {{ a.d5_bev_temp_b }}. % change per +1 °C?"
+    answer: "{{ a.d5_bev_temp_pct }}"
+    tolerance_abs: 0.1
+    unit: '%'
+    explanation: 100 × (e^β − 1).
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C167
+    prompt: "Promo-share coefficient {{ a.d5_bev_promo_b }}. % change for +10 pp of SKUs on promotion?"
+    answer: "{{ a.d5_bev_promo10_pct }}"
+    tolerance_abs: 0.3
+    unit: '%'
+    explanation: 100 × (e^(0.1β) − 1).
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C167
+    prompt: In log(y) ~ log(x), β is…
+    options:
+    - id: a
+      text: An elasticity (% change in y per 1% change in x)
+      correct: true
+      why: Log–log.
+    - id: b
+      text: Units per unit
+      why: That's linear.
+    - id: c
+      text: '% per unit'
+      why: That's log–linear.
+    - id: d
+      text: An odds ratio
+      why: Logistic.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C169
+    prompt: 'C(format) with Express as reference: the Hyper coefficient means…'
+    options:
+    - id: a
+      text: Difference between Hyper and Express, other things equal
+      correct: true
+      why: Vs reference.
+    - id: b
+      text: Hyper's mean
+      why: No.
+    - id: c
+      text: Difference from the average store
+      why: Not with treatment coding.
+    - id: d
+      text: Hyper's share
+      why: No.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C168
+    prompt: "R² = {{ a.d5_bev_r2 }}. Which is true?"
+    options:
+    - id: a
+      text: Most variation is explained, largely by store size; it doesn't prove the coefficients are right
+      correct: true
+      why: Fit ≠ validity.
+    - id: b
+      text: The model is causal
+      why: No.
+    - id: c
+      text: 89% of predictions are exact
+      why: No.
+    - id: d
+      text: Adding variables can lower R²
+      why: R² never falls when adding.
+  - id: q7
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C167
+    prompt: Elasticity of credit limit with respect to income?
+    answer: "{{ a.d5_lim_elast }}"
+    tolerance_abs: 0.02
+    explanation: Limits ∝ income — a policy rule.
+  - id: q8
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C167
+    prompt: Why prefer the log model to the raw-units model across stores?
+    options:
+    - id: a
+      text: Effects are proportional and comparable across store sizes
+      correct: true
+      why: Raw effects average over very different stores.
+    - id: b
+      text: Higher R²
+      why: Not necessarily.
+    - id: c
+      text: No assumptions
+      why: No.
+    - id: d
+      text: Always unbiased
+      why: No.
+- id: L5.1-L
+  title: L5.1 Reading regressions (Leader)
+  lesson: L5.1
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C167
+    prompt: Which presentation of the Beverages model is most useful to the buyer?
+    options:
+    - id: a
+      text: '''+2% per °C, +45% holiday weeks, −9% per 10 pp of SKUs out of stock'', with CIs'
+      correct: true
+      why: Business units.
+    - id: b
+      text: A table of β and p
+      why: Not actionable.
+    - id: c
+      text: R² only
+      why: No.
+    - id: d
+      text: The SQL
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C166
+    prompt: '''Holding promotions constant'' is credible only if…'
+    options:
+    - id: a
+      text: The model includes the variables that move with promotions (displays, format) as the DAG requires
+      correct: true
+      why: L4.4.
+    - id: b
+      text: R² is high
+      why: No.
+    - id: c
+      text: n is large
+      why: No.
+    - id: d
+      text: Always
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C167
+    prompt: A deck claims 'the regression discovered that bureau score drives our interest rates'. Comment.
+    model: "That is our pricing rule ({{ a.d5_rate_bureau_100 }} pp per 100 points), not a discovery about customers. Regressions on policy-determined variables recover the policy. Useful for auditing pricing consistency, not as an insight."
+    rubric: 'Full: policy recovered + appropriate use. Partial: one.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C168
+    prompt: A model with R² 0.15 from an A/B test…
+    options:
+    - id: a
+      text: Can still estimate the causal effect precisely
+      correct: true
+      why: R² ≠ validity.
+    - id: b
+      text: Is useless
+      why: No.
+    - id: c
+      text: Must be redone
+      why: No.
+    - id: d
+      text: Is overfitted
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C167
+    prompt: First question when shown a coefficient?
+    options:
+    - id: a
+      text: What does it mean in business units, with what interval?
+      correct: true
+      why: Translate first.
+    - id: b
+      text: Is p < 0.05?
+      why: Secondary.
+    - id: c
+      text: Which software?
+      why: No.
+    - id: d
+      text: How many decimals?
+      why: No.
+- id: L5.2-F
+  title: L5.2 Diagnostics (Basic → Advanced)
+  lesson: L5.2
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C171
+    prompt: Heteroscedasticity mainly affects…
+    options:
+    - id: a
+      text: Standard errors (not coefficients)
+      correct: true
+      why: Use robust SEs.
+    - id: b
+      text: Coefficients only
+      why: No.
+    - id: c
+      text: R² only
+      why: No.
+    - id: d
+      text: Nothing
+      why: SEs wrong.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C171
+    prompt: Raw-units residuals fan out with store size. Best fix?
+    options:
+    - id: a
+      text: Log the outcome and use HC3 SEs
+      correct: true
+      why: Proportional effects, robust SEs.
+    - id: b
+      text: Drop big stores
+      why: No.
+    - id: c
+      text: Ignore
+      why: No.
+    - id: d
+      text: Add more variables
+      why: Doesn't fix variance.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C172
+    prompt: VIF of income in the card default model?
+    answer: "{{ a.d5_vif.income_annual }}"
+    tolerance_abs: 3
+    explanation: Collinear with limit.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C172
+    prompt: With VIF ≈ 140, the income and limit coefficients are…
+    options:
+    - id: a
+      text: Individually uninterpretable and unstable
+      correct: true
+      why: Signs flip across samples.
+    - id: b
+      text: Precise
+      why: No.
+    - id: c
+      text: Causal
+      why: No.
+    - id: d
+      text: Biased predictions
+      why: Predictions are fine.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C172
+    prompt: In how many of 5 samples was the income coefficient positive?
+    answer: "{{ a.d5_flip_n_inc_pos }}"
+    tolerance_abs: 0
+    explanation: Instability.
+  - id: q6
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C173
+    prompt: Cook's distance measures…
+    options:
+    - id: a
+      text: How much the fit changes if a row is removed
+      correct: true
+      why: Influence.
+    - id: b
+      text: Residual size
+      why: Partly.
+    - id: c
+      text: Leverage only
+      why: Combined.
+    - id: d
+      text: Correlation
+      why: No.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C170
+    prompt: Which assumption violation is most dangerous for p-values?
+    options:
+    - id: a
+      text: Non-independent errors
+      correct: true
+      why: SEs far too small.
+    - id: b
+      text: Non-normal errors with large n
+      why: Minor.
+    - id: c
+      text: Slight heteroscedasticity
+      why: Fixable with HC3.
+    - id: d
+      text: Rounded data
+      why: No.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C174
+    prompt: Durbin-Watson near 0 on weekly data means…
+    options:
+    - id: a
+      text: Strong positive autocorrelation — SEs over-optimistic
+      correct: true
+      why: Time dependence.
+    - id: b
+      text: No autocorrelation
+      why: That's ≈ 2.
+    - id: c
+      text: Negative autocorrelation
+      why: Near 4.
+    - id: d
+      text: Perfect fit
+      why: No.
+- id: L5.2-L
+  title: L5.2 Reviewing models (Leader)
+  lesson: L5.2
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C172
+    prompt: Version 2 of the default model says income increases risk; version 1 said the opposite. Response?
+    options:
+    - id: a
+      text: Check VIF — income and limit are near-duplicates; keep one
+      correct: true
+      why: Collinearity.
+    - id: b
+      text: Investigate rich customers
+      why: Artefact.
+    - id: c
+      text: Average versions
+      why: No.
+    - id: d
+      text: Ignore
+      why: Explainability risk.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C173
+    prompt: A junior removed 181 'influential' rows. You ask…
+    options:
+    - id: a
+      text: Which rows, why, and does the conclusion change with them in?
+      correct: true
+      why: Document and justify.
+    - id: b
+      text: Remove more
+      why: No.
+    - id: c
+      text: Fine
+      why: No.
+    - id: d
+      text: Use median
+      why: Not the point.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C171
+    prompt: Write a team standard for regression diagnostics (3 bullets).
+    model: 1) Plot residuals vs fitted and Q-Q; transform if curved or fan-shaped. 2) Default to robust (HC3) or cluster SEs at the unit of dependence. 3) Report VIFs for interpreted terms (> 5 → drop/combine/regularise) and list influential rows with explanations — never auto-delete.
+    rubric: 'Full: plots + robust SEs + VIF/influence. Partial: 2.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C172
+    prompt: Collinearity matters most for…
+    options:
+    - id: a
+      text: Interpretation and adverse-action reasons
+      correct: true
+      why: Predictions unaffected.
+    - id: b
+      text: Prediction accuracy
+      why: Little effect.
+    - id: c
+      text: Data storage
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C174
+    prompt: Weekly store data, p < 0.001 everywhere. First concern?
+    options:
+    - id: a
+      text: Repeated rows per store — cluster SEs
+      correct: true
+      why: Dependence.
+    - id: b
+      text: Too few rows
+      why: No.
+    - id: c
+      text: Software bug
+      why: Unlikely.
+    - id: d
+      text: None
+      why: No.
+- id: L5.3-F
+  title: L5.3 Logistic regression (Basic → Advanced)
+  lesson: L5.3
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C175
+    prompt: Logistic regression is linear on the scale of…
+    options:
+    - id: a
+      text: Log-odds
+      correct: true
+      why: logit(p).
+    - id: b
+      text: Probability
+      why: No — S-shaped.
+    - id: c
+      text: Odds
+      why: Log of odds.
+    - id: d
+      text: Counts
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C175
+    prompt: Odds ratio for +50 bureau points?
+    answer: "{{ a.d5_or_bureau }}"
+    tolerance_abs: 0.02
+    explanation: Protective.
+  - id: q3
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C175
+    prompt: Average marginal effect of the partner channel on PD (pp)?
+    answer: "{{ a.d5_me_partner_pp }}"
+    tolerance_abs: 0.3
+    explanation: "OR {{ a.d5_or_partner }}."
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C175
+    prompt: OR ≈ RR when…
+    options:
+    - id: a
+      text: The outcome is rare
+      correct: true
+      why: Odds ≈ probability.
+    - id: b
+      text: n is large
+      why: No.
+    - id: c
+      text: The OR is significant
+      why: No.
+    - id: d
+      text: Always
+      why: No.
+  - id: q5
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C176
+    prompt: AUC of the default model?
+    answer: "{{ a.d5_logit_auc }}"
+    tolerance_abs: 0.01
+    explanation: Good ranking.
+  - id: q6
+    type: mcq
+    difficulty: 3
+    concepts:
+    - C176
+    prompt: "Return model: significant drivers, AUC {{ a.d5_ret_auc }}. Meaning?"
+    options:
+    - id: a
+      text: Real associations, weak prediction
+      correct: true
+      why: Near-random ranking.
+    - id: b
+      text: Good model
+      why: No.
+    - id: c
+      text: Bug
+      why: No.
+    - id: d
+      text: Overfitted
+      why: No.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C176
+    prompt: McFadden pseudo-R² of 0.18 is…
+    options:
+    - id: a
+      text: Reasonable for a logistic model; not comparable with OLS R²
+      correct: true
+      why: 0.2–0.4 good.
+    - id: b
+      text: Very poor
+      why: Different scale.
+    - id: c
+      text: 18% accuracy
+      why: No.
+    - id: d
+      text: Overfitting
+      why: No.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C176
+    prompt: Best check that predicted PDs are right in level?
+    options:
+    - id: a
+      text: Calibration plot by decile
+      correct: true
+      why: Predicted vs observed.
+    - id: b
+      text: AUC
+      why: Ranking only.
+    - id: c
+      text: p-values
+      why: No.
+    - id: d
+      text: R²
+      why: No.
+- id: L5.3-L
+  title: L5.3 Communicating logistic results (Leader)
+  lesson: L5.3
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C175
+    prompt: Which sentence for the CRO?
+    options:
+    - id: a
+      text: "'A partner-channel customer's PD is ~{{ a.d5_me_partner_pp }} pp higher than a similar branch customer's'"
+      correct: true
+      why: pp, adjusted.
+    - id: b
+      text: '''Partner customers are 2.5× more likely to default'''
+      why: Odds, not probability; overstated.
+    - id: c
+      text: '''β = 0.9'''
+      why: Opaque.
+    - id: d
+      text: '''Significant'''
+      why: Uninformative.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C176
+    prompt: A significant model is proposed for deployment. You require…
+    options:
+    - id: a
+      text: Held-out AUC and calibration
+      correct: true
+      why: Predictive validation.
+    - id: b
+      text: Smaller p-values
+      why: No.
+    - id: c
+      text: More variables
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C175
+    prompt: Why are logistic scorecards still standard in credit despite ML?
+    model: Stable, monotone and explainable coefficients (adverse-action reasons), easy calibration and monitoring, regulator familiarity, and only modest accuracy loss vs GBMs on well-engineered features.
+    rubric: 'Full: explainability + stability/calibration + regulation. Partial: 1–2.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C175
+    prompt: "Unverified-income OR is {{ a.d5_or_unver }} adjusted vs a raw RR of ~1.9 (L3.4). Why smaller?"
+    options:
+    - id: a
+      text: Part of the raw gap is explained by channel and bureau score
+      correct: true
+      why: Confounding adjusted.
+    - id: b
+      text: Error
+      why: No.
+    - id: c
+      text: OR always smaller
+      why: No.
+    - id: d
+      text: Sample size
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C176
+    prompt: Event rate matters for interpreting logistic output because…
+    options:
+    - id: a
+      text: It converts odds into probabilities and determines whether OR ≈ RR
+      correct: true
+      why: Base rate.
+    - id: b
+      text: It sets R²
+      why: No.
+    - id: c
+      text: It doesn't
+      why: It does.
+    - id: d
+      text: It fixes calibration
+      why: No.
+- id: L5.4-F
+  title: L5.4 Regularisation (Basic → Advanced)
+  lesson: L5.4
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C178
+    prompt: Lasso differs from ridge because it…
+    options:
+    - id: a
+      text: Can set coefficients exactly to zero
+      correct: true
+      why: L1 penalty.
+    - id: b
+      text: Never shrinks
+      why: No.
+    - id: c
+      text: Needs no tuning
+      why: No.
+    - id: d
+      text: Is unbiased
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C179
+    prompt: Test R² of OLS trained on 80 rows with 59 features?
+    answer: "{{ a.d5_r2_ols8_te }}"
+    tolerance_abs: 0.05
+    explanation: "Train {{ a.d5_r2_ols8_tr }}."
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C179
+    prompt: With thousands of rows per feature, regularisation…
+    options:
+    - id: a
+      text: Changes little
+      correct: true
+      why: "OLS {{ a.d5_r2_ols_te }} ≈ lasso {{ a.d5_r2_lasso_te }}."
+    - id: b
+      text: Always improves test error
+      why: No.
+    - id: c
+      text: Is harmful
+      why: No.
+    - id: d
+      text: Removes bias
+      why: Adds bias.
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C179
+    prompt: Why shuffle CV folds on store-sorted data?
+    options:
+    - id: a
+      text: Unshuffled folds drop whole stores and mislead the choice of λ
+      correct: true
+      why: Fold composition.
+    - id: b
+      text: Speed
+      why: No.
+    - id: c
+      text: Never shuffle
+      why: Except time series.
+    - id: d
+      text: To raise R²
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C179
+    prompt: The 1-SE rule picks…
+    options:
+    - id: a
+      text: The simplest model within one SE of the best CV score
+      correct: true
+      why: Parsimony.
+    - id: b
+      text: The best CV score
+      why: That's 'min'.
+    - id: c
+      text: The largest model
+      why: No.
+    - id: d
+      text: A random model
+      why: No.
+  - id: q6
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C178
+    prompt: Noise features kept by the best-CV lasso in the finance screen?
+    answer: "{{ a.d5_f_l1best_noise_kept }}"
+    tolerance_abs: 1
+    explanation: Of 20.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C179
+    prompt: BIC penalises parameters…
+    options:
+    - id: a
+      text: More than AIC (log n each)
+      correct: true
+      why: Prefers smaller models.
+    - id: b
+      text: Less than AIC
+      why: No.
+    - id: c
+      text: Not at all
+      why: No.
+    - id: d
+      text: Only for logistic
+      why: No.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C177
+    prompt: Ridge suits correlated predictors because it…
+    options:
+    - id: a
+      text: Shares the effect between them stably
+      correct: true
+      why: L2.
+    - id: b
+      text: Drops one at random
+      why: Lasso tends to.
+    - id: c
+      text: Ignores them
+      why: No.
+    - id: d
+      text: Needs no scaling
+      why: Scale first.
+- id: L5.4-L
+  title: L5.4 Parsimony and validation (Leader)
+  lesson: L5.4
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C179
+    prompt: A junior shows R² 0.99 on training data. Your question?
+    options:
+    - id: a
+      text: What is it on held-out (and out-of-time) data?
+      correct: true
+      why: Overfitting check.
+    - id: b
+      text: Can it reach 1.0?
+      why: No.
+    - id: c
+      text: Which features?
+      why: Later.
+    - id: d
+      text: None
+      why: No.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C178
+    prompt: '''Lasso dropped income, so income doesn''t matter.'' Response?'
+    options:
+    - id: a
+      text: It may have kept a correlated substitute (limit); selection isn't causal
+      correct: true
+      why: F06.
+    - id: b
+      text: Agree
+      why: No.
+    - id: c
+      text: Use ridge to prove it
+      why: No.
+    - id: d
+      text: Remove limit too
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C179
+    prompt: Argue for the 1-SE model to a product owner who wants maximum AUC.
+    model: "It loses ~{{ ((a.d5_f_auc_l1best_te - a.d5_f_auc_l1_te) * 1000) | round(0) | int }} thousandths of AUC on held-out data but uses {{ a.d5_f_l1_kept }} instead of {{ a.d5_f_l1best_kept }} variables: cheaper data, simpler monitoring and explanations, less drift risk. The AUC difference is within noise."
+    rubric: 'Full: numbers + operational benefits. Partial: benefits only.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C179
+    prompt: Which validation do you require for a model used over time?
+    options:
+    - id: a
+      text: Out-of-time holdout
+      correct: true
+      why: Time drift.
+    - id: b
+      text: Random split only
+      why: Optimistic.
+    - id: c
+      text: Training fit
+      why: No.
+    - id: d
+      text: None
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C179
+    prompt: ΔAIC = 3 between models on 25,000 rows. Meaning?
+    options:
+    - id: a
+      text: Small; check out-of-sample before choosing the bigger model
+      correct: true
+      why: Large n detects tiny gains.
+    - id: b
+      text: Decisive
+      why: No.
+    - id: c
+      text: Bigger model wrong
+      why: No.
+    - id: d
+      text: Meaningless always
+      why: No.
+- id: L5.5-F
+  title: L5.5 GLMs (Basic → Advanced)
+  lesson: L5.5
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 1
+    concepts:
+    - C180
+    prompt: A GLM is defined by…
+    options:
+    - id: a
+      text: A family, a link function and a linear predictor
+      correct: true
+      why: GLM recipe.
+    - id: b
+      text: Only a family
+      why: No.
+    - id: c
+      text: A neural network
+      why: No.
+    - id: d
+      text: OLS on logs
+      why: No.
+  - id: q2
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C182
+    prompt: Pearson dispersion of the Poisson Beverages model?
+    answer: "{{ a.d5_pois_disp }}"
+    tolerance_abs: 0.3
+    explanation: Over-dispersed.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C181
+    prompt: Why include log(exposure) as an offset?
+    options:
+    - id: a
+      text: To model claims per policy-year when policies are observed for different times
+      correct: true
+      why: Rate.
+    - id: b
+      text: To raise AIC
+      why: No.
+    - id: c
+      text: To fix collinearity
+      why: No.
+    - id: d
+      text: Optional decoration
+      why: Essential.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C181
+    prompt: Motor claim frequency per policy-year?
+    answer: "{{ a.d5_freq_rate }}"
+    tolerance_abs: 0.005
+    explanation: Claims ÷ exposure.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C183
+    prompt: Gamma GLM is suited to…
+    options:
+    - id: a
+      text: Positive, right-skewed amounts (claim severity)
+      correct: true
+      why: Variance ∝ mean².
+    - id: b
+      text: Counts
+      why: Poisson/NB.
+    - id: c
+      text: Binary
+      why: Logistic.
+    - id: d
+      text: Negative values
+      why: No.
+  - id: q6
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C183
+    prompt: Large-loss loading (%) — uncapped vs P99-capped mean severity?
+    answer: "{{ a.d5_large_loading_pct }}"
+    tolerance_abs: 1
+    unit: '%'
+    explanation: F17 catastrophic claims.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C184
+    prompt: Tweedie regression is for…
+    options:
+    - id: a
+      text: Outcomes with many zeros plus positive amounts
+      correct: true
+      why: Pure premium, spend incl. non-buyers.
+    - id: b
+      text: Counts only
+      why: No.
+    - id: c
+      text: Binary
+      why: No.
+    - id: d
+      text: Ordinal
+      why: No.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C185
+    prompt: Quantile regression estimates…
+    options:
+    - id: a
+      text: Effects on a chosen percentile (e.g. P90)
+      correct: true
+      why: Tail-focused.
+    - id: b
+      text: The mean
+      why: OLS.
+    - id: c
+      text: Odds
+      why: No.
+    - id: d
+      text: Variance
+      why: No.
+- id: L5.5-L
+  title: L5.5 Pricing with GLMs (Leader)
+  lesson: L5.5
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C183
+    prompt: "Motor loss ratio is {{ a.d5_loss_ratio.motor }}. First pricing actions?"
+    options:
+    - id: a
+      text: Add an explicit large-loss load and re-rate young drivers / vehicle groups
+      correct: true
+      why: Drivers of the shortfall.
+    - id: b
+      text: Raise all premiums equally
+      why: Crude.
+    - id: c
+      text: Ignore large losses
+      why: No.
+    - id: d
+      text: Exit home insurance
+      why: Home is profitable.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C182
+    prompt: A promo looks significant in a Poisson model with dispersion 5. Concern?
+    options:
+    - id: a
+      text: SEs ~2× too small; refit NB or robust SEs
+      correct: true
+      why: Over-dispersion.
+    - id: b
+      text: None
+      why: No.
+    - id: c
+      text: Use OLS
+      why: Not the fix.
+    - id: d
+      text: Drop zeros
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C181
+    prompt: Explain frequency × severity to a non-technical board member.
+    model: We estimate how often each type of policy claims per year (frequency) and how much a typical claim costs (severity); multiplying gives expected claims cost per policy-year — the pure premium. We add a separate charge for rare very large claims, then expenses and margin.
+    rubric: 'Full: both parts + large-loss + loadings. Partial: 2.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C185
+    prompt: Staffing should be planned on…
+    options:
+    - id: a
+      text: A high quantile of demand (P90) — quantile regression
+      correct: true
+      why: Tail decisions.
+    - id: b
+      text: Mean
+      why: Under-staffs peaks.
+    - id: c
+      text: Median
+      why: Same.
+    - id: d
+      text: Max
+      why: Over-staffs.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C180
+    prompt: Which question selects the GLM family?
+    options:
+    - id: a
+      text: What kind of outcome is it (count, positive amount, zero+amount, binary)?
+      correct: true
+      why: Family follows outcome.
+    - id: b
+      text: Which has the best R²?
+      why: No.
+    - id: c
+      text: What did we use last time?
+      why: No.
+    - id: d
+      text: Which is newest?
+      why: No.
+- id: L5.6-F
+  title: L5.6 Non-linearity, interactions, mixed models (Basic → Advanced)
+  lesson: L5.6
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C186
+    prompt: Default rate ratio, utilisation > 90% vs ≤ 50%?
+    answer: "{{ a.d5_util_ratio }}"
+    tolerance_abs: 0.5
+    explanation: F04.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C186
+    prompt: Which utilisation specification has the lowest AIC?
+    options:
+    - id: a
+      text: B-spline (4 df)
+      correct: true
+      why: "AIC {{ a.d5_util_spl_aic | n }}."
+    - id: b
+      text: Linear
+      why: "{{ a.d5_util_lin_aic | n }}."
+    - id: c
+      text: 5 bins
+      why: "{{ a.d5_util_bin_aic | n }}."
+    - id: d
+      text: All equal
+      why: No.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C186
+    prompt: Why might a bank still choose bins?
+    options:
+    - id: a
+      text: Monotone, explainable, stable — small fit cost
+      correct: true
+      why: Scorecard practice.
+    - id: b
+      text: Always more accurate
+      why: No.
+    - id: c
+      text: Required by law
+      why: No.
+    - id: d
+      text: Faster
+      why: Not the reason.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C187
+    prompt: Default rate (%) for young (< 25), high-DTI customers?
+    answer: "{{ a.d5_int_rates.young_hiDTI }}"
+    tolerance_abs: 0.3
+    unit: '%'
+    explanation: "Vs {{ a.d5_int_rates.older_loDTI }}% for older, low-DTI."
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C187
+    prompt: "An interaction OR of {{ a.d5_int_or }} means…"
+    options:
+    - id: a
+      text: High DTI raises young customers' odds more than its separate effects predict
+      correct: true
+      why: Extra effect.
+    - id: b
+      text: Young customers are 1.6× riskier
+      why: That's a main effect.
+    - id: c
+      text: No interaction
+      why: OR > 1.
+    - id: d
+      text: DTI irrelevant
+      why: No.
+  - id: q6
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C188
+    prompt: ICC of log basket value between stores?
+    answer: "{{ a.d5_mix_icc }}"
+    tolerance_abs: 0.01
+    explanation: Mostly within-store variation.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C188
+    prompt: Random intercepts shrink small stores' estimates because…
+    options:
+    - id: a
+      text: Their raw averages are noisy; the model borrows strength from other stores
+      correct: true
+      why: Partial pooling.
+    - id: b
+      text: Small stores are worse
+      why: No.
+    - id: c
+      text: To hide them
+      why: No.
+    - id: d
+      text: A bug
+      why: No.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C186
+    prompt: Before fitting a straight line, you should…
+    options:
+    - id: a
+      text: Plot outcome against the driver (binned means)
+      correct: true
+      why: See the shape.
+    - id: b
+      text: Standardise
+      why: Doesn't reveal shape.
+    - id: c
+      text: Add interactions
+      why: Premature.
+    - id: d
+      text: Nothing
+      why: No.
+- id: L5.6-L
+  title: L5.6 Thresholds and segments (Leader)
+  lesson: L5.6
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 2
+    concepts:
+    - C186
+    prompt: Collections wants a trigger. Where does risk accelerate?
+    options:
+    - id: a
+      text: Above ~80% utilisation
+      correct: true
+      why: "{{ a.d5_util_obs['80–90'] }}% → {{ a.d5_util_obs['>90'] }}%."
+    - id: b
+      text: Above 30%
+      why: Flat there.
+    - id: c
+      text: Nowhere
+      why: No.
+    - id: d
+      text: At 100% only
+      why: Earlier.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C187
+    prompt: "The young × high-DTI cell has {{ a.d5_int_n_cell }} accounts. Implication?"
+    options:
+    - id: a
+      text: Flag the segment; validate before precise pricing
+      correct: true
+      why: Wide CI.
+    - id: b
+      text: Price precisely now
+      why: Imprecise.
+    - id: c
+      text: Ignore
+      why: Real signal.
+    - id: d
+      text: Ban the segment
+      why: Disproportionate.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C188
+    prompt: Why should a store league table use shrunk estimates?
+    model: "Small stores' raw averages swing by chance and dominate the top and bottom of league tables. Shrunk (mixed-model) estimates pull them toward their format's mean in proportion to their noise, so rankings reflect performance rather than sample size (store {{ a.d5_mix_small_store }} keeps only {{ (a.d5_mix_shrink * 100) | round(0) | int }}% of its raw deviation)."
+    rubric: 'Full: noise + shrinkage + example. Partial: one.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C186
+    prompt: AUC barely changes between linear and spline utilisation. Why still care?
+    options:
+    - id: a
+      text: Calibration in the high-risk band drives limit and collections decisions
+      correct: true
+      why: Where money is.
+    - id: b
+      text: We shouldn't
+      why: No.
+    - id: c
+      text: For R²
+      why: No.
+    - id: d
+      text: Regulation
+      why: Not primary.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C187
+    prompt: Interactions should be presented as…
+    options:
+    - id: a
+      text: A 2×2 table or predicted probabilities
+      correct: true
+      why: Readable.
+    - id: b
+      text: The raw coefficient
+      why: Hard to read.
+    - id: c
+      text: A p-value
+      why: No size.
+    - id: d
+      text: Not at all
+      why: No.
+- id: L5.7-F
+  title: L5.7 Capstone (Basic → Advanced)
+  lesson: L5.7
+  track: F
+  questions:
+  - id: q1
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C166
+    prompt: Rate effect (pp) in the 2025Q1→Q2 margin decomposition?
+    answer: "{{ a.d5_cap_rate_pp }}"
+    tolerance_abs: 0.2
+    explanation: "Mix {{ a.d5_cap_mix_pp }} pp."
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C166
+    prompt: Which segments contributed most to the margin fall?
+    options:
+    - id: a
+      text: Regular-price Beverages, Fresh Produce, Dairy
+      correct: true
+      why: Top rate contributions.
+    - id: b
+      text: Promoted Electronics
+      why: No.
+    - id: c
+      text: Mix shift to promotions
+      why: Promo share barely moved.
+    - id: d
+      text: Returns
+      why: No.
+  - id: q3
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C167
+    prompt: Why did regular margins fall?
+    options:
+    - id: a
+      text: Shelf prices cut relative to list while costs were flat
+      correct: true
+      why: "{{ a.d5_cap_reg_pidx_q1 }} → {{ a.d5_cap_reg_pidx_q2 }}."
+    - id: b
+      text: Supplier cost increases
+      why: Cost index flat.
+    - id: c
+      text: More promotions
+      why: No.
+    - id: d
+      text: Theft
+      why: No.
+  - id: q4
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C166
+    prompt: Approval rate (%) in 2025Q2?
+    answer: "{{ a.d5_appr_q2 }}"
+    tolerance_abs: 0.3
+    unit: '%'
+    explanation: "Q1: {{ a.d5_appr_q1 }}%."
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C166
+    prompt: Did underwriting get stricter?
+    options:
+    - id: a
+      text: No — approval within existing channels is unchanged; a new partner channel changed the mix
+      correct: true
+      why: Mix effect.
+    - id: b
+      text: 'Yes'
+      why: Within-channel rates stable.
+    - id: c
+      text: Can't tell
+      why: Channel split answers it.
+    - id: d
+      text: Only online
+      why: No.
+  - id: q6
+    type: numeric
+    difficulty: 2
+    concepts:
+    - C166
+    prompt: Partner share (%) of applications in 2025Q2?
+    answer: "{{ a.d5_partner_share_q2 }}"
+    tolerance_abs: 0.5
+    unit: '%'
+    explanation: New channel.
+  - id: q7
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C166
+    prompt: First analytical step for 'why did X change?'
+    options:
+    - id: a
+      text: Decompose into mix and rate
+      correct: true
+      why: Separates who from how.
+    - id: b
+      text: Run a neural network
+      why: No.
+    - id: c
+      text: Survey staff
+      why: Later.
+    - id: d
+      text: Compare means
+      why: Not enough.
+  - id: q8
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C167
+    prompt: After adjusting for discount depth, the Q2 promo-margin effect…
+    options:
+    - id: a
+      text: "Shrinks ({{ a.d5_cap_q2_effect_raw_pp }} → {{ a.d5_cap_q2_effect_after_disc_pp }} pp)"
+      correct: true
+      why: Depth explains part.
+    - id: b
+      text: Disappears entirely
+      why: Not quite.
+    - id: c
+      text: Grows
+      why: No.
+    - id: d
+      text: Reverses
+      why: No.
+- id: L5.7-L
+  title: L5.7 Live review (Leader)
+  lesson: L5.7
+  track: L
+  questions:
+  - id: q1
+    type: scenario
+    difficulty: 3
+    concepts:
+    - C166
+    prompt: 'Sales director: ''Risk has tightened underwriting — approvals fell 18 points.'' Response?'
+    options:
+    - id: a
+      text: 'Show approval by channel: unchanged; the new partner channel supplies weaker applicants'
+      correct: true
+      why: Mix.
+    - id: b
+      text: Loosen the cut-off
+      why: Treats a non-problem.
+    - id: c
+      text: Agree
+      why: Wrong.
+    - id: d
+      text: Ask for a model
+      why: The table answers it.
+  - id: q2
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C166
+    prompt: Which reviewer question exposes an unfinished 'why' analysis?
+    options:
+    - id: a
+      text: How much is mix and how much is rate?
+      correct: true
+      why: Core.
+    - id: b
+      text: Which tool?
+      why: No.
+    - id: c
+      text: How long did it take?
+      why: No.
+    - id: d
+      text: Any charts?
+      why: No.
+  - id: q3
+    type: open
+    difficulty: 3
+    concepts:
+    - C166
+    prompt: Write the two-sentence answer to the margin question for the trading director.
+    model: "Margin fell from {{ a.d5_cap_m_q1 }}% to {{ a.d5_cap_m_q2 }}% because regular shelf prices were cut by ~2% in North, South and West while costs stayed flat, with slightly deeper promotional discounts adding to it; the product mix barely changed. Prices recovered in Q3 and margin returned to {{ a.d5_cap_m_q3 }}%, so the question for pricing is whether the Q2 cuts bought enough volume (Day 8)."
+    rubric: 'Full: cause + numbers + status + next question. Partial: cause only.'
+  - id: q4
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C166
+    prompt: The real decision behind the approvals story is…
+    options:
+    - id: a
+      text: Whether the partner channel is worth it at its approval, default and margin
+      correct: true
+      why: Economics.
+    - id: b
+      text: Whether to change the cut-off
+      why: Not the issue.
+    - id: c
+      text: Hiring underwriters
+      why: No.
+    - id: d
+      text: None
+      why: No.
+  - id: q5
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C166
+    prompt: Why save the capstone as a config?
+    options:
+    - id: a
+      text: Next quarter's review is one command and auditable
+      correct: true
+      why: Reuse + reproducibility.
+    - id: b
+      text: Required by Git
+      why: No.
+    - id: c
+      text: To hide code
+      why: No.
+    - id: d
+      text: No reason
+      why: No.
+- id: D5-GATE
+  title: Day 5 gate (pass 75%)
+  lesson: D5
+  track: Mixed
+  pass_mark: 75
+  questions:
+  - id: g01
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C167
+    prompt: β = 0.02 in log(y) ~ x means…
+    options:
+    - id: a
+      text: ≈ +2% in y per unit of x
+      correct: true
+      why: Log-linear.
+    - id: b
+      text: +0.02 units
+      why: No.
+    - id: c
+      text: Elasticity 0.02
+      why: Needs log x.
+    - id: d
+      text: Odds × 1.02
+      why: Logistic.
+  - id: g02
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C171
+    prompt: Fan-shaped residuals →
+    options:
+    - id: a
+      text: Log transform + robust SEs
+      correct: true
+      why: Heteroscedasticity.
+    - id: b
+      text: Delete outliers
+      why: No.
+    - id: c
+      text: More data
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+  - id: g03
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C172
+    prompt: VIF 140 →
+    options:
+    - id: a
+      text: Coefficients unstable; drop/combine/regularise
+      correct: true
+      why: Collinearity.
+    - id: b
+      text: Great predictor
+      why: No.
+    - id: c
+      text: Heteroscedasticity
+      why: No.
+    - id: d
+      text: Overdispersion
+      why: No.
+  - id: g04
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C175
+    prompt: Logistic coefficient exponentiated gives…
+    options:
+    - id: a
+      text: An odds ratio
+      correct: true
+      why: e^β.
+    - id: b
+      text: A probability
+      why: No.
+    - id: c
+      text: A risk ratio always
+      why: Only if rare.
+    - id: d
+      text: R²
+      why: No.
+  - id: g05
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C179
+    prompt: Overfitting is detected by…
+    options:
+    - id: a
+      text: Comparing training and held-out performance
+      correct: true
+      why: Gap.
+    - id: b
+      text: High R²
+      why: Not alone.
+    - id: c
+      text: Low p-values
+      why: No.
+    - id: d
+      text: VIF
+      why: No.
+  - id: g06
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C178
+    prompt: Lasso…
+    options:
+    - id: a
+      text: Shrinks and can zero coefficients
+      correct: true
+      why: L1.
+    - id: b
+      text: Proves causality
+      why: No.
+    - id: c
+      text: Needs no scaling
+      why: No.
+    - id: d
+      text: Always beats OLS
+      why: No.
+  - id: g07
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C182
+    prompt: Count data with variance ≫ mean →
+    options:
+    - id: a
+      text: Negative binomial GLM
+      correct: true
+      why: Over-dispersion.
+    - id: b
+      text: Poisson
+      why: SEs too small.
+    - id: c
+      text: Logistic
+      why: No.
+    - id: d
+      text: Gamma
+      why: Amounts.
+  - id: g08
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C181
+    prompt: Policies observed for different durations →
+    options:
+    - id: a
+      text: Offset log(exposure)
+      correct: true
+      why: Rates.
+    - id: b
+      text: Drop short policies
+      why: No.
+    - id: c
+      text: Weight by premium
+      why: No.
+    - id: d
+      text: Ignore
+      why: Biased.
+  - id: g09
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C186
+    prompt: Risk jumps above a threshold →
+    options:
+    - id: a
+      text: Splines or bins
+      correct: true
+      why: Non-linear.
+    - id: b
+      text: Linear term
+      why: Misses it.
+    - id: c
+      text: Drop the variable
+      why: No.
+    - id: d
+      text: Interaction with ID
+      why: No.
+  - id: g10
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C187
+    prompt: Effect of DTI depends on age →
+    options:
+    - id: a
+      text: Interaction term
+      correct: true
+      why: It depends.
+    - id: b
+      text: Spline
+      why: Shape, not dependence.
+    - id: c
+      text: Random effect
+      why: Groups.
+    - id: d
+      text: Offset
+      why: No.
+  - id: g11
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C188
+    prompt: Many stores, few observations each →
+    options:
+    - id: a
+      text: Mixed model with random store intercepts
+      correct: true
+      why: Shrinkage.
+    - id: b
+      text: Ignore stores
+      why: Dependence.
+    - id: c
+      text: One model per store
+      why: Noisy.
+    - id: d
+      text: Delete small stores
+      why: No.
+  - id: g12
+    type: mcq
+    difficulty: 2
+    concepts:
+    - C166
+    prompt: Overall rate fell but every segment's rate is stable →
+    options:
+    - id: a
+      text: Mix effect
+      correct: true
+      why: Composition changed.
+    - id: b
+      text: Rate effect
+      why: No.
+    - id: c
+      text: Data error
+      why: Not necessarily.
+    - id: d
+      text: Collinearity
+      why: No.

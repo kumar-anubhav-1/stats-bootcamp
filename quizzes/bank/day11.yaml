@@ -1,0 +1,1427 @@
+quizzes:
+- id: L11.1-F
+  title: L11.1 Images as data (Basic → Advanced)
+  lesson: L11.1
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    prompt: A shelf photo of 48 × 192 pixels in colour contains how many numbers?
+    options:
+    - id: a
+      text: 27,648 (48 × 192 × 3)
+      correct: true
+      why: Rows × columns × channels.
+    - id: b
+      text: 9,216
+      why: Forgot the 3 colour channels.
+    - id: c
+      text: '192'
+      why: One row only.
+    - id: d
+      text: '48'
+      why: One column only.
+    concepts:
+    - C276
+  - id: q2
+    type: mcq
+    difficulty: 2
+    prompt: A pixel value of 0 in the red channel means…
+    options:
+    - id: a
+      text: No red light at that point (dark)
+      correct: true
+      why: 0 dark, 255 bright.
+    - id: b
+      text: Bright red
+      why: 255 is brightest.
+    - id: c
+      text: Missing data
+      why: It's a valid value.
+    - id: d
+      text: An error
+      why: No.
+    concepts:
+    - C276
+  - id: q3
+    type: mcq
+    difficulty: 2
+    prompt: A 3 × 3 filter with −1s on the left and +1s on the right detects…
+    options:
+    - id: a
+      text: Vertical edges (left-to-right brightness jumps)
+      correct: true
+      why: Weighted sums highlight patterns.
+    - id: b
+      text: Colour
+      why: It ignores colour.
+    - id: c
+      text: Horizontal edges
+      why: That's top-to-bottom.
+    - id: d
+      text: Noise only
+      why: It responds to edges.
+    concepts:
+    - C276
+  - id: q4
+    type: mcq
+    difficulty: 2
+    prompt: What does a CNN learn?
+    options:
+    - id: a
+      text: Its own filters, from edges up to shapes
+      correct: true
+      why: Stacked learned filters.
+    - id: b
+      text: Fixed hand-made rules
+      why: Learned.
+    - id: c
+      text: Only colours
+      why: Also shapes.
+    - id: d
+      text: Nothing new vs regression
+      why: Learns spatial filters.
+    concepts:
+    - C276
+  - id: q5
+    type: numeric
+    difficulty: 2
+    prompt: Average brightness of store S07's photos from week 5?
+    answer: "{{ a.v_bright_s7_after }}"
+    tolerance_abs: 0.03
+    explanation: "Was {{ a.v_bright_s7_before }} — a dim camera (V1)."
+    concepts:
+    - C276
+  - id: q6
+    type: mcq
+    difficulty: 2
+    prompt: Store S03's photos have much lower sharpness. Most likely?
+    options:
+    - id: a
+      text: The camera is out of focus
+      correct: true
+      why: V2.
+    - id: b
+      text: More products
+      why: Doesn't lower sharpness.
+    - id: c
+      text: A bigger store
+      why: No.
+    - id: d
+      text: Better lighting
+      why: No.
+    concepts:
+    - C276
+  - id: q7
+    type: mcq
+    difficulty: 2
+    prompt: Why check image quality before modelling?
+    options:
+    - id: a
+      text: Models fail silently on conditions unlike their training images
+      correct: true
+      why: Quality first.
+    - id: b
+      text: It's required by law
+      why: No.
+    - id: c
+      text: To speed up training
+      why: Not the point.
+    - id: d
+      text: It isn't needed
+      why: It is.
+    concepts:
+    - C276
+  - id: q8
+    type: mcq
+    difficulty: 2
+    prompt: Hand-made image features are…
+    options:
+    - id: a
+      text: Quick and explainable but fragile when conditions change
+      correct: true
+      why: Trade-off.
+    - id: b
+      text: Always best
+      why: No.
+    - id: c
+      text: Impossible to compute
+      why: Easy.
+    - id: d
+      text: The same as CNN filters
+      why: Hand-made vs learned.
+    concepts:
+    - C276
+- id: L11.1-L
+  title: L11.1 Images as data (Leader)
+  lesson: L11.1
+  track: L
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    prompt: A vendor shows accuracy before any images. You ask…
+    options:
+    - id: a
+      text: To see random images from every camera first
+      correct: true
+      why: Look at the data.
+    - id: b
+      text: For a bigger model
+      why: No.
+    - id: c
+      text: For the price
+      why: Later.
+    - id: d
+      text: Nothing
+      why: No.
+    concepts:
+    - C276
+  - id: q2
+    type: mcq
+    difficulty: 2
+    prompt: Cheapest ongoing safeguard for a camera network?
+    options:
+    - id: a
+      text: Daily brightness and sharpness checks per camera
+      correct: true
+      why: Quality monitoring.
+    - id: b
+      text: Retrain weekly
+      why: Costly; misses root cause.
+    - id: c
+      text: More cameras
+      why: No.
+    - id: d
+      text: None
+      why: No.
+    concepts:
+    - C276
+  - id: q3
+    type: mcq
+    difficulty: 2
+    prompt: Shelf cameras capture shoppers. Best control?
+    options:
+    - id: a
+      text: Point at shelves, blur faces, short retention
+      correct: true
+      why: Privacy by design.
+    - id: b
+      text: Keep everything
+      why: Privacy risk.
+    - id: c
+      text: Turn off cameras
+      why: Loses value.
+    - id: d
+      text: Face recognition
+      why: High legal risk.
+    concepts:
+    - C276
+  - id: q4
+    type: open
+    difficulty: 3
+    prompt: Explain to a store manager what the system 'sees'.
+    model: A grid of numbers per photo — brightness of red, green and blue at each point; the model learns which number patterns mean an empty slot.
+    rubric: 'Full: numbers + pattern learning. Partial: one.'
+    concepts:
+    - C276
+  - id: q5
+    type: mcq
+    difficulty: 2
+    prompt: One camera degrades. Who should be alerted first?
+    options:
+    - id: a
+      text: The camera owner, before reports go out
+      correct: true
+      why: Fix at source.
+    - id: b
+      text: The CEO
+      why: Too late/too high.
+    - id: c
+      text: Nobody
+      why: No.
+    - id: d
+      text: Customers
+      why: No.
+    concepts:
+    - C276
+- id: L11.2-F
+  title: L11.2 Classification and augmentation (Basic → Advanced)
+  lesson: L11.2
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    prompt: "Only {{ a.v_gap_share }}% of windows are gaps. A model saying 'no gap' everywhere would score about…"
+    options:
+    - id: a
+      text: 93% accuracy while finding no gaps
+      correct: true
+      why: Accuracy trap.
+    - id: b
+      text: 50%
+      why: No.
+    - id: c
+      text: 0%
+      why: No.
+    - id: d
+      text: 100%
+      why: No.
+    concepts:
+    - C282
+  - id: q2
+    type: mcq
+    difficulty: 2
+    prompt: Recall for gaps means…
+    options:
+    - id: a
+      text: Share of real gaps the model finds
+      correct: true
+      why: Coverage.
+    - id: b
+      text: Share of flags that are real
+      why: Precision.
+    - id: c
+      text: Overall accuracy
+      why: No.
+    - id: d
+      text: Speed
+      why: No.
+    concepts:
+    - C282
+  - id: q3
+    type: numeric
+    difficulty: 2
+    prompt: Gap recall (%) of the small network on the dim camera, without augmentation?
+    answer: "{{ a.v_cls['Small neural network on raw pixels'].rec_dim }}"
+    tolerance_abs: 5
+    explanation: "Accuracy still {{ a.v_cls['Small neural network on raw pixels'].acc_dim }}%."
+    concepts:
+    - C282
+  - id: q4
+    type: numeric
+    difficulty: 2
+    prompt: Gap recall (%) on the dim camera after brightness augmentation?
+    answer: "{{ a.v_aug.rec_dim }}"
+    tolerance_abs: 5
+    explanation: Robust to light.
+    concepts:
+    - C282
+  - id: q5
+    type: mcq
+    difficulty: 2
+    prompt: Data augmentation means…
+    options:
+    - id: a
+      text: Creating extra training images by changing what shouldn't matter (light, small shifts)
+      correct: true
+      why: Invariance.
+    - id: b
+      text: Collecting more stores
+      why: That's more data, not augmentation.
+    - id: c
+      text: Changing labels
+      why: No.
+    - id: d
+      text: Adding features by hand
+      why: No.
+    concepts:
+    - C282
+  - id: q6
+    type: mcq
+    difficulty: 2
+    prompt: Why split by store, not by random window?
+    options:
+    - id: a
+      text: Windows from the same photo would leak into test and inflate results
+      correct: true
+      why: Group split (L6.4).
+    - id: b
+      text: Faster
+      why: No.
+    - id: c
+      text: Required by sklearn
+      why: No.
+    - id: d
+      text: No reason
+      why: Leakage.
+    concepts:
+    - C282
+  - id: q7
+    type: mcq
+    difficulty: 2
+    prompt: Transfer learning is…
+    options:
+    - id: a
+      text: Fine-tuning a model pretrained on millions of photos for your task
+      correct: true
+      why: Reuse filters.
+    - id: b
+      text: Training from scratch
+      why: Opposite.
+    - id: c
+      text: Moving data between servers
+      why: No.
+    - id: d
+      text: A type of augmentation
+      why: Different.
+    concepts:
+    - C282
+  - id: q8
+    type: mcq
+    difficulty: 2
+    prompt: The brightness rule has very low precision because…
+    options:
+    - id: a
+      text: Dark packs look like empty slots
+      correct: true
+      why: Simple rules confuse look-alikes.
+    - id: b
+      text: It's too slow
+      why: No.
+    - id: c
+      text: It ignores colour
+      why: Partly, but the issue is dark packs.
+    - id: d
+      text: It's random
+      why: No.
+    concepts:
+    - C282
+- id: L11.2-L
+  title: L11.2 Classification and augmentation (Leader)
+  lesson: L11.2
+  track: L
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    prompt: '''98% accuracy on shelf gaps.'' Your first question?'
+    options:
+    - id: a
+      text: What are gap recall and precision, by store and camera?
+      correct: true
+      why: Rare-event metrics.
+    - id: b
+      text: Can it be 99%?
+      why: Wrong metric.
+    - id: c
+      text: How fast is it?
+      why: Later.
+    - id: d
+      text: Who built it?
+      why: Irrelevant.
+    concepts:
+    - C282
+  - id: q2
+    type: mcq
+    difficulty: 2
+    prompt: Which test result matters most for a 400-store rollout?
+    options:
+    - id: a
+      text: Performance on the worst camera and unseen stores
+      correct: true
+      why: Test where it runs.
+    - id: b
+      text: Average on training stores
+      why: Leaky.
+    - id: c
+      text: Best store
+      why: Cherry-picked.
+    - id: d
+      text: Vendor demo
+      why: Not evidence.
+    concepts:
+    - C282
+  - id: q3
+    type: mcq
+    difficulty: 2
+    prompt: A team trained a CNN from scratch on 800 images. Advice?
+    options:
+    - id: a
+      text: Start from a pretrained model and fine-tune with augmentation
+      correct: true
+      why: Transfer learning.
+    - id: b
+      text: Collect 1 million images first
+      why: Unnecessary.
+    - id: c
+      text: Use a brightness rule
+      why: Weak.
+    - id: d
+      text: Ship it
+      why: Risky.
+    concepts:
+    - C282
+  - id: q4
+    type: open
+    difficulty: 3
+    prompt: Why did the neural network fail in store S07, and how was it fixed?
+    model: "It had only seen bright photos; in the dim store gaps looked like products. Training with random brightness changes taught it that a gap is a gap in any light — recall rose from {{ a.v_cls['Small neural network on raw pixels'].rec_dim }}% to {{ a.v_aug.rec_dim }}%."
+    rubric: 'Full: cause + fix + numbers. Partial: one.'
+    concepts:
+    - C282
+  - id: q5
+    type: mcq
+    difficulty: 2
+    prompt: Each model failed differently (false alarms, dim light, blur). Lesson?
+    options:
+    - id: a
+      text: Test every model on every condition you expect in production
+      correct: true
+      why: Stress testing.
+    - id: b
+      text: Pick the most complex
+      why: Still failed.
+    - id: c
+      text: Average the results
+      why: Hides failures.
+    - id: d
+      text: Ignore rare conditions
+      why: They happen.
+    concepts:
+    - C282
+- id: L11.3-F
+  title: L11.3 Detection, IoU and OSA (Basic → Advanced)
+  lesson: L11.3
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    prompt: IoU of two boxes is…
+    options:
+    - id: a
+      text: Overlap ÷ total area covered by both
+      correct: true
+      why: Intersection over union.
+    - id: b
+      text: Overlap ÷ true box
+      why: No.
+    - id: c
+      text: Distance between centres
+      why: No.
+    - id: d
+      text: Union ÷ overlap
+      why: Inverted.
+    concepts:
+    - C207
+  - id: q2
+    type: numeric
+    difficulty: 2
+    prompt: IoU for truth 80–104 and prediction 90–118?
+    answer: '0.37'
+    tolerance_abs: 0.02
+    explanation: Overlap 14 ÷ union 38.
+    concepts:
+    - C207
+  - id: q3
+    type: mcq
+    difficulty: 2
+    prompt: A prediction with IoU 0.4 at a 0.5 standard counts as…
+    options:
+    - id: a
+      text: A false alarm, and the true gap as a miss
+      correct: true
+      why: Matching rule.
+    - id: b
+      text: A hit
+      why: Below standard.
+    - id: c
+      text: Half a hit
+      why: No partial credit.
+    - id: d
+      text: Ignored
+      why: No.
+    concepts:
+    - C207
+  - id: q4
+    type: numeric
+    difficulty: 2
+    prompt: Detection recall (%) on new stores at IoU ≥ 0.5?
+    answer: "{{ a.v_det['test stores'].recall }}"
+    tolerance_abs: 3
+    explanation: "Precision {{ a.v_det['test stores'].precision }}%."
+    concepts:
+    - C207
+  - id: q5
+    type: mcq
+    difficulty: 2
+    prompt: AP at IoU 0.75 is much lower than at 0.5 because…
+    options:
+    - id: a
+      text: Box edges are coarse (4-pixel steps)
+      correct: true
+      why: Stricter overlap.
+    - id: b
+      text: The model is random
+      why: No.
+    - id: c
+      text: Fewer gaps
+      why: Same gaps.
+    - id: d
+      text: Bug
+      why: Expected.
+    concepts:
+    - C207
+  - id: q6
+    type: mcq
+    difficulty: 2
+    prompt: Average precision summarises…
+    options:
+    - id: a
+      text: The precision–recall curve across score thresholds
+      correct: true
+      why: Area under PR.
+    - id: b
+      text: Accuracy
+      why: No.
+    - id: c
+      text: IoU only
+      why: No.
+    - id: d
+      text: Training loss
+      why: No.
+    concepts:
+    - C207
+  - id: q7
+    type: mcq
+    difficulty: 2
+    prompt: Non-maximum suppression…
+    options:
+    - id: a
+      text: Removes duplicate overlapping boxes, keeping the highest score
+      correct: true
+      why: Deduplication.
+    - id: b
+      text: Adds boxes
+      why: No.
+    - id: c
+      text: Normalises pixels
+      why: No.
+    - id: d
+      text: Augments data
+      why: No.
+    concepts:
+    - C207
+  - id: q8
+    type: numeric
+    difficulty: 2
+    prompt: Predicted on-shelf availability (%) on new stores?
+    answer: "{{ a.v_det['test stores'].osa_pred }}"
+    tolerance_abs: 1
+    explanation: "vs {{ a.v_det['test stores'].osa_true }}% labelled."
+    concepts:
+    - C207
+- id: L11.3-L
+  title: L11.3 Detection, IoU and OSA (Leader)
+  lesson: L11.3
+  track: L
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    prompt: A vendor quotes 'precision 0.9'. You ask…
+    options:
+    - id: a
+      text: At what IoU, on which images, and with what recall?
+      correct: true
+      why: Context.
+    - id: b
+      text: Nothing
+      why: Incomplete.
+    - id: c
+      text: For 0.95
+      why: No.
+    - id: d
+      text: For the code
+      why: Not the point.
+    concepts:
+    - C207
+  - id: q2
+    type: mcq
+    difficulty: 2
+    prompt: "Camera OSA is {{ (a.v_det['test stores'].osa_true - a.v_det['test stores'].osa_pred) | round(1) }} points below audited OSA. Action?"
+    options:
+    - id: a
+      text: Report the bias and calibrate with a monthly manual audit
+      correct: true
+      why: Known bias.
+    - id: b
+      text: Hide it
+      why: No.
+    - id: c
+      text: Abandon cameras
+      why: Overreaction.
+    - id: d
+      text: Ignore
+      why: Misleads managers.
+    concepts:
+    - C207
+  - id: q3
+    type: mcq
+    difficulty: 2
+    prompt: Missed gaps cost sales; false alarms cost staff time. Threshold choice?
+    options:
+    - id: a
+      text: Minimise total cost of misses and false alarms
+      correct: true
+      why: Cost-based (L6.6).
+    - id: b
+      text: Always 0.5
+      why: Arbitrary.
+    - id: c
+      text: Maximise accuracy
+      why: Wrong objective.
+    - id: d
+      text: Minimise false alarms only
+      why: Misses sales.
+    concepts:
+    - C207
+  - id: q4
+    type: open
+    difficulty: 3
+    prompt: Tell the COO how reliable the gap alerts are.
+    model: "On new stores the system finds about {{ a.v_det['test stores'].recall | round(0) }}% of gaps and {{ a.v_det['test stores'].precision | round(0) }}% of its alerts are real; it slightly under-states availability, so we calibrate monthly against a manual audit."
+    rubric: 'Full: recall + precision + bias. Partial: one.'
+    concepts:
+    - C207
+  - id: q5
+    type: mcq
+    difficulty: 2
+    prompt: "Without augmentation, dim-store detection recall fell to {{ a.v_det_dim_noaug.recall }}%. Governance lesson?"
+    options:
+    - id: a
+      text: Monitor per-camera performance and image quality continuously
+      correct: true
+      why: Monitoring.
+    - id: b
+      text: Buy brighter bulbs only
+      why: Partial.
+    - id: c
+      text: Nothing
+      why: No.
+    - id: d
+      text: Use fewer stores
+      why: No.
+    concepts:
+    - C207
+- id: L11.4-F
+  title: L11.4 Document AI (Basic → Advanced)
+  lesson: L11.4
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    prompt: OCR of a cheque amount is…
+    options:
+    - id: a
+      text: Several image-classification problems, one per character
+      correct: true
+      why: Characters.
+    - id: b
+      text: One regression
+      why: No.
+    - id: c
+      text: Clustering
+      why: No.
+    - id: d
+      text: A forecast
+      why: No.
+    concepts:
+    - C205
+  - id: q2
+    type: numeric
+    difficulty: 2
+    prompt: Best digit accuracy (%) on test digits?
+    answer: "{{ a.v_ocr_acc[a.v_ocr_best] }}"
+    tolerance_abs: 1
+    explanation: "{{ a.v_ocr_best }}."
+    concepts:
+    - C205
+  - id: q3
+    type: numeric
+    difficulty: 2
+    prompt: Field accuracy (%) for 6-digit amounts?
+    answer: "{{ a.v_cheque_field_acc }}"
+    tolerance_abs: 1
+    explanation: ≈ digit accuracy⁶.
+    concepts:
+    - C205
+  - id: q4
+    type: mcq
+    difficulty: 2
+    prompt: Why is field accuracy lower than digit accuracy?
+    options:
+    - id: a
+      text: Any one wrong digit makes the whole amount wrong
+      correct: true
+      why: Errors multiply.
+    - id: b
+      text: Different model
+      why: Same.
+    - id: c
+      text: Bug
+      why: No.
+    - id: d
+      text: More data
+      why: No.
+    concepts:
+    - C205
+  - id: q5
+    type: mcq
+    difficulty: 2
+    prompt: Confidence routing means…
+    options:
+    - id: a
+      text: Automate reads above a confidence threshold; send the rest to people
+      correct: true
+      why: Human-in-the-loop.
+    - id: b
+      text: Retrain often
+      why: No.
+    - id: c
+      text: Read everything twice
+      why: Costly.
+    - id: d
+      text: Ignore low confidence
+      why: Unsafe.
+    concepts:
+    - C205
+  - id: q6
+    type: numeric
+    difficulty: 2
+    prompt: Share (%) of cheques automated at the 0.5%-error threshold?
+    answer: "{{ a.v_route_auto_at_thr }}"
+    tolerance_abs: 3
+    explanation: "Threshold {{ a.v_route_threshold }}."
+    concepts:
+    - C205
+  - id: q7
+    type: mcq
+    difficulty: 2
+    prompt: Before routing on confidence, the probabilities should be…
+    options:
+    - id: a
+      text: Calibrated
+      correct: true
+      why: L6.6.
+    - id: b
+      text: Rounded
+      why: No.
+    - id: c
+      text: Hidden
+      why: No.
+    - id: d
+      text: Doubled
+      why: No.
+    concepts:
+    - C205
+  - id: q8
+    type: mcq
+    difficulty: 2
+    prompt: Flipping digit images as augmentation is…
+    options:
+    - id: a
+      text: Wrong — a flipped 6 can look like a 9
+      correct: true
+      why: Augment only meaning-preserving changes.
+    - id: b
+      text: Always fine
+      why: Changes meaning.
+    - id: c
+      text: Required
+      why: No.
+    - id: d
+      text: Irrelevant
+      why: It matters.
+    concepts:
+    - C205
+- id: L11.4-L
+  title: L11.4 Document AI (Leader)
+  lesson: L11.4
+  track: L
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    prompt: A vendor quotes 99% character accuracy. You ask for…
+    options:
+    - id: a
+      text: Field-level accuracy at our error tolerance
+      correct: true
+      why: Business-level metric.
+    - id: b
+      text: Speed
+      why: Later.
+    - id: c
+      text: Logo
+      why: No.
+    - id: d
+      text: Nothing
+      why: Incomplete.
+    concepts:
+    - C205
+  - id: q2
+    type: mcq
+    difficulty: 2
+    prompt: 'Set first: the error tolerance or the automation target?'
+    options:
+    - id: a
+      text: The error tolerance — automation follows
+      correct: true
+      why: Risk appetite first.
+    - id: b
+      text: Automation target
+      why: Risk becomes an afterthought.
+    - id: c
+      text: Neither
+      why: No.
+    - id: d
+      text: Vendor decides
+      why: No.
+    concepts:
+    - C205
+  - id: q3
+    type: mcq
+    difficulty: 2
+    prompt: Cheapest extra protection beyond the model?
+    options:
+    - id: a
+      text: Business-rule cross-checks (figures vs words, valid date, account exists)
+      correct: true
+      why: Rules.
+    - id: b
+      text: A bigger model
+      why: Costly.
+    - id: c
+      text: No checks
+      why: No.
+    - id: d
+      text: Manual review of everything
+      why: Defeats automation.
+    concepts:
+    - C205
+  - id: q4
+    type: open
+    difficulty: 3
+    prompt: Write the business case sentence for cheque automation.
+    model: "At a 0.5% error tolerance we can automate about {{ a.v_route_auto_at_thr }}% of cheques; the rest go to clerks, and a daily audit sample checks automated reads."
+    rubric: 'Full: tolerance + automation + audit. Partial: one.'
+    concepts:
+    - C205
+  - id: q5
+    type: mcq
+    difficulty: 2
+    prompt: "A scanner batch drops accuracy to {{ a.v_ocr_smudged_acc }}%. Response?"
+    options:
+    - id: a
+      text: Route that scanner's items to people and fix the scanner
+      correct: true
+      why: Drift response.
+    - id: b
+      text: Retrain immediately
+      why: Fix the source.
+    - id: c
+      text: Ignore
+      why: Errors.
+    - id: d
+      text: Raise automation
+      why: Opposite.
+    concepts:
+    - C205
+- id: L11.5-F
+  title: L11.5 Vision in production (Basic → Advanced)
+  lesson: L11.5
+  track: F
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    prompt: Cohen's kappa corrects agreement for…
+    options:
+    - id: a
+      text: Agreement expected by chance
+      correct: true
+      why: Chance-corrected.
+    - id: b
+      text: Sample size
+      why: No.
+    - id: c
+      text: Image size
+      why: No.
+    - id: d
+      text: Model accuracy
+      why: No.
+    concepts:
+    - C216
+  - id: q2
+    type: numeric
+    difficulty: 2
+    prompt: Kappa between annotators A and B?
+    answer: "{{ a.v_kappa }}"
+    tolerance_abs: 0.02
+    explanation: "Raw agreement {{ a.v_agree_pct }}%."
+    concepts:
+    - C216
+  - id: q3
+    type: mcq
+    difficulty: 2
+    prompt: Kappa is much lower than raw agreement here because…
+    options:
+    - id: a
+      text: Most windows are obvious 'product', so chance agreement is high
+      correct: true
+      why: Base rates.
+    - id: b
+      text: Bug
+      why: No.
+    - id: c
+      text: Too few windows
+      why: No.
+    - id: d
+      text: Kappa is always lower by 30 points
+      why: Depends on base rates.
+    concepts:
+    - C216
+  - id: q4
+    type: mcq
+    difficulty: 2
+    prompt: Random label noise of 8% mostly…
+    options:
+    - id: a
+      text: Averages out; systematic errors do not
+      correct: true
+      why: Random vs systematic.
+    - id: b
+      text: Destroys any model
+      why: Not random noise.
+    - id: c
+      text: Improves models
+      why: No.
+    - id: d
+      text: Has no effect ever
+      why: Systematic noise does.
+    concepts:
+    - C216
+  - id: q5
+    type: mcq
+    difficulty: 2
+    prompt: Image drift is best caught by…
+    options:
+    - id: a
+      text: Daily per-camera statistics (brightness, sharpness, confidence) with PSI bands
+      correct: true
+      why: Monitoring.
+    - id: b
+      text: Annual review
+      why: Too late.
+    - id: c
+      text: Customer complaints
+      why: Too late.
+    - id: d
+      text: Bigger models
+      why: No.
+    concepts:
+    - C216
+  - id: q6
+    type: mcq
+    difficulty: 2
+    prompt: Face recognition for loss prevention is…
+    options:
+    - id: a
+      text: High legal risk in many places; avoid unless clearly lawful and approved
+      correct: true
+      why: Biometrics.
+    - id: b
+      text: Always fine
+      why: No.
+    - id: c
+      text: Required
+      why: No.
+    - id: d
+      text: Low risk
+      why: No.
+    concepts:
+    - C216
+  - id: q7
+    type: mcq
+    difficulty: 2
+    prompt: Usually the largest hidden cost of a vision project is…
+    options:
+    - id: a
+      text: Labelling
+      correct: true
+      why: Labels.
+    - id: b
+      text: GPUs
+      why: Often smaller.
+    - id: c
+      text: Cameras
+      why: Visible.
+    - id: d
+      text: Licences
+      why: Smaller.
+    concepts:
+    - C216
+  - id: q8
+    type: mcq
+    difficulty: 2
+    prompt: Fairness in ID verification means testing…
+    options:
+    - id: a
+      text: Accuracy and false rejections by group and document type
+      correct: true
+      why: L9.5.
+    - id: b
+      text: Overall accuracy only
+      why: Hides gaps.
+    - id: c
+      text: Speed
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+    concepts:
+    - C216
+- id: L11.5-L
+  title: L11.5 Vision in production (Leader)
+  lesson: L11.5
+  track: L
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    prompt: Minimum evidence before scaling cameras to all stores?
+    options:
+    - id: a
+      text: Pilot with audited KPI, per-camera monitoring and a cost per gap found
+      correct: true
+      why: Evidence.
+    - id: b
+      text: A demo
+      why: No.
+    - id: c
+      text: Vendor slides
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+    concepts:
+    - C216
+  - id: q2
+    type: mcq
+    difficulty: 2
+    prompt: Kappa 0.55 between labellers. Action?
+    options:
+    - id: a
+      text: Improve the guide, retrain labellers, adjudicate disagreements
+      correct: true
+      why: Label quality.
+    - id: b
+      text: Proceed
+      why: Weak labels.
+    - id: c
+      text: Drop labelling
+      why: No.
+    - id: d
+      text: Use one labeller
+      why: Hides the problem.
+    concepts:
+    - C216
+  - id: q3
+    type: mcq
+    difficulty: 2
+    prompt: Who should sign off privacy for shelf cameras?
+    options:
+    - id: a
+      text: Legal/privacy officer with store operations
+      correct: true
+      why: Accountability.
+    - id: b
+      text: The data scientist alone
+      why: No.
+    - id: c
+      text: Nobody
+      why: No.
+    - id: d
+      text: The vendor
+      why: No.
+    concepts:
+    - C216
+  - id: q4
+    type: open
+    difficulty: 3
+    prompt: Give three reasons vision projects fail after the pilot.
+    model: Camera and lighting drift, poor or inconsistent labels, and no monitoring or audited KPI (plus privacy issues and unpriced errors).
+    rubric: 'Full: three. Partial: one or two.'
+    concepts:
+    - C216
+  - id: q5
+    type: mcq
+    difficulty: 2
+    prompt: The model's average confidence falls in one store. Likely?
+    options:
+    - id: a
+      text: Image-quality or environment change at that store
+      correct: true
+      why: Drift signal.
+    - id: b
+      text: Model improved
+      why: No.
+    - id: c
+      text: More gaps
+      why: Possibly, but check images first.
+    - id: d
+      text: Nothing
+      why: Investigate.
+    concepts:
+    - C216
+- id: D11-GATE
+  title: Day 11 gate (pass 75%)
+  lesson: D11
+  track: Mixed
+  pass_mark: 75
+  questions:
+  - id: q1
+    type: mcq
+    difficulty: 2
+    prompt: A colour image of 100 × 100 pixels has…
+    options:
+    - id: a
+      text: 30,000 numbers
+      correct: true
+      why: × 3.
+    - id: b
+      text: 10,000
+      why: Forgot channels.
+    - id: c
+      text: '300'
+      why: No.
+    - id: d
+      text: '100'
+      why: No.
+    concepts:
+    - C282
+  - id: q2
+    type: mcq
+    difficulty: 2
+    prompt: Edge filters respond to…
+    options:
+    - id: a
+      text: Sudden brightness changes
+      correct: true
+      why: Gradients.
+    - id: b
+      text: Colour names
+      why: No.
+    - id: c
+      text: Labels
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+    concepts:
+    - C282
+  - id: q3
+    type: mcq
+    difficulty: 2
+    prompt: For rare gaps, report…
+    options:
+    - id: a
+      text: Recall and precision
+      correct: true
+      why: Rare events.
+    - id: b
+      text: Accuracy only
+      why: Trap.
+    - id: c
+      text: Loss
+      why: No.
+    - id: d
+      text: AUC only
+      why: Partial.
+    concepts:
+    - C282
+  - id: q4
+    type: mcq
+    difficulty: 2
+    prompt: Augmentation should change…
+    options:
+    - id: a
+      text: Things that don't change the label
+      correct: true
+      why: Invariance.
+    - id: b
+      text: Labels
+      why: No.
+    - id: c
+      text: Anything
+      why: Flips can change meaning.
+    - id: d
+      text: Nothing
+      why: Then it's not augmentation.
+    concepts:
+    - C282
+  - id: q5
+    type: mcq
+    difficulty: 2
+    prompt: Transfer learning helps when…
+    options:
+    - id: a
+      text: Labelled images are few
+      correct: true
+      why: Reuse.
+    - id: b
+      text: Data is huge only
+      why: Helps most when small.
+    - id: c
+      text: Never
+      why: No.
+    - id: d
+      text: Only for text
+      why: No.
+    concepts:
+    - C282
+  - id: q6
+    type: mcq
+    difficulty: 2
+    prompt: IoU 0.5 is…
+    options:
+    - id: a
+      text: A common standard for counting a detection as correct
+      correct: true
+      why: Standard.
+    - id: b
+      text: Perfect overlap
+      why: That's 1.
+    - id: c
+      text: No overlap
+      why: That's 0.
+    - id: d
+      text: A pixel count
+      why: No.
+    concepts:
+    - C282
+  - id: q7
+    type: mcq
+    difficulty: 2
+    prompt: AP summarises…
+    options:
+    - id: a
+      text: The precision–recall curve
+      correct: true
+      why: Detection metric.
+    - id: b
+      text: Accuracy
+      why: No.
+    - id: c
+      text: Training loss
+      why: No.
+    - id: d
+      text: Image size
+      why: No.
+    concepts:
+    - C282
+  - id: q8
+    type: mcq
+    difficulty: 2
+    prompt: A 6-character field is right less often than one character because…
+    options:
+    - id: a
+      text: Errors multiply
+      correct: true
+      why: Field accuracy.
+    - id: b
+      text: Different scanners
+      why: No.
+    - id: c
+      text: Bug
+      why: No.
+    - id: d
+      text: It isn't
+      why: It is.
+    concepts:
+    - C282
+  - id: q9
+    type: mcq
+    difficulty: 2
+    prompt: Confidence routing trades…
+    options:
+    - id: a
+      text: Automation rate against error rate
+      correct: true
+      why: Threshold.
+    - id: b
+      text: Speed against cost
+      why: No.
+    - id: c
+      text: Pixels against labels
+      why: No.
+    - id: d
+      text: Nothing
+      why: No.
+    concepts:
+    - C282
+  - id: q10
+    type: mcq
+    difficulty: 2
+    prompt: Kappa measures…
+    options:
+    - id: a
+      text: Chance-corrected agreement between labellers
+      correct: true
+      why: Labels.
+    - id: b
+      text: Model accuracy
+      why: No.
+    - id: c
+      text: Image quality
+      why: No.
+    - id: d
+      text: IoU
+      why: No.
+    concepts:
+    - C282
+  - id: q11
+    type: mcq
+    difficulty: 2
+    prompt: A dim camera is…
+    options:
+    - id: a
+      text: Image drift — monitor per camera
+      correct: true
+      why: V1.
+    - id: b
+      text: Concept drift only
+      why: Input drift.
+    - id: c
+      text: Irrelevant
+      why: No.
+    - id: d
+      text: A label error
+      why: No.
+    concepts:
+    - C282
+  - id: q12
+    type: mcq
+    difficulty: 2
+    prompt: 'Shelf cameras and privacy:'
+    options:
+    - id: a
+      text: Point at shelves, blur faces, limit retention
+      correct: true
+      why: Privacy by design.
+    - id: b
+      text: Record everything
+      why: No.
+    - id: c
+      text: Face recognition
+      why: Risky.
+    - id: d
+      text: No controls
+      why: No.
+    concepts:
+    - C282

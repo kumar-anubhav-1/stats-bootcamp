@@ -1,0 +1,17 @@
+{
+  "mode": "graph",
+  "base_rate": 0.007,
+  "entities": 25000,
+  "components_ge_min": 3,
+  "sizes": [
+    15,
+    15,
+    15
+  ],
+  "label_rates": [
+    0.6,
+    0.6,
+    0.6
+  ],
+  "largest_other": 2
+}

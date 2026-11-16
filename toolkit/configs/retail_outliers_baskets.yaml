@@ -1,0 +1,18 @@
+# L1.6: basket-value outliers (aggregate lines to baskets first). Run on raw data to see the decimal-shift errors.
+recipe: rcp_outliers
+dataset:
+  name: northstar_transactions
+  path: data/retail/transactions.parquet
+columns:
+  target: revenue
+  id: line_id
+filters:
+  - "return_flag == False and quantity > 0"
+params:
+  unit: basket_id
+  agg: sum
+  iqr_k: [1.5, 3]
+  z: 3
+  robust_z: 3.5
+output:
+  folder: outputs/{recipe}/{date}_retail_baskets
